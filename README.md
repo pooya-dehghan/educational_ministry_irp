@@ -72,6 +72,40 @@ This API uses token-based authentication. To access protected endpoints, include
 - Get message numbers as didnt read yet
 - Message Restrictions for user (user with access student wont be able to message organizations)
 
+## Models
+
+User {
+id : number
+organization : Organization
+messagesSent : Message[]
+messagesRecieved : Message[]
+role : string
+tasks : Task[]
+status : string
+notifications : Notification[]
+alerts : Alert[]
+firstname : string
+lastname : string
+username : string
+phonenumber : string
+email : string
+bio : string
+school : School
+manager Manager
+}
+
+Organization : {
+id : number
+name : string
+role : string
+phonenumbers : string[]
+manager : Manager
+students : Student[]
+schools : School[]
+}
+
+
+
 ## Examples
 
 ## Contributing
