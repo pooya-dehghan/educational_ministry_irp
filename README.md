@@ -14,23 +14,29 @@ All models , use cases and methods used in project.
 ## Getting Started
 
 1. Clone the repository:
+   client side
 
-```client side
+```shell
 git clone https://github.com/pooya-dehghan/educational_ministry_irp
 ```
 
-```server side
+server side
+
+```shell
 git clone XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
 Install the dependencies:
+client side
 
-```client side
+```shell
 cd educational_ministry_irp
 npm install
 ```
 
-```server side
+server side
+
+```shell
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
@@ -74,6 +80,7 @@ This API uses token-based authentication. To access protected endpoints, include
 
 ## Models
 
+```typescript
 User {
 id : number
 organization : Organization
@@ -93,7 +100,9 @@ bio : string
 school : School
 manager Manager
 }
+```
 
+```typescript
 Organization : {
 id : number
 name : string
@@ -103,8 +112,7 @@ manager : Manager
 students : Student[]
 schools : School[]
 }
-
-
+```
 
 ## Examples
 
