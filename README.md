@@ -178,16 +178,16 @@ interface Alert {
 ```
 
 ```typescript
-interface Message { 
-  id : number
-  message  : string
-  sender : User
-  reciever : User
-  read : boolean
+interface Message {
+  id: number;
+  message: string;
+  sender: User;
+  reciever: User;
+  read: boolean;
 }
 ```
 
-```typescript 
+```typescript
 interface Task {
   id : number
   user : User
@@ -200,7 +200,7 @@ interface Task {
 }
 ```
 
-```typescript 
+```typescript
 interface City : {
   id : number
   name : string
@@ -209,6 +209,20 @@ interface City : {
 }
 ```
 
+## API Routes
+
+| Route                   | Method | Description                                                                 |
+| ----------------------- | ------ | --------------------------------------------------------------------------- |
+| `/api/auth/signup`      | POST   | Register a new user account                                                 |
+| `/api/auth/login`       | POST   | Authenticate and log in a user                                              |
+| `/api/auth/logout`      | POST   | Log out the currently authenticated user                                    |
+| `/api/users`            | GET    | Get all users (admin only)                                                  |
+| `/api/users/:id`        | GET    | Get a specific user by ID                                                   |
+| `/api/users/:id`        | PUT    | Update a specific user by ID                                                |
+| `/api/users/:id`        | DELETE | Delete a specific user by ID                                                |
+| `/api/notification/:id` | POST   | sending a notification to a specific user by id and title and body provided |
+
+This table provides an overview of the routes available in the Project System API, along with their associated HTTP methods and descriptions. Please note that this is just a sample and you may have additional routes or modify the existing ones based on your specific project requirements.
 
 ## Examples
 
