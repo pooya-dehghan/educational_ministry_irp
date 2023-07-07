@@ -81,7 +81,7 @@ This API uses token-based authentication. To access protected endpoints, include
 ## Models
 
 ```typescript
-User {
+interface User {
 id : number
 organization : Organization
 messagesSent : Message[]
@@ -103,7 +103,7 @@ manager Manager
 ```
 
 ```typescript
-Organization : {
+interface Organization : {
 id : number
 name : string
 role : string
