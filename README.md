@@ -114,6 +114,102 @@ schools : School[]
 }
 ```
 
+```typescript
+interface School : {
+  id : number
+  name : string
+  phonenumbers : string[]
+  dstrict : number
+  city : City
+  students : Student[]
+  manager  : Manager
+  organization : Organization
+}
+```
+
+```typescript
+interface Student  : {
+  id  : number
+  name : string
+  phonenumber : string
+  role : string
+  city : City
+  school  : School
+  organization : Organization
+  tasks : Task[]
+  alerts : Alert[]
+  notifications: Notification[]
+}
+```
+
+```typescript
+interface Manager {
+  id: number;
+  firstname: string;
+  lastname: string;
+  school: School;
+  phonenumbers: string[];
+  organization: Organization;
+  tasks: Task[];
+  alerts: Alert[];
+  notifications: Notification[];
+}
+```
+
+```typescript
+interface Notification {
+  id: number;
+  title: string;
+  body: string;
+  notification_token: string;
+  device_type: string;
+  picture_url: string;
+}
+```
+
+```typescript
+interface Alert {
+  id : number
+  title : string
+  body : string
+  type : string #(success ,warning , error , info)
+  read : boolean
+}
+```
+
+```typescript
+interface Message { 
+  id : number
+  message  : string
+  sender : User
+  reciever : User
+  read : boolean
+}
+```
+
+```typescript 
+interface Task {
+  id : number
+  user : User
+  title : string
+  description : string
+  dueTime : Time
+  createdTime : Time
+  giver : User
+  status : string #(done , in_progress , draft)
+}
+```
+
+```typescript 
+interface City : {
+  id : number
+  name : string
+  countery : string
+  districts : number[]
+}
+```
+
+
 ## Examples
 
 ## Contributing
