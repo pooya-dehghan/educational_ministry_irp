@@ -211,16 +211,29 @@ interface City : {
 
 ## API Routes
 
-| Route                   | Method | Description                                                                 |
-| ----------------------- | ------ | --------------------------------------------------------------------------- |
-| `/api/auth/signup`      | POST   | Register a new user account                                                 |
-| `/api/auth/login`       | POST   | Authenticate and log in a user                                              |
-| `/api/auth/logout`      | POST   | Log out the currently authenticated user                                    |
-| `/api/users`            | GET    | Get all users (admin only)                                                  |
-| `/api/users/:id`        | GET    | Get a specific user by ID                                                   |
-| `/api/users/:id`        | PUT    | Update a specific user by ID                                                |
-| `/api/users/:id`        | DELETE | Delete a specific user by ID                                                |
-| `/api/notification/:id` | POST   | sending a notification to a specific user by id and title and body provided |
+| Route              | Method | Description                              |
+| ------------------ | ------ | ---------------------------------------- |
+| `/api/auth/signup` | POST   | Register a new user account              |
+| `/api/auth/login`  | POST   | Authenticate and log in a user           |
+| `/api/auth/logout` | POST   | Log out the currently authenticated user |
+| `/api/users`       | GET    | Get all users (admin only)               |
+| `/api/users/:id`   | GET    | Get a specific user by ID                |
+| `/api/users/:id`   | PUT    | Update a specific user by ID             |
+| `/api/users/:id`   | DELETE | Delete a specific user by ID             |
+
+| `/api/task/:userId/giverId` | Post | create a new task for user |
+| `/api/task/:userId` | GET | get all task for a user by ID |
+| `/api/task/:taskId` | DELETE | Delete a specific task by ID |
+| `/api/task/:taskId` | GET | Get a task informationa and state by ID |
+| `/api/task/:taskId` | PUT | Update a task by ID |
+| `/api/task/:giverId` | GET | Get all tasks a user give and sent out |
+
+| `/api/organization` | Post | create a new organization |
+| `/api/organization` | GET | get all organization |
+| `/api/organization/:id` | PUT | update a organization by ID |
+| `/api/organization/:id` | GET | Get a organization informationa and state by ID |
+
+| `/api/notification/:userId` | POST | creating sending a notification to a specific user by id and title and body provided |
 
 This table provides an overview of the routes available in the Project System API, along with their associated HTTP methods and descriptions. Please note that this is just a sample and you may have additional routes or modify the existing ones based on your specific project requirements.
 
