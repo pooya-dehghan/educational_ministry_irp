@@ -11,30 +11,70 @@ All models , use cases and methods used in project.
 - Npm (version X.X.X)
 - Django (version Y.Y.Y)
 
-## Getting Started
+# Getting Started
 
-1. Clone the repository:
-   client side
-
+## Preparing the backend side
+a)  clone the repository
 ```shell
-git clone https://github.com/pooya-dehghan/educational_ministry_irp
+git clone  https://github.com/pooya-dehghan/educational_ministry_irp
 ```
 
-server side
+b) Navigate to the project directory:
+```shell
+cd educational_ministry_irp
+```
+c) Create a virtual environment to isolate project dependencies locally
 
 ```shell
-git clone XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+python -m venv name_of_your_virtualenv
+example:
+python -m venv my_env
+```
+- we can install virtualenv package for create it too. use this command
+
+```shell
+python -m pip install virtualenv
+```
+- after installing virtualenv use this command for creating your virtual environment
+
+```shell
+virtualenv name_of_your_environment
+```
+d) activate your virtual environment
+- windows
+```shell
+name_of_your_virtualenv\Scripts\activate
+example:
+my_env\Scripts\activate
+```
+- linux:
+```shell
+source name_of_your_virtualenv/bin/activate
+example:
+source my_env/bin/activate
 ```
 
-Install the dependencies:
-client side
+e) Install the dependencies(Backend side)
+- using backend_requirments.txt file in the repo:
+```shell
+pip install -r backend_requirments.txt
+```
+
+
+
+
+
+
+
+# Install the dependencies(client side):
+
 
 ```shell
 cd educational_ministry_irp
 npm install
 ```
 
-server side
+
 
 ```shell
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
