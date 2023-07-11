@@ -56,19 +56,18 @@ example:
 source my_env/bin/activate
 ```
 
-- after activating the virtual environment you should see name of your environment behind the path of your application. like below image:
-![Screenshot of my cmd]("..img/my_env.PNG")
+## after activating the virtual environment you should see name of your environment behind the path of your application. like below image:
+![Screenshot of my cmd](img/my_env.PNG)
 
 
 
 
 e) Install the dependencies(Backend side)
+- notice that your virtual environment should be active while installing
 - using backend_requirments.txt file in the repo:
 ```shell
 pip install -r backend_requirments.txt
 ```
-
-
 
 
 
