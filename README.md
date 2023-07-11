@@ -70,6 +70,21 @@ pip install -r backend_requirments.txt
 ```
 
 
+f) navigate to the backend folder(directory)
+```shell
+cd backend
+```
+
+g) now you can run backend server with this command:
+
+```shell
+python manage.py runserver
+```
+
+- you should see a message in your command line or terminal like this:
+
+
+
 
 
 
