@@ -56,6 +56,12 @@ example:
 source my_env/bin/activate
 ```
 
+- after activating the virtual environment you should see name of your environment behind the path of your application. like below image:
+![Screenshot of my cmd](images/my_env.png)
+
+
+
+
 e) Install the dependencies(Backend side)
 - using backend_requirments.txt file in the repo:
 ```shell
