@@ -14,7 +14,7 @@ All models , use cases and methods used in project.
 # Getting Started
 
 ## Preparing the backend side
-a)  clone the repository
+a)  Clone the repository
 ```shell
 git clone  https://github.com/pooya-dehghan/educational_ministry_irp
 ```
@@ -30,7 +30,7 @@ python -m venv <name of your virtualenv>
 example:
 python -m venv my_env
 ```
-- we can install virtualenv package for create it too. use this command
+- we can install virtualenv package to create it too. use this command
 
 ```shell
 python -m pip install virtualenv
@@ -56,7 +56,7 @@ example:
 source my_env/bin/activate
 ```
 
-## after activating the virtual environment you should see name of your environment behind the path of your application. like below image:
+## After activating the virtual environment you should see the name of your environment behind the path of your application. like the below image:
 ![Screenshot of my cmd](img/my_env.PNG)
 
 
@@ -75,7 +75,7 @@ f) navigate to the backend folder(directory)
 cd backend
 ```
 
-g) now you can run backend server with this command:
+g) now you can run the backend server with this command:
 
 ```shell
 python manage.py runserver
@@ -83,8 +83,32 @@ python manage.py runserver
 
 - you should see a message in your command line or terminal like this:
 
+![Screenshot of my cmd](img/runserver.PNG)
 
 
+h) If you want to see the output, open the browser and search for this address
+```shell
+http://localhost:8000
+or
+http://127.0.0.1:8000
+```
+
+# migrate
+you have more than 20 unapplied migrations. so you can not use the admin panel or database. 
+- this command applies all unapplied migrations.
+```shell
+python manage.py migrate
+```
+
+# superuser
+- To access the admin panel to manage users and materials, create a superuser:
+
+```shell
+python manage.py createsuperuser
+```
+- Follow the prompts to enter your desired username, email, and password.
+
+- Go to http://localhost:8000/admin/ ↗ and log in with your superuser credentials.
 
 
 
