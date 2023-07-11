@@ -26,7 +26,7 @@ cd educational_ministry_irp
 c) Create a virtual environment to isolate project dependencies locally
 
 ```shell
-python -m venv name_of_your_virtualenv
+python -m venv <name of your virtualenv>
 example:
 python -m venv my_env
 ```
@@ -38,18 +38,20 @@ python -m pip install virtualenv
 - after installing virtualenv use this command for creating your virtual environment
 
 ```shell
-virtualenv name_of_your_environment
+virtualenv <name of your environment>
+example:
+virtualenv my_env
 ```
 d) activate your virtual environment
 - windows
 ```shell
-name_of_your_virtualenv\Scripts\activate
+<name of your environment>\Scripts\activate
 example:
 my_env\Scripts\activate
 ```
 - linux:
 ```shell
-source name_of_your_virtualenv/bin/activate
+source <name of your environment>/bin/activate
 example:
 source my_env/bin/activate
 ```
