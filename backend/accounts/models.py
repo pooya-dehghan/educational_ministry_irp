@@ -73,6 +73,9 @@ class Teacher(User):
 class OfficeManager(User):
     region = models.PositiveSmallIntegerField()
 
+    def __str__(self):
+        return f"{self.username} - {self.id}"
+
 
 class School(models.Model):
     title_choices = (
@@ -89,10 +92,10 @@ class School(models.Model):
     city = models.CharField(max_length=200)
     region = models.PositiveSmallIntegerField()
     capacity = models.PositiveSmallIntegerField(default=0)
-    manager = models.OneToOneField(User, on_delete=models.CASCADE)
+    manager = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(choices=title_choices, default='n', max_length=100)
-    teacher = models.ManyToManyField(Teacher, related_name='teacher_to_school')
-    office_manager = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='office_to_school')
+    teacher = models.ManyToManyField(Teacher, related_name='teacher_to_school',null=True, blank=True)
+    office_manager = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='office_to_school', null=True, blank=True)
 
 
     def __str__(self):
@@ -113,6 +116,9 @@ class Professor(User):
     professor_id = models.CharField(max_length=10)
     is_science_committee = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"{self.id} - {self.username}"
+
 
 class Student(User):
     student_id = models.CharField(max_length=10)
@@ -120,6 +126,9 @@ class Student(User):
     professor2 = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='professor_to_student')
     school2 = models.ForeignKey(School, on_delete=models.CASCADE, related_name='school_to_student', null=True, blank=True)
     teacher2 = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_to_student', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.username} - {self.student_id}"
 
 
 

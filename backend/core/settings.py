@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'rest_framework',
     'rest_framework.authtoken',
+    'school.apps.SchoolConfig',
     # third part
     'drf_yasg',
     'rest_framework_simplejwt'
