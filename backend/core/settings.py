@@ -30,9 +30,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'school.apps.SchoolConfig',
+    'student.apps.StudentConfig',
+    'officemanager.apps.OfficemanagerConfig',
     # third part
     'drf_yasg',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'teacher.apps.TeacherConfig',
+    'professor.apps.ProfessorConfig',
 ]
 
 MIDDLEWARE = [

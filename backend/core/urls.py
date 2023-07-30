@@ -34,6 +34,10 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('school/', include('school.urls', namespace="school")),
     path('student/', include('student.urls', namespace="student")),
+    path('officemanager/', include('officemanager.urls', namespace='officemanager')),
+    path('teacher/', include('teacher.urls', namespace='teacher')),
+    path('professor/', include('professor.urls', namespace='professor')),
+
 ]
 
 
