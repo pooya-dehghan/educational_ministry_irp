@@ -3,9 +3,12 @@ from accounts.models import Professor
 from rest_framework.response import Response
 from .serializers import ProfessorSerializer
 from rest_framework import status
+from .permissions import IsSuperuser
 
 
 class ProfessorView(APIView):
+    permission_classes = [IsSuperuser]
+
     def get(self, request):
         professor = Professor.objects.all()
         ser_data = ProfessorSerializer(instance=professor, many=True)

@@ -1,10 +1,9 @@
 from rest_framework.views import APIView
-from accounts.models import Teacher
+from accounts.models import Teacher, School
 from rest_framework.response import Response
 from .serializers import TeacherSerializer
 from rest_framework import status
 from .permissions import IsSuperuserOrSchoolManager, IsSuperuser
-from rest_framework.permissions import IsAuthenticated
 
 
 class TeacherView(APIView):
@@ -19,10 +18,9 @@ class TeacherView(APIView):
         ser_data = TeacherSerializer(data=request.POST)
         if ser_data.is_valid():
             teacher = ser_data.save()
-            if request.user.school_set.filter(manager=request.user).exists():
-                school = request.user.school_set.filter(manager=request.user).first()
+            if School.objects.filter(manager=request.user).exists():
+                school = School.objects.get(manager=request.user)
                 school.teacher.add(teacher)
-                teacher.school.add(school)
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 

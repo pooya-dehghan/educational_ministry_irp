@@ -3,9 +3,12 @@ from accounts.models import OfficeManager
 from rest_framework.response import Response
 from .serializers import OfficeManagerSerializer
 from rest_framework import status
+from .permissions import IsSuperuser
 
 
 class OfficeManagerView(APIView):
+    permission_classes = [IsSuperuser]
+
     def get(self, request):
         office_manager = OfficeManager.objects.all()
         ser_data = OfficeManagerSerializer(instance=office_manager, many=True)
