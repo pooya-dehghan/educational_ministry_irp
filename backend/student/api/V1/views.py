@@ -5,8 +5,6 @@ from .serializers import StudentSerializer
 from rest_framework import status
 
 
-
-
 class StudentView(APIView):
     def get(self, request):
         students = Student.objects.all()

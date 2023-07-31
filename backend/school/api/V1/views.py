@@ -8,6 +8,7 @@ from .permissions import IsSuperuserOrOfficialManager
 
 class SchoolView(APIView):
     permission_classes = [IsSuperuserOrOfficialManager]
+
     def get(self, request):
         professor = School.objects.all()
         ser_data = SchoolSerializer(instance=professor, many=True)
