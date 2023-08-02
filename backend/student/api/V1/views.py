@@ -3,9 +3,12 @@ from accounts.models import Student
 from rest_framework.response import Response
 from .serializers import StudentSerializer
 from rest_framework import status
+from permissions import IsSuperuserOrStudent
+
 
 
 class StudentView(APIView):
+    permission_classes = [IsSuperuserOrStudent]
     def get(self, request):
         students = Student.objects.all()
         ser_data = StudentSerializer(instance=students, many=True)
