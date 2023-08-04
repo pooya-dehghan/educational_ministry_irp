@@ -4,7 +4,7 @@ import React, { useState, useEffect, ReactNode } from 'react';
 import SideBar from '../../components/SideBar/SideBar';
 
 interface PageWrapper {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const Dashboard: React.FC<PageWrapper> = ({ children }) => {

@@ -14,6 +14,9 @@ import ErrorPage from './pages/Error/Error';
 import List from './pages/Lists/Lists';
 import ThemeProviderWrapper from './wrapper';
 import './index.css';
+import { Provider } from 'react-redux';
+import store from './store/store';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -45,8 +48,10 @@ const router = createBrowserRouter([
 const rootEl = document.getElementById('root') as HTMLElement;
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
-    <ThemeProviderWrapper>
-      <RouterProvider router={router} />
-    </ThemeProviderWrapper>
+    <Provider store={store}>
+      <ThemeProviderWrapper>
+        <RouterProvider router={router} />
+      </ThemeProviderWrapper>
+    </Provider>
   </React.StrictMode>
 );
