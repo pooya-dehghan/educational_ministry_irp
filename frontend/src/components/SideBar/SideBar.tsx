@@ -17,34 +17,12 @@ import { Link, useLocation } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import  ListItems from './side-bar-list';
 
 interface propsTypes {
   open: boolean | undefined;
   handleDrawerToggle: () => void;
 }
-
-const listItems = [
-  {
-    list: 'ثبت نام',
-    icon: <HowToReg />,
-    to: '/register',
-  },
-  {
-    list: 'لیست مدارس',
-    icon: <HomeWorkIcon />,
-    to: '/schools',
-  },
-  {
-    list: 'لیست ادارات',
-    icon: <ApartmentIcon />,
-    to: '/organs',
-  },
-  {
-    list: 'لیست دانشگاه ها',
-    icon: <SchoolIcon />,
-    to: 'university',
-  },
-];
 
 const SideBar: React.FC<propsTypes> = ({ open, handleDrawerToggle }) => {
   const { pathname } = useLocation();
@@ -59,7 +37,7 @@ const SideBar: React.FC<propsTypes> = ({ open, handleDrawerToggle }) => {
           <OpenInFullIcon />
         </IconButton>
         <Divider />
-        {listItems.map((list) => {
+        {ListItems.map((list) => {
           return (
             <ListItem
               component={Link}

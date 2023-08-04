@@ -11,6 +11,7 @@ import RootPage from './pages/root';
 import SignUp from './pages/SignUp/Signup';
 import Dashboard from './pages/Dashboard/Dashboard';
 import ErrorPage from './pages/Error/Error';
+import List from './pages/Lists/Lists';
 import ThemeProviderWrapper from './wrapper';
 import './index.css';
 const router = createBrowserRouter([
@@ -26,6 +27,18 @@ const router = createBrowserRouter([
   {
     path: '/dashboard',
     element: <Dashboard />,
+  },
+  {
+    path: '/dashboard/list/schools',
+    element: <List />,
+  },
+  {
+    path: '/dashboard/list/managers',
+    element: <List />,
+  },
+  {
+    path: '/dashboard/list/principals',
+    element: <List />,
   },
 ]);
 
