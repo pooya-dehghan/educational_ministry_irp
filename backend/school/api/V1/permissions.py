@@ -3,7 +3,7 @@ from accounts.models import OfficeManager
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
-class IsSuperuserOrOfficialManager(permissions.BasePermission):
+class IsSuperuser(permissions.BasePermission):
     def has_permission(self, request, view):
         # Check if the user is a superuser or official manager
         return request.user.is_admin  # or request.user.is_official manager
@@ -16,8 +16,7 @@ class IsSuperuserOrOfficeManager(BasePermission):
             return True
         elif request.user.is_authenticated and request.user.is_admin:
             return True
-        elif request.user.is_authenticated and OfficeManager.objects.filter(manager=request.user).exists():
-            # Check if the requesting user is a manager of any school
+        elif request.user.is_authenticated and OfficeManager.objects.filter(id=request.user.id).exists():
             return True
         else:
             return False
