@@ -1,35 +1,36 @@
 from rest_framework.views import APIView
-from accounts.models import Student
+from accounts.models import Professor
 from rest_framework.response import Response
-from .serializers import StudentSerializer
+from .serializers import ProfessorSerializer
 from rest_framework import status
-from permissions import IsSuperuserOrStudent
+from .permissions import IsSuperuser
 
 
+class ProfessorView(APIView):
+    permission_classes = [IsSuperuser]
 
-class StudentView(APIView):
-    permission_classes = [IsSuperuserOrStudent]
     def get(self, request):
-        students = Student.objects.all()
-        ser_data = StudentSerializer(instance=students, many=True)
+        professor = Professor.objects.all()
+        ser_data = ProfessorSerializer(instance=professor, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        ser_data = StudentSerializer(data=request.POST)
+        ser_data = ProfessorSerializer(data=request.POST)
         if ser_data.is_valid():
             ser_data.save()
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk):
-        student = Student.objects.get(pk=pk)
-        ser_data = StudentSerializer(instance=student, data=request.data, partial=True)
+        professor = Professor.objects.get(pk=pk)
+        ser_data = ProfessorSerializer(instance=professor, data=request.data, partial=True)
         if ser_data.is_valid():
             ser_data.save()
             return Response(ser_data.data, status=status.HTTP_200_OK)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        student = Student.objects.get(pk=pk)
-        student.delete()
+        professor = Professor.objects.get(pk=pk)
+        professor.delete()
         return Response({'message': 'deleted successfully'})
+

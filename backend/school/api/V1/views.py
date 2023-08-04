@@ -3,11 +3,12 @@ from accounts.models import School
 from rest_framework.response import Response
 from .serializers import SchoolSerializer
 from rest_framework import status
-from .permissions import IsSuperuserOrOfficialManager
+from .permissions import IsSuperuserOrOfficeManager
 
 
 class SchoolView(APIView):
-    permission_classes = [IsSuperuserOrOfficialManager]
+    permission_classes = [IsSuperuserOrOfficeManager]
+
     def get(self, request):
         professor = School.objects.all()
         ser_data = SchoolSerializer(instance=professor, many=True)

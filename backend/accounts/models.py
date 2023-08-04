@@ -25,7 +25,6 @@ class User(AbstractBaseUser):
     avatar = models.ImageField(null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     personal_code = models.CharField(max_length=8, null=True, blank=True)
-
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["phone_number", "email"]
 
@@ -94,9 +93,9 @@ class School(models.Model):
     capacity = models.PositiveSmallIntegerField(default=0)
     manager = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(choices=title_choices, default='n', max_length=100)
-    teacher = models.ManyToManyField(Teacher, related_name='teacher_to_school',null=True, blank=True)
-    office_manager = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='office_to_school', null=True, blank=True)
-
+    teacher = models.ManyToManyField(Teacher, related_name='teacher_to_school', null=True, blank=True)
+    office_manager = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='office_to_school',
+                                       null=True, blank=True)
 
     def __str__(self):
         return f'{self.name} - {self.capacity}-{self.id}'
@@ -124,13 +123,10 @@ class Student(User):
     student_id = models.CharField(max_length=10)
     field = models.CharField(max_length=200)
     professor2 = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='professor_to_student')
-    school2 = models.ForeignKey(School, on_delete=models.CASCADE, related_name='school_to_student', null=True, blank=True)
-    teacher2 = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_to_student', null=True, blank=True)
+    school2 = models.ForeignKey(School, on_delete=models.CASCADE, related_name='school_to_student', null=True,
+                                blank=True)
+    teacher2 = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_to_student', null=True,
+                                 blank=True)
 
     def __str__(self):
         return f"{self.username} - {self.student_id}"
-
-
-
-
-
