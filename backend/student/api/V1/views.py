@@ -3,7 +3,7 @@ from accounts.models import Student
 from rest_framework.response import Response
 from .serializers import StudentSerializer
 from rest_framework import status
-from permissions import IsSuperuserOrStudent
+from .permissions import IsSuperuserOrStudent
 
 
 
