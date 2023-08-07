@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import SchoolView
+from . import views
+
 app_name = "api-v1"
 
-
 urlpatterns = [
-    path("list/", SchoolView.as_view(), name="list-post"),
-    path("list/<int:pk>/", SchoolView.as_view(), name="update-delete")
+    path("list/", views.SchoolList.as_view()),
+    path('create/', views.SchoolCreate.as_view()),
+    path('update/<int:pk>/', views.SchoolUpdate.as_view()),
+    path('delete/<int:pk>/', views.SchoolDelete.as_view()),
 ]

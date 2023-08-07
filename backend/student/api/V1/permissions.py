@@ -3,14 +3,14 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 from accounts.models import Student
 
 
-class IsSuperuserOrStudent(BasePermission):
-    def has_permission(self, request, view):
+class IsSuperuserOrOwnStudent(BasePermission):
+    def has_object_permission(self, request, view, obj):
+
         if request.method in SAFE_METHODS:
             return True
         elif request.user.is_authenticated and request.user.is_admin:
             return True
-        elif request.user.is_authenticated and Student.objects.filter(id=request.user.id).exists():
-            # Check if the requesting user is a manager of any school
+        elif request.user.is_authenticated and obj.id == request.user.id:
             return True
         else:
             return False

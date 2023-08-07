@@ -6,13 +6,16 @@ from rest_framework import status
 from .permissions import IsSuperuserOrSchoolManager, IsSuperuser
 
 
-class TeacherView(APIView):
-    permission_classes = [IsSuperuserOrSchoolManager]
+class TeacherList(APIView):
 
     def get(self, request):
         teacher = Teacher.objects.all()
         ser_data = TeacherSerializer(instance=teacher, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
+
+
+class TeacherCreate(APIView):
+    permission_classes = [IsSuperuserOrSchoolManager]
 
     def post(self, request):
         ser_data = TeacherSerializer(data=request.POST)
@@ -25,7 +28,7 @@ class TeacherView(APIView):
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TeacherView2(APIView):
+class TeacherUpdate(APIView):
     permission_classes = [IsSuperuser]
 
     def put(self, request, pk):
@@ -35,6 +38,10 @@ class TeacherView2(APIView):
             ser_data.save()
             return Response(ser_data.data, status=status.HTTP_200_OK)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TeacherDelete(APIView):
+    permission_classes = [IsSuperuser]
 
     def delete(self, request, pk):
         teacher = Teacher.objects.get(pk=pk)
