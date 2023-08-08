@@ -1,9 +1,5 @@
-.login_page {
-  justify-content: center;
-  align-items: center;
-}
-
 .container {
+  background-image: url(../../../../img/signupbg.jpg);
   background-image: url(./signupbg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
