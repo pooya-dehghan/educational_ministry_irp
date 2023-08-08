@@ -3,16 +3,19 @@ from accounts.models import Teacher, School
 from rest_framework.response import Response
 from .serializers import TeacherSerializer
 from rest_framework import status
-from .permissions import IsSuperuserOrSchoolManager, IsSuperuser
+from .permissions import IsSuperuserOrSchoolManager, IsSuperuser, IsSuperuserOrOwnTeacher
 
 
-class TeacherView(APIView):
-    permission_classes = [IsSuperuserOrSchoolManager]
+class TeacherList(APIView):
 
     def get(self, request):
         teacher = Teacher.objects.all()
         ser_data = TeacherSerializer(instance=teacher, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
+
+
+class TeacherCreate(APIView):
+    permission_classes = [IsSuperuserOrSchoolManager]
 
     def post(self, request):
         ser_data = TeacherSerializer(data=request.POST)
@@ -25,16 +28,21 @@ class TeacherView(APIView):
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TeacherView2(APIView):
-    permission_classes = [IsSuperuser]
+class TeacherUpdate(APIView):
+    permission_classes = [IsSuperuserOrOwnTeacher]
 
     def put(self, request, pk):
         teacher = Teacher.objects.get(pk=pk)
+        self.check_object_permissions(request, teacher)
         ser_data = TeacherSerializer(instance=teacher, data=request.data, partial=True)
         if ser_data.is_valid():
             ser_data.save()
             return Response(ser_data.data, status=status.HTTP_200_OK)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TeacherDelete(APIView):
+    permission_classes = [IsSuperuser]
 
     def delete(self, request, pk):
         teacher = Teacher.objects.get(pk=pk)

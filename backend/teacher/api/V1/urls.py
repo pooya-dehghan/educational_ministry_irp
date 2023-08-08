@@ -4,6 +4,8 @@ from . import views
 app_name = "api-v1"
 
 urlpatterns = [
-    path('list/', views.TeacherView.as_view()),
-    path('list/<int:pk>/', views.TeacherView2.as_view()),
+    path('list/', views.TeacherList.as_view()),
+    path('create/', views.TeacherCreate.as_view()),
+    path('update/<int:pk>/', views.TeacherUpdate.as_view()),
+    path('delete/<int:pk>/', views.TeacherDelete.as_view()),
 ]
