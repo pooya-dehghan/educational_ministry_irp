@@ -3,7 +3,7 @@ from accounts.models import School, OfficeManager
 from rest_framework.response import Response
 from .serializers import SchoolSerializer, SchoolSerializerByOfficeManager
 from rest_framework import status
-from .permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManager
+from .permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManager, IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager
 
 
 class SchoolList(APIView):
@@ -34,12 +34,11 @@ class SchoolCreate(APIView):
 
 
 class SchoolUpdate(APIView):
-    permission_classes = [IsSuperuserOrOwnOfficeManager]
+    permission_classes = [IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager]
 
     def put(self, request, pk):
         school = School.objects.get(pk=pk)
-        office_manager = school.office_manager
-        self.check_object_permissions(request, office_manager)
+        self.check_object_permissions(request, school)
         if OfficeManager.objects.filter(id=request.user.id).exists():
             ser_data = SchoolSerializerByOfficeManager(instance=school, data=request.data, partial=True)
         else:

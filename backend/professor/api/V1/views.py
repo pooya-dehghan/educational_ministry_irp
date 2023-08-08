@@ -3,7 +3,7 @@ from accounts.models import Professor
 from rest_framework.response import Response
 from .serializers import ProfessorSerializer
 from rest_framework import status
-from .permissions import IsSuperuser
+from .permissions import IsSuperuser, IsSuperuserOrOwnProfessor
 
 
 class ProfessorList(APIView):
@@ -26,10 +26,11 @@ class ProfessorCreate(APIView):
 
 
 class ProfessorUpdate(APIView):
-    permission_classes = [IsSuperuser]
+    permission_classes = [IsSuperuserOrOwnProfessor]
 
     def put(self, request, pk):
         professor = Professor.objects.get(pk=pk)
+        self.check_object_permissions(request, professor)
         ser_data = ProfessorSerializer(instance=professor, data=request.data, partial=True)
         if ser_data.is_valid():
             ser_data.save()

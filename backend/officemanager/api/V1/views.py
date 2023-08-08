@@ -3,7 +3,7 @@ from accounts.models import OfficeManager
 from rest_framework.response import Response
 from .serializers import OfficeManagerSerializer
 from rest_framework import status
-from .permissions import IsSuperuser
+from .permissions import IsSuperuser, IsSuperuserOrOwnOfficeManager
 
 
 class OfficeManagerList(APIView):
@@ -26,10 +26,11 @@ class OfficeManagerCreate(APIView):
 
 
 class OfficeManagerUpdate(APIView):
-    permission_classes = [IsSuperuser]
+    permission_classes = [IsSuperuserOrOwnOfficeManager]
 
     def put(self, request, pk):
         office_manager = OfficeManager.objects.get(pk=pk)
+        self.check_object_permissions(request,office_manager)
         ser_data = OfficeManagerSerializer(instance=office_manager, data=request.data, partial=True)
         if ser_data.is_valid():
             ser_data.save()

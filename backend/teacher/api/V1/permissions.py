@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-from accounts.models import School
+from accounts.models import School, Teacher
 
 
 class IsSuperuserOrSchoolManager(BasePermission):
@@ -21,5 +21,17 @@ class IsSuperuser(BasePermission):
             return True
         else:
             return request.user.is_authenticated and request.user.is_admin
+
+
+class IsSuperuserOrOwnTeacher(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        elif request.user.is_authenticated and request.user.is_admin:
+            return True
+        elif request.user.is_authenticated and obj.id == request.user.id:
+            return True
+        else:
+            return False
 
 

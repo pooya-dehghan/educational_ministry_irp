@@ -33,3 +33,20 @@ class IsSuperuserOrOwnOfficeManager(BasePermission):
             return True
         else:
             return False
+
+
+class IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        office_manager = obj.office_manager
+        if request.method in SAFE_METHODS:
+            return True
+        elif request.user.is_authenticated and request.user.is_admin:
+            return True
+        elif request.user.is_authenticated and OfficeManager.objects.filter(
+                id=request.user.id).exists() and office_manager.id == request.user.id:
+            return True
+        elif request.user.is_authenticated and obj.manager.id == request.user.id:
+            return True
+        else:
+            return False
+
