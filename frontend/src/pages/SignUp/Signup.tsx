@@ -1,55 +1,65 @@
-import React, { useState, useEffect } from "react";
-import styles from "./Signup.module.css";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { makeStyles } from "@material-ui/styles";
-import SnackBar from "../../components/snackBar/snackBar";
-import axios from "axios";
-import { Container, Link } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import React, { useState, useEffect } from 'react';
+import styles from './Signup.module.css';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { makeStyles } from '@material-ui/styles';
+import { Container, Link } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useDispatch, useSelector } from 'react-redux';
+import { signUpAsync } from '../../features/signup/signUpThunk';
+import { signup } from '../../features/signup/signUpSlice';
+import { RootState } from '../../store/store'; // Make sure to provide the correct path
 
 const useStyles = makeStyles({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100vw !important",
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100vw !important',
   },
   loginHeader: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   buttonContainer: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   textAreaContainer: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   loginLink: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 
 const Root = () => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.signup.isAuthenticated
+  );
+  const user = useSelector((state: RootState) => state.signup.user);
   const classes = useStyles();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
-  const [message, setMessage] = useState("");
-  const isSmallScreen = useMediaQuery("(max-width: 600px)");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
-  const signupRequest = () => {
-    console.log("signup");
-    axios
-      .post("localhost:8000/user", {
-        firstName: username,
-        lastName: password,
+  const handleSignUp = () => {
+    const signUpData = {
+      username,
+      password,
+      password_confirmation: passwordConfirmation,
+    };
+
+    (dispatch as any)(signUpAsync(signUpData))
+      .unwrap()
+      .then((response: any) => {
+        console.log('response: ', response);
+        // You can handle success here, e.g. redirect or show a success message
+        dispatch(signup(response.user)); // Dispatch your signup action to update the state
       })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
+      .catch((error: any) => {
+        // Handle errors, e.g. show an error message
       });
   };
 
@@ -59,9 +69,9 @@ const Root = () => {
         <Container
           component="main"
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Box
@@ -71,11 +81,11 @@ const Root = () => {
               px: 4,
               py: 6,
               marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: isSmallScreen ? "300px" : "500px",
-              justifyContent: "center",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              width: isSmallScreen ? '300px' : '500px',
+              justifyContent: 'center',
             }}
             className={styles.box}
           >
@@ -109,7 +119,7 @@ const Root = () => {
                 />
               </Grid>
               <Grid item xs={8} className={classes.buttonContainer}>
-                <Button onClick={() => signupRequest()} variant="contained">
+                <Button onClick={() => handleSignUp()} variant="contained">
                   ثبت نام
                 </Button>
               </Grid>
