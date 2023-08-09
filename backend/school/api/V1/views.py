@@ -6,6 +6,16 @@ from rest_framework import status
 from .permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManager, IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager
 
 
+class SchoolGet(APIView):
+    def get(self, request, pk):
+        if School.objects.filter(id=pk).exists():
+            school = School.objects.get(id=pk)
+            ser_data = SchoolSerializer(instance=school)
+            return Response(ser_data.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'this school does not exist'})
+
+
 class SchoolList(APIView):
 
     def get(self, request):
