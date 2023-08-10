@@ -156,19 +156,21 @@ This API uses token-based authentication. To access protected endpoints, include
 - User logout
 - Password reset/forgot password
 
-**User Profile:**
+**User: All kind of user Profile:**
 
 - Retrieve user profile
 - Update user profile (name, bio, profile picture)
-- Signing user to specific organization or some other user for specific roles
-- Retrieve user overall information
-- Retrieve user alerts (signed into somewhere , has a task , has a new message from boss , has a new role)
-
+- user requesting to specific Office Manager or some other user for specific roles
+- Getting notifications
+- making notification for specific user
+- read/seen notifications
+- Deleting Profile
+- Updating Profile
+- 
 **Notifications:**
 
-- Retrieve notifications for the user (oraganizations working with , users working with , messages , alerts)
-- Mark notifications as read
-- Retrive notifications queue (all notification sent to user)
+- List profile template
+
 
 **Direct Messaging:**
 
