@@ -1,4 +1,4 @@
-from ...models import User
+from ...models import Student
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
@@ -11,8 +11,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     password_confirmation = serializers.CharField(max_length=255, write_only=True)
 
     class Meta:
-        model = User
-        fields = ["username", "password", "password_confirmation"]
+        model = Student
+        fields = ["username", "password", "password_confirmation", "student_id", "field", "professor2"]
 
     def validate(self, attrs):
         password_confirmation = attrs.get("password_confirmation")
@@ -32,7 +32,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop("password_confirmation", None)
-        return User.objects.create_user(**validated_data)
+        return Student.objects.create(**validated_data)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

@@ -20,9 +20,12 @@ class ApiUserRegistrationView(GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            student = serializer.save()
             data = {
                 "username": serializer.validated_data["username"],
+                'type': 'student',
+                'id': student.id,
+
             }
             return Response(data=data, status=status.HTTP_201_CREATED)
         else:
