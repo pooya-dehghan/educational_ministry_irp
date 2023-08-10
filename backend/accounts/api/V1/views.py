@@ -6,10 +6,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from accounts.models import Teacher, OfficeManager, School, Student
+from accounts.models import Teacher, OfficeManager, School, Student, Professor
 from .serializers import LoginSerializer
 from rest_framework.views import APIView
 from ...models import User
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth import authenticate
 
 
@@ -30,6 +31,7 @@ class ApiUserRegistrationView(GenericAPIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
 
 #
 # class CustomObtainAuthToken(ObtainAuthToken):
@@ -69,25 +71,67 @@ class UserLoginAPIView(APIView):
         password = serializer.validated_data['password']
         print(username)
         print(password)
-        user = User.objects.get(username=username, password=password)
-        if user:
+        z = 0
+        user = User.objects.get(username=username)
+        if user and check_password(password, user.password):
+
             if Teacher.objects.filter(pk=user.pk).exists():
+                z = 1
                 type = "teacher"
             elif Student.objects.filter(pk=user.pk).exists():
                 type = "student"
+                z = 1
             elif OfficeManager.objects.filter(pk=user.pk).exists():
                 type = "office manager"
-            elif School.objects.filter(pk=user.pk).exists():
-                type = "School"
-            elif user.is_superuser:
+                z = 1
+            elif School.objects.filter(manager=user).exists():
+                type = "school manager"
+                z = 1
+            elif Professor.objects.filter(pk=user.pk).exists():
+                type = "professor"
+                z = 1
+            elif user.is_admin:
                 type = "superuser"
+                z = 1
             else:
-                type="anonmous"
+                type = "anonymous"
+                z = 1
             token, created = Token.objects.get_or_create(user=user)
             return Response({
                 'token': token.key,
                 'id': user.pk,
                 'type': type
             })
-        else:
+
+        user = User.objects.get(username=username, password=password)
+        if user:
+
+            if Teacher.objects.filter(pk=user.pk).exists():
+                z = 1
+                type = "teacher"
+            elif Student.objects.filter(pk=user.pk).exists():
+                type = "student"
+                z = 1
+            elif OfficeManager.objects.filter(pk=user.pk).exists():
+                type = "office manager"
+                z = 1
+            elif School.objects.filter(manager=user).exists():
+                type = "school manager"
+                z = 1
+            elif Professor.objects.filter(pk=user.pk).exists():
+                type = "professor"
+                z = 1
+            elif user.is_admin:
+                type = "superuser"
+                z = 1
+            else:
+                type = "anonymous"
+                z = 1
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({
+                'token': token.key,
+                'id': user.pk,
+                'type': type
+            })
+        if z == 0:
             return Response({'error': 'Unable to log in with provided credentials.'}, status=400)

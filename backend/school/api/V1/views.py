@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from accounts.models import School, OfficeManager
 from rest_framework.response import Response
-from .serializers import SchoolSerializer, SchoolSerializerByOfficeManager
+from .serializers import SchoolSerializer, SchoolSerializerByOfficeManager, SchoolSerializerBySchoolManager
 from rest_framework import status
-from .permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManager, IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager
+from .permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManager,\
+    IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager
 
 
 class SchoolGet(APIView):
@@ -51,6 +52,8 @@ class SchoolUpdate(APIView):
         self.check_object_permissions(request, school)
         if OfficeManager.objects.filter(id=request.user.id).exists():
             ser_data = SchoolSerializerByOfficeManager(instance=school, data=request.data, partial=True)
+        elif school.manager.id == request.user.id:
+            ser_data = SchoolSerializerBySchoolManager(instance=school, data=request.data, partial=True)
         else:
             ser_data = SchoolSerializer(instance=school, data=request.data, partial=True)
         if ser_data.is_valid():
