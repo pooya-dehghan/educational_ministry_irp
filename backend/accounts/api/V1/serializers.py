@@ -6,6 +6,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
 
+
 class UserRegisterSerializer(serializers.ModelSerializer):
     password_confirmation = serializers.CharField(max_length=255, write_only=True)
 
@@ -23,22 +24,20 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             validate_password(password)
         except exceptions.ValidationError as e:
             raise serializers.ValidationError({"password": list(e.messages)})
-        
-        if "@"  in username:
+
+        if "@" in username:
             raise serializers.ValidationError("Email addresses are not allowed as usernames")
 
         return super().validate(attrs)
-
 
     def create(self, validated_data):
         validated_data.pop("password_confirmation", None)
         return User.objects.create_user(**validated_data)
 
 
-
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        validated_data =  super().validate(attrs)
+        validated_data = super().validate(attrs)
         validated_data["user-id"] = self.user.id
         validated_data["username"] = self.user.username
         return validated_data
@@ -50,3 +49,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 #         validated_data["user-id"] = attrs.get("username")
 #         validated_data["username"] = attrs.get("username")
 #         return validated_data
+
+######################### Serializer for login ################################################
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)

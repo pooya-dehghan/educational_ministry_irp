@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ApiUserRegistrationView, CustomTokenObtainPairView, CustomObtainAuthToken
+from .views import ApiUserRegistrationView, CustomTokenObtainPairView, UserLoginAPIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -21,5 +21,5 @@ urlpatterns = [
     path('jwt/verify/', TokenVerifyView.as_view(), name="jwt-token-verify"),
     path('jwt/refresh/', TokenRefreshView.as_view(), name="jwt-token-refresh"),
     # login drf token
-    path("login/", CustomObtainAuthToken.as_view(), name="login-token"),
+    path("login/", UserLoginAPIView.as_view(), name="login-token"),
 ]
