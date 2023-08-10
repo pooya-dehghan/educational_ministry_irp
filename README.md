@@ -166,19 +166,77 @@ This API uses token-based authentication. To access protected endpoints, include
 - read/seen notifications
 - Deleting Profile
 - Updating Profile
-- 
-**Notifications:**
-
-- List profile template
 
 
-**Direct Messaging:**
+**Super User**
 
-- Send a direct message to a user
-- Retrieve direct message conversations
-- Mark messages as read
-- Get message numbers as didnt read yet
-- Message Restrictions for user (user with access student wont be able to message organizations)
+- Crud on every thing
+- List and Get every thing
+- Manage roles
+
+
+
+**University Student**
+- Request to office manager
+- Get and List region
+- Generate report of School and manager performance 
+- Generate report of teacher
+- mashghasham benviseh :)
+- school request status
+- List Attendance
+- List Grade of report and attendance
+
+
+**Office manager**
+
+- CRUD on schools
+- School assignment
+- List and get Schools and their managers
+- generate reports or analytics on student performance
+
+
+**Teacher**
+- Generate report on student performance
+- grade assignment
+
+
+**Professor**
+- List Student information
+- Get student information(All reports, All Attendance‏s, All assignments, Personal info, School info)
+- List student's report
+- Grade student report
+- Generate report for student performance
+
+
+**School Manager**
+- CRUD on teacher
+- Registeration Capacity
+- Grade student performance
+- Fill Attendance‏
+- Get and List own teachers and own students
+
+
+  **Notifications:**
+- List profile template for admin
+- sending notification for specific route
+- getting notification for specific user
+
+
+**Report**
+- CRUD
+- Generate PDF
+- List and Get 
+
+
+**Assignment**
+- Generate PDF
+
+**Attendance‏**
+- Generate PDF/CSV
+
+**Request**
+- CRUD
+
 
 ## Models
 
