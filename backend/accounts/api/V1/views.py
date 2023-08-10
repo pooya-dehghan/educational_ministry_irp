@@ -74,21 +74,8 @@ class UserLoginAPIView(APIView):
         z = 0
         user = User.objects.get(username=username)
         if user and check_password(password, user.password):
-
-            if Teacher.objects.filter(pk=user.pk).exists():
-                z = 1
-                type = "teacher"
-            elif Student.objects.filter(pk=user.pk).exists():
-                type = "student"
-                z = 1
-            elif OfficeManager.objects.filter(pk=user.pk).exists():
-                type = "office manager"
-                z = 1
-            elif School.objects.filter(manager=user).exists():
+            if School.objects.filter(manager=user).exists():
                 type = "school manager"
-                z = 1
-            elif Professor.objects.filter(pk=user.pk).exists():
-                type = "professor"
                 z = 1
             elif user.is_admin:
                 type = "superuser"
@@ -115,17 +102,8 @@ class UserLoginAPIView(APIView):
             elif OfficeManager.objects.filter(pk=user.pk).exists():
                 type = "office manager"
                 z = 1
-            elif School.objects.filter(manager=user).exists():
-                type = "school manager"
-                z = 1
             elif Professor.objects.filter(pk=user.pk).exists():
                 type = "professor"
-                z = 1
-            elif user.is_admin:
-                type = "superuser"
-                z = 1
-            else:
-                type = "anonymous"
                 z = 1
             token, created = Token.objects.get_or_create(user=user)
             return Response({
