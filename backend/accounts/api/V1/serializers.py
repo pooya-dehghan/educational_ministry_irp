@@ -1,4 +1,4 @@
-from ...models import Student
+from ...models import Student, User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
@@ -54,3 +54,14 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+
+
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(max_length=100)
+    new_password_confirm = serializers.CharField(max_length=100)
+
+
