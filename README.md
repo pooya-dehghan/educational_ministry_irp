@@ -156,27 +156,87 @@ This API uses token-based authentication. To access protected endpoints, include
 - User logout
 - Password reset/forgot password
 
-**User Profile:**
+**User: All kind of user Profile:**
 
 - Retrieve user profile
 - Update user profile (name, bio, profile picture)
-- Signing user to specific organization or some other user for specific roles
-- Retrieve user overall information
-- Retrieve user alerts (signed into somewhere , has a task , has a new message from boss , has a new role)
+- user requesting to specific Office Manager or some other user for specific roles
+- Getting notifications
+- making notification for specific user
+- read/seen notifications
+- Deleting Profile
+- Updating Profile
 
-**Notifications:**
 
-- Retrieve notifications for the user (oraganizations working with , users working with , messages , alerts)
-- Mark notifications as read
-- Retrive notifications queue (all notification sent to user)
+**Super User**
 
-**Direct Messaging:**
+- Crud on every thing
+- List and Get every thing
+- Manage roles
 
-- Send a direct message to a user
-- Retrieve direct message conversations
-- Mark messages as read
-- Get message numbers as didnt read yet
-- Message Restrictions for user (user with access student wont be able to message organizations)
+
+
+**University Student**
+- Request to office manager
+- Get and List region
+- Generate report of School and manager performance 
+- Generate report of teacher
+- mashghasham benviseh :)
+- school request status
+- List Attendance
+- List Grade of report and attendance
+
+
+**Office manager**
+
+- CRUD on schools
+- School assignment
+- List and get Schools and their managers
+- generate reports or analytics on student performance
+
+
+**Teacher**
+- Generate report on student performance
+- grade assignment
+
+
+**Professor**
+- List Student information
+- Get student information(All reports, All Attendance‏s, All assignments, Personal info, School info)
+- List student's report
+- Grade student report
+- Generate report for student performance
+
+
+**School Manager**
+- CRUD on teacher
+- Registeration Capacity
+- Grade student performance
+- Fill Attendance‏
+- Get and List own teachers and own students
+
+
+  **Notifications:**
+- List profile template for admin
+- sending notification for specific route
+- getting notification for specific user
+
+
+**Report**
+- CRUD
+- Generate PDF
+- List and Get 
+
+
+**Assignment**
+- Generate PDF
+
+**Attendance‏**
+- Generate PDF/CSV
+
+**Request**
+- CRUD
+
 
 ## Models
 

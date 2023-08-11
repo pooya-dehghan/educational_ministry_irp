@@ -128,4 +128,4 @@ class Student(User):
                                  blank=True)
 
     def __str__(self):
-        return f"{self.username} - {self.student_id}"
+        return f"{self.username} - {self.student_id}-{self.id}"

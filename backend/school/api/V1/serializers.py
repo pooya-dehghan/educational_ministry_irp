@@ -11,4 +11,17 @@ class SchoolSerializer(serializers.ModelSerializer):
 class SchoolSerializerByOfficeManager(serializers.ModelSerializer):
     class Meta:
         model = School
-        exclude = ['office_manager']
+        fields = '__all__'
+        extra_kwargs = {
+            'office_manager': {'read_only': True}
+        }
+
+
+class SchoolSerializerBySchoolManager(serializers.ModelSerializer):
+    class Meta:
+        model = School
+        fields = '__all__'
+        extra_kwargs = {
+            'office_manager': {'read_only': True},
+            'manager': {'read_only': True},
+        }

@@ -6,6 +6,16 @@ from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnOfficeManager
 
 
+class OfficeManagerGet(APIView):
+    def get(self, request, pk):
+        if OfficeManager.objects.filter(id=pk).exists():
+            office_manager = OfficeManager.objects.get(id=pk)
+            ser_data = OfficeManagerSerializer(instance=office_manager)
+            return Response(ser_data.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'this office manager does not exist'})
+
+
 class OfficeManagerList(APIView):
 
     def get(self, request):
@@ -30,7 +40,7 @@ class OfficeManagerUpdate(APIView):
 
     def put(self, request, pk):
         office_manager = OfficeManager.objects.get(pk=pk)
-        self.check_object_permissions(request,office_manager)
+        self.check_object_permissions(request, office_manager)
         ser_data = OfficeManagerSerializer(instance=office_manager, data=request.data, partial=True)
         if ser_data.is_valid():
             ser_data.save()

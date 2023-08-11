@@ -6,6 +6,16 @@ from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnProfessor
 
 
+class ProfessorGet(APIView):
+    def get(self, request, pk):
+        if Professor.objects.filter(id=pk).exists():
+            professor = Professor.objects.get(id=pk)
+            ser_data = ProfessorSerializer(instance=professor)
+            return Response(ser_data.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'this professor does not exist'})
+
+
 class ProfessorList(APIView):
 
     def get(self, request):

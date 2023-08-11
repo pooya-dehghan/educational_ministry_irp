@@ -8,4 +8,5 @@ urlpatterns = [
     path('create/', views.TeacherCreate.as_view()),
     path('update/<int:pk>/', views.TeacherUpdate.as_view()),
     path('delete/<int:pk>/', views.TeacherDelete.as_view()),
+    path('get/<int:pk>/', views.TeacherGet.as_view()),
 ]
