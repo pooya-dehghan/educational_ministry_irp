@@ -1,9 +1,11 @@
 from rest_framework.views import APIView
-from accounts.models import Student
+from accounts.models import Student, OfficeManager
 from rest_framework.response import Response
 from .serializers import StudentSerializer
 from rest_framework import status
 from .permissions import IsSuperuserOrOwnStudent, IsSuperuser
+from request.models import Request
+from request.serializers import RequestSerializer
 
 
 class StudentGet(APIView):
@@ -56,3 +58,15 @@ class StudentDelete(APIView):
         student = Student.objects.get(pk=pk)
         student.delete()
         return Response({'message': 'deleted successfully'})
+
+
+class RequestForSchool(APIView):
+    # permission_classes = [IsSuperuser]
+
+    def get(self, request, pk):
+        office_manager = OfficeManager.objects.get(id=pk)
+        student = Student.objects.get(id=request.user.pk)
+        print(student)
+        print(office_manager)
+        req = Request.objects.create(sender=student, reciever=office_manager)
+        return Response({'message':'request sent successfully','request id':req.id}, status=status.HTTP_201_CREATED)

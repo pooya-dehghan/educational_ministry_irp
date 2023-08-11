@@ -32,6 +32,9 @@ INSTALLED_APPS = [
     'school.apps.SchoolConfig',
     'student.apps.StudentConfig',
     'officemanager.apps.OfficemanagerConfig',
+    'attendance.apps.AttendanceConfig',
+    'report.apps.ReportConfig',
+    'request.apps.RequestConfig',
     # third part
     'drf_yasg',
     'rest_framework_simplejwt',
@@ -142,6 +145,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 # or
+
 # CORS_ORIGIN_WHITELIST = [
 #     'http://localhost:8000',
 #     'http://example.com',
@@ -153,3 +157,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = 'vltlqqpyzhnnidzu'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'InterShip'
+
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8000',
+    'http://example.com',
+]
