@@ -37,11 +37,13 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'teacher.apps.TeacherConfig',
     'professor.apps.ProfessorConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -132,3 +134,12 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTO_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
 }
+
+
+# CORS handeling
+CORS_ORIGIN_ALLOW_ALL = True
+# or
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8000',
+    'http://example.com',
+]
