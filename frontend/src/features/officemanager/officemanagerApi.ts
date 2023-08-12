@@ -74,8 +74,8 @@ export const officeManagerApi = {
     getData: GetAllOfficeManagersRequest
   ): Promise<GetAllOfficeManagersResponse> => {
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/accounts/api/v1/officemanager/`,
+      const response = await axios.get(
+        `${API_BASE_URL}/officemanager/api/v1/list/`,
         getData
       );
       return response.data;

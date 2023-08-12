@@ -18,7 +18,10 @@ export const dashboardApi = {
     DashboardData: DashboardRequest
   ): Promise<DashboardResponse> => {
     try {
-      const response = await axios.post(`${API_BASE_URL}`, DashboardData);
+      const response = await axios.post(
+        `${API_BASE_URL}/accounts/api/v1/login/`,
+        DashboardData
+      );
       return response.data;
     } catch (error) {
       throw error;
