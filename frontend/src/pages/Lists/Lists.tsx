@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import ListOf from '../../components/ListOf/ListOf';
 import Grid from '@mui/material/Grid';
 import Dashboard from '../Dashboard/Dashboard';
 import { useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getAllOfficeManagersAsync } from '../../features/officemanager/officemanagerThunk';
 import { createschoolAsync } from '../../features/school/schoolThunk';
 import { getProfessorsAsync } from '../../features/professor/professorThunk';
-import { getstudentAsync } from '../../features/student/studentThunk';
+import { getAllstudentsAsync } from '../../features/student/studentThunk';
 import styles from './Lists.module.css';
 
 const List = () => {
@@ -40,7 +40,7 @@ const List = () => {
       })
       .catch((error: any) => {});
 
-    (dispatch as any)(getstudentAsync({}))
+    (dispatch as any)(getAllstudentsAsync({}))
       .unwrap()
       .then((response: any) => {
         console.log('hello list schools: ', response);

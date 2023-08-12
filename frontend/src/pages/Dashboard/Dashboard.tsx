@@ -64,7 +64,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
         />
         <Grid container direction="column">
           <Grid className={styles.menuContainer} item>
-            <AppBar position="static">
+            <AppBar position="static" className={styles.appbar}>
               <Toolbar>
                 <Typography sx={{ flexGrow: 1, textAlign: 'right' }}>
                   ADMIN
