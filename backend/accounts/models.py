@@ -91,10 +91,10 @@ class School(models.Model):
     city = models.CharField(max_length=200)
     region = models.PositiveSmallIntegerField()
     capacity = models.PositiveSmallIntegerField(default=0)
-    manager = models.OneToOneField(User, on_delete=models.CASCADE)
+    manager = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(choices=title_choices, default='n', max_length=100)
     teacher = models.ManyToManyField(Teacher, related_name='teacher_to_school', null=True, blank=True)
-    office_manager = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='office_to_school')
+    office_manager = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='office_to_school', null=True, blank=True)
 
     def __str__(self):
         return f'{self.name} - {self.capacity}-{self.id}'
@@ -120,8 +120,8 @@ class Professor(User):
 
 class Student(User):
     student_id = models.CharField(max_length=10)
-    field = models.CharField(max_length=200)
-    professor2 = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='professor_to_student')
+    field = models.CharField(max_length=200, null=True, blank=True,default='computer')
+    professor2 = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='professor_to_student', null=True, blank=True)
     school2 = models.ForeignKey(School, on_delete=models.CASCADE, related_name='school_to_student', null=True,
                                 blank=True)
     teacher2 = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_to_student', null=True,
