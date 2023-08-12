@@ -17,7 +17,7 @@ import { Link, useLocation } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import  ListItems from './side-bar-list';
+import ListItems from './side-bar-list';
 
 interface propsTypes {
   open: boolean | undefined;
