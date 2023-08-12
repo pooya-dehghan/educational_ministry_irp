@@ -12,17 +12,17 @@ const ListItems = [
   {
     list: 'لیست مدارس',
     icon: <HomeWorkIcon />,
-    to: 'list/schools',
+    to: '/list/schools',
   },
   {
     list: 'لیست مدیران',
     icon: <HomeWorkIcon />,
-    to: 'list/managers',
+    to: '/list/managers',
   },
   {
     list: 'لیست ادارات',
     icon: <ApartmentIcon />,
-    to: 'list/organs',
+    to: '/list/organs',
   },
   {
     list: 'لیست دانشگاه ها',
