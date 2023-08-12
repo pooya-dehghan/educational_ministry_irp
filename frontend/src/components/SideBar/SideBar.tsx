@@ -17,7 +17,8 @@ import { Link, useLocation } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import  ListItems from './side-bar-list';
+import ListItems from './side-bar-list';
+import path from 'path';
 
 interface propsTypes {
   open: boolean | undefined;
@@ -26,6 +27,10 @@ interface propsTypes {
 
 const SideBar: React.FC<propsTypes> = ({ open, handleDrawerToggle }) => {
   const { pathname } = useLocation();
+  const isLocalEnvironment = process.env.NODE_ENV === 'development';
+  const basePath = isLocalEnvironment
+    ? '/dashboard'
+    : '/educational_ministry_irp';
   return (
     <Box component={'div'}>
       <Drawer anchor="right" open={open} onClose={handleDrawerToggle}>
@@ -41,7 +46,7 @@ const SideBar: React.FC<propsTypes> = ({ open, handleDrawerToggle }) => {
           return (
             <ListItem
               component={Link}
-              to={`${pathname}/${list.to}`}
+              to={`${basePath}${list.to}`}
               key={'information'}
               disablePadding
             >

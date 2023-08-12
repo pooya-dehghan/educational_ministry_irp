@@ -41,26 +41,24 @@ const Root = () => {
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const [studentNumber, setStudentNumber] = useState('');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
   const handleSignUp = () => {
     const signUpData = {
       username,
       password,
-      password_confirmation: passwordConfirmation,
+      password_confirmation,
+      student_id: studentNumber,
     };
 
     (dispatch as any)(signUpAsync(signUpData))
       .unwrap()
       .then((response: any) => {
-        console.log('response: ', response);
-        // You can handle success here, e.g. redirect or show a success message
         dispatch(signup(response.user)); // Dispatch your signup action to update the state
       })
-      .catch((error: any) => {
-        // Handle errors, e.g. show an error message
-      });
+      .catch((error: any) => {});
   };
 
   return (
@@ -112,9 +110,17 @@ const Root = () => {
               </Grid>
               <Grid item xs={12} className={classes.textAreaContainer}>
                 <TextField
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setPasswordConfirmation(e.target.value)}
                   id="outlined-basic"
                   label="تکرار گذر واژه"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12} className={classes.textAreaContainer}>
+                <TextField
+                  onChange={(e) => setStudentNumber(e.target.value)}
+                  id="outlined-basic"
+                  label="شماره دانشجویی"
                   variant="outlined"
                 />
               </Grid>
@@ -127,12 +133,6 @@ const Root = () => {
                 <Link href="#">قبلا ثبت نام نموداه‌اید؟ وارد شوید</Link>
               </Grid>
             </Grid>
-            {/* <SnackBar
-              severity="error"
-              message="this is my error"
-              handleClose={() => console.log("close me nigger")}
-              open={true}
-            /> */}
           </Box>
         </Container>
       </div>

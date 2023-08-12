@@ -1,26 +1,42 @@
-export interface GetTeacherRequest {
+export interface GetteacherRequest {
   teacherID: number;
 }
 
-export interface GetTeacherResponse {
+export interface GetteacherResponse {
   username: string;
   region: number;
   schools: string[];
-  students: [];
 }
 
-export interface CreateTeacherRequest {}
+export interface CreateteacherRequest {
 
-export interface CreateTeacherResponse {}
+}
 
-export interface UpdateTeacherRequest {}
+export interface CreateteacherResponse {
 
-export interface UpdateTeacherResponse {}
+}
 
-export interface DeleteTeacherRequest {}
+export interface UpdateteacherRequest {
 
-export interface DeleteTeacherResponse {}
+}
 
-export interface GetAllTeachersRequest {}
+export interface UpdateteacherResponse {
+  
+}
 
-export interface GetAllTeachersResponse {}
+
+export interface DeleteteachereRequest { 
+
+}
+
+export interface DeleteteacherResponse {
+
+}
+
+export interface GetAllteachersRequest {
+
+}
+
+export interface GetAllteachersResponse {
+  
+}
