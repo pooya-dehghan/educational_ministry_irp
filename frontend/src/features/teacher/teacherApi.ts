@@ -1,22 +1,22 @@
 import axios from 'axios';
 import {
-  CreateTeacherRequest,
-  CreateTeacherResponse,
-  GetAllTeachersRequest,
-  GetAllTeachersResponse,
-  GetTeacherRequest,
-  GetTeacherResponse,
-  DeleteTeacherRequest,
-  DeleteTeacherResponse,
-  UpdateTeacherRequest,
-  UpdateTeacherResponse,
+  CreateteacherRequest,
+  CreateteacherResponse,
+  DeleteteachereRequest,
+  DeleteteacherResponse,
+  GetAllteachersRequest,
+  GetAllteachersResponse,
+  GetteacherRequest,
+  GetteacherResponse,
+  UpdateteacherRequest,
+  UpdateteacherResponse,
 } from './interface/interface.index';
 const API_BASE_URL = 'http://localhost:8000'; // Your API base URL
 
 export const teacherApi = {
-  getTeacher: async (
-    getData: GetTeacherRequest
-  ): Promise<GetTeacherResponse> => {
+  getteacher: async (
+    getData: GetteacherRequest
+  ): Promise<GetteacherResponse> => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/accounts/api/v1/teacher/`,
@@ -28,9 +28,9 @@ export const teacherApi = {
     }
   },
 
-  createTeacher: async (
-    createData: CreateTeacherRequest
-  ): Promise<CreateTeacherResponse> => {
+  createteacher: async (
+    createData: CreateteacherRequest
+  ): Promise<CreateteacherResponse> => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/accounts/api/v1/teacher/`,
@@ -42,9 +42,9 @@ export const teacherApi = {
     }
   },
 
-  updateTeacher: async (
-    updateData: UpdateTeacherRequest
-  ): Promise<UpdateTeacherResponse> => {
+  updateteacher: async (
+    updateData: UpdateteacherRequest
+  ): Promise<UpdateteacherResponse> => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/accounts/api/v1/teacher/`,
@@ -56,9 +56,9 @@ export const teacherApi = {
     }
   },
 
-  deleteTeacher: async (
-    deleteData: DeleteTeacherRequest
-  ): Promise<DeleteTeacherResponse> => {
+  deleteteacher: async (
+    deleteData: DeleteteachereRequest
+  ): Promise<DeleteteacherResponse> => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/accounts/api/v1/teacher/`,
@@ -70,9 +70,9 @@ export const teacherApi = {
     }
   },
 
-  getAllOfficeManagers: async (
-    getData: GetAllTeachersRequest
-  ): Promise<GetAllTeachersResponse> => {
+  getAllteachers: async (
+    getData: GetAllteachersRequest
+  ): Promise<GetAllteachersResponse> => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/accounts/api/v1/teacher/`,
