@@ -14,6 +14,7 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from .serializers import EmailSerializer, ChangePasswordSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 class ApiUserRegistrationView(GenericAPIView):
@@ -178,3 +179,41 @@ class ResetPassword(APIView):
         user_token.delete()
         token, created = Token.objects.get_or_create(user=user)
         return Response({'message': 'password change successfully'}, status=status.HTTP_200_OK)
+
+
+class DashBordList(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        TeacherList = ['دیدن لیست دانشجوهای خودش', 'دیدن پروفایل', 'دادن نمره به دانشجو ها',
+                       'پرکردن گزارش راجب دانشجوها']
+        ProfessorList = ['دیدن لیست دانشجو های خودش', 'ثبت نمره برای دانشحوها', 'چک کردن تکالیف دانشجویان',
+                         'چک کردن حضور وغیاب دانشحویان', 'دیدن پروفایل']
+        StudentList = ['دیدن لیست مناطق', 'ایجاد گزارش برای مدرسه و معلم', 'تحویل تکالیف استاد',
+                       'دیدن وضعیت حضور و غیاب خودش', 'دیدن نمره خود', 'دیدن پروفایل',
+                       'درخواست به مسئول اداره و بررسی وضعیت درخواست']
+        OfficeManagerList = ['فرستادن یک دانشجو به یک مدرسه', 'دیدن پروفایل', 'استعلام گزارش ها راجب مدارس',
+                             'دیدن لیست مدارس']
+
+        SchoolManagerList = ['ثبت ظرفیت مدرسه', 'پر کردن و حضور و غیاب  و نمایش حضور و غیاب دانشجویان',
+                             'دیدن لیست دانش آموزان', 'دیدن لیست معلم ها', 'دیدن پروفایل']
+        SuperuserList = ['دیدن لیست مدارس', 'ثبت ظرفیت مدرسه', 'دیدن لیست معلم ها', 'دیدن پروفایل',
+                         'فرستادن یک دانشجو به یک مدرسه', 'استعلام گزارش ها راجب مدارس', 'دیدن لیست مناطق',
+                         'ایجاد گزارش برای مدرسه و معلم', 'دیدن لیست دانشجوها', '', 'دادن نمره به دانشجو هاو دیدن نمره',
+                         'چک کردن تکالیف دانشجویان', 'پر کردن و حضور و غیاب  و نمایش حضور و غیاب دانشجویان',
+                         'درخواست به مسئول اداره و بررسی وضعیت درخواست', 'پرکردن گزارش راجب دانشجوها']
+        if Teacher.objects.filter(pk=user.id).exists():
+            return Response({'list': TeacherList, 'type': 'Teacher'}, status=status.HTTP_200_OK)
+        elif Professor.objects.filter(pk=user.id).exists():
+            return Response({'list': ProfessorList, 'type': 'Professor'}, status=status.HTTP_200_OK)
+        elif Student.objects.filter(pk=user.id).exists():
+            return Response({'list': StudentList, 'type': 'Student'}, status=status.HTTP_200_OK)
+        elif OfficeManager.objects.filter(pk=user.id).exists():
+            return Response({'list': OfficeManagerList, 'type': 'OfficeManager'}, status=status.HTTP_200_OK)
+        elif School.objects.filter(manager=user).exists():
+            return Response({'list': SchoolManagerList, 'type': 'SchoolManager'}, status=status.HTTP_200_OK)
+        elif user.is_admin:
+            return Response({'list': SuperuserList, 'type': 'Superuser'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'not type user'}, status=status.HTTP_404_NOT_FOUND)
