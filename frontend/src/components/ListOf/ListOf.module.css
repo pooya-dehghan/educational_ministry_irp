@@ -5,3 +5,14 @@
 .avatar {
   margin: auto;
 }
+
+.card {
+  background: rgb(131, 58, 180);
+  background: linear-gradient(
+    90deg,
+    rgba(131, 58, 180, 1) 0%,
+    rgba(157, 41, 41, 1) 0%,
+    rgba(252, 176, 69, 1) 100%
+  );
+  margin: 20px;
+}

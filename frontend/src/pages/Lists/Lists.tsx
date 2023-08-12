@@ -5,9 +5,10 @@ import Dashboard from '../Dashboard/Dashboard';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllOfficeManagersAsync } from '../../features/officemanager/officemanagerThunk';
-import { getSchoolsAsync } from '../../features/school/schoolThunk';
+import { createschoolAsync } from '../../features/school/schoolThunk';
 import { getProfessorsAsync } from '../../features/professor/professorThunk';
-import { getStudentsAsync } from '../../features/student/studentThunk';
+import { getstudentAsync } from '../../features/student/studentThunk';
+import styles from './Lists.module.css';
 
 const List = () => {
   const location = useLocation();
@@ -23,7 +24,7 @@ const List = () => {
         // dispatch(response.user);
       })
       .catch((error: any) => {});
-    (dispatch as any)(getSchoolsAsync({}))
+    (dispatch as any)(createschoolAsync({}))
       .unwrap()
       .then((response: any) => {
         console.log('hello list schools: ', response);
@@ -39,7 +40,7 @@ const List = () => {
       })
       .catch((error: any) => {});
 
-    (dispatch as any)(getStudentsAsync({}))
+    (dispatch as any)(getstudentAsync({}))
       .unwrap()
       .then((response: any) => {
         console.log('hello list schools: ', response);
@@ -49,23 +50,23 @@ const List = () => {
   }, []);
   return (
     <Dashboard>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={2} md={4} lg={3}>
+      <Grid container spacing={2} className={styles.grid}>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
           <ListOf />
         </Grid>
         {/* <Grid item xs={12} sm={2} md={4} lg={3}>
           <ListOf />
         </Grid>
-        <Grid item xs={12} sm={2} md={4} lg={3}>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
           <ListOf />
         </Grid>
-        <Grid item xs={12} sm={2} md={4} lg={3}>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
           <ListOf />
         </Grid>
-        <Grid item xs={12} sm={2} md={4} lg={3}>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
           <ListOf />
         </Grid>
-        <Grid item xs={12} sm={2} md={4} lg={3}>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
           <ListOf />
         </Grid> */}
       </Grid>

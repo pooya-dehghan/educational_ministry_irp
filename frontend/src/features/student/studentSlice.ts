@@ -1,23 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  student: {
-    name: '',
-    number: '',
+  studentinfo: {
+    username: '',
+    avatar: '',
+    status: '',
   },
-  students: [],
+  allstudents: [],
 };
 
 const studentSlice = createSlice({
   name: 'student',
   initialState,
   reducers: {
-    getAllStudents: (state, action) => {
-      state.students = action.payload;
+    createstudent: (state, action) => {
+      state.studentinfo = action.payload;
+    },
+    getAllstudents: (state, action) => {
+      state.allstudents = action.payload;
+    },
+    updatestudent: (state, action) => {
+      state.studentinfo = action.payload;
+    },
+    deletestudent: (state, action) => {
+      state.studentinfo = { username: '', avatar: '', status: '' };
     },
   },
 });
 
-export const { getAllStudents } = studentSlice.actions;
+export const {
+  createstudent,
+  getAllstudents,
+  updatestudent,
+  deletestudent,
+} = studentSlice.actions;
 
 export default studentSlice.reducer;

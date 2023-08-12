@@ -1,7 +1,15 @@
 import axios from 'axios';
 import {
+  CreateprofessorRequest,
+  CreateprofessorResponse,
+  DeleteprofessoreRequest,
+  DeleteprofessorResponse,
   GetAllProfessorRequest,
   GetAllProfessorResponse,
+  GetprofessorRequest,
+  GetprofessorResponse,
+  UpdateprofessorRequest,
+  UpdateprofessorResponse,
 } from './interface/interface.index';
 const API_BASE_URL = 'http://localhost:8000'; // Your API base URL
 

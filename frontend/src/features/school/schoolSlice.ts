@@ -1,23 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  school: {
-    name: '',
-    region: '',
+  schoolinfo: {
+    schoolname : '',
   },
-  schools: [],
+  allschools: [],
 };
 
 const schoolSlice = createSlice({
   name: 'school',
   initialState,
   reducers: {
-    getAllSchools: (state, action) => {
-      state.schools = action.payload;
+    createschool: (state, action) => {
+      state.schoolinfo = action.payload;
+    },
+    getAllschools: (state, action) => {
+      state.allschools = action.payload;
+    },
+    updateschool: (state, action) => {
+      state.schoolinfo = action.payload;
+    },
+    deleteschool: (state, action) => {
+      state.schoolinfo = { schoolname : ''};
     },
   },
 });
 
-export const { getAllSchools } = schoolSlice.actions;
+export const {
+  createschool,
+  getAllschools,
+  updateschool,
+  deleteschool,
+} = schoolSlice.actions;
 
 export default schoolSlice.reducer;
