@@ -91,10 +91,10 @@ class School(models.Model):
     city = models.CharField(max_length=200)
     region = models.PositiveSmallIntegerField()
     capacity = models.PositiveSmallIntegerField(default=0)
-    manager = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    manager = models.OneToOneField(User, on_delete=models.CASCADE)
     title = models.CharField(choices=title_choices, default='n', max_length=100)
     teacher = models.ManyToManyField(Teacher, related_name='teacher_to_school', null=True, blank=True)
-    office_manager = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='office_to_school', null=True, blank=True)
+    office_manager = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='office_to_school')
 
     def __str__(self):
         return f'{self.name} - {self.capacity}-{self.id}'
