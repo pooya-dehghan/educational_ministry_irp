@@ -24,12 +24,16 @@ class ApiUserRegistrationView(GenericAPIView):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             student = serializer.save()
+            user = User.objects.get(pk=student.id)
+            token, created = Token.objects.get_or_create(user=user)
             data = {
                 "username": serializer.validated_data["username"],
                 'type': 'student',
                 'id': student.id,
-
+                'token': token.key,
             }
+
+
             return Response(data=data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
