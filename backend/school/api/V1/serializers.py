@@ -25,3 +25,8 @@ class SchoolSerializerBySchoolManager(serializers.ModelSerializer):
             'office_manager': {'read_only': True},
             'manager': {'read_only': True},
         }
+
+
+class SchoolCapacitySerializer(serializers.Serializer):
+    capacity = serializers.IntegerField()
+

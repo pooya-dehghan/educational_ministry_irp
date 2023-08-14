@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
-from accounts.models import OfficeManager
+from accounts.models import OfficeManager, School
 from rest_framework.response import Response
-from .serializers import OfficeManagerSerializer
+from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSerializer
 from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnOfficeManager
 
@@ -55,3 +55,23 @@ class OfficeManagerDelete(APIView):
         office_manager = OfficeManager.objects.get(pk=pk)
         office_manager.delete()
         return Response({'message': 'deleted successfully'})
+
+
+class SchoolList(APIView):
+    def get(self, request):
+        office_manager = OfficeManager.objects.get(id=request.user.id)
+        school = office_manager.office_to_school
+        ser_data = SchoolListSerializer(instance=school, many=True)
+        return Response(ser_data.data, status=status.HTTP_200_OK)
+
+
+class SchoolGet(APIView):
+    def get(self, request, pk):
+        office_manager = OfficeManager.objects.get(id=request.user.id)
+        if office_manager.office_to_school.filter(pk=pk).exists():
+            school = office_manager.office_to_school.get(pk=pk)
+            ser_data = SchoolSerializer(instance=school)
+            return Response(ser_data.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'not exist school in this region with this id'},
+                            status=status.HTTP_404_NOT_FOUND)

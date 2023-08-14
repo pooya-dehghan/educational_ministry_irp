@@ -9,4 +9,6 @@ urlpatterns = [
     path('update/<int:pk>/', views.OfficeManagerUpdate.as_view()),
     path('delete/<int:pk>/', views.OfficeManagerDelete.as_view()),
     path('get/<int:pk>/', views.OfficeManagerGet.as_view()),
+    path('schoollist/', views.SchoolList.as_view()),
+    path('schoolget/<int:pk>/', views.SchoolGet.as_view()),
 ]
