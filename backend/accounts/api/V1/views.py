@@ -83,7 +83,7 @@ class UserLogoutAPIView(APIView):
         token = Token.objects.get(key=token_value)
         token.delete()
 
-        return Response({'message': 'Logged out successfully'})
+        return Response({'message': 'Logged out successfully'},status=status.HTTP_200_OK)
 
 
 class UserLoginAPIView(APIView):
@@ -122,10 +122,11 @@ class UserLoginAPIView(APIView):
             return Response({
                 'token': token.key,
                 'id': user.pk,
-                'type': type
+                'type': type,
+                'username': user.username
             })
         else:
-            return Response({'error': 'Unable to log in with provided credentials.'}, status=400)
+            return Response({'error': 'Unable to log in with provided credentials.'},status=status.HTTP_404_NOT_FOUND)
 
 
 class ForgetPassword(APIView):
