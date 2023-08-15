@@ -4,6 +4,9 @@ from rest_framework.response import Response
 from .serializers import TeacherSerializer
 from rest_framework import status
 from .permissions import IsSuperuserOrSchoolManager, IsSuperuser, IsSuperuserOrOwnTeacher
+from drf_yasg.utils import swagger_auto_schema
+from .swagger_info import swagger_parameters
+
 
 
 class TeacherGet(APIView):
@@ -27,6 +30,9 @@ class TeacherList(APIView):
 class TeacherCreate(APIView):
     permission_classes = [IsSuperuserOrSchoolManager]
 
+    @swagger_auto_schema(
+            manual_parameters=swagger_parameters
+    )
     def post(self, request):
         ser_data = TeacherSerializer(data=request.POST)
         if ser_data.is_valid():

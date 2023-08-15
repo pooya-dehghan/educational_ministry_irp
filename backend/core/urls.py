@@ -39,6 +39,3 @@ urlpatterns = [
     path('professor/', include('professor.urls', namespace='professor')),
 
 ]
-
-
-

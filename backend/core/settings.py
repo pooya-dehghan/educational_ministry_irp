@@ -163,3 +163,9 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000',
     'http://example.com',
 ]
+
+
+
+SWAGGER_SETTINGS = {
+       'DEFAULT_INFO': 'core.urls.swagger_info',
+   }
