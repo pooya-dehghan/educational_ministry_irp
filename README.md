@@ -356,6 +356,62 @@ interface City : {
 }
 ```
 
+
+
+
+```typescript
+interface Report {
+id : Number
+name : String
+student : Student
+professor : Professor
+report_file : File
+created : DateTimeField
+updated : DateTimeField
+}
+```
+
+
+
+```typescript
+interface Request {
+id : Number
+sender : Student
+reciever : OfficeManager
+created : DateTimeField
+updated : DateTimeField
+status : String
+}
+```
+
+
+
+
+
+```typescript
+interface Attendance {
+id : Number
+student : Student
+school : School
+school_manager : String
+teacher : Teacher
+is_present : BooleanField
+date : DateField
+enterance_time : TimeField
+exit_time : TimeField
+created : DateTimeField
+updated : DateTimeField
+}
+```
+
+
+
+
+
+
+
+
+
 ## API Routes
 
 | Route                       | Method | Description                                                                          |
