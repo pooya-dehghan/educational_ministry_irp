@@ -3,6 +3,8 @@ from accounts.models import OfficeManager, School, User
 
 
 class OfficeManagerSerializer(serializers.ModelSerializer):
+    password_confirmation = serializers.CharField(max_length=255, write_only=True)
+
     class Meta:
         model = OfficeManager
         fields = '__all__'
