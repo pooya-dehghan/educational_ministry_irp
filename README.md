@@ -55,13 +55,6 @@ source <name of your environment>/bin/activate
 example:
 source my_env/bin/activate
 ```
-
-## After activating the virtual environment you should see the name of your environment behind the path of your application. like the below image:
-![Screenshot of my cmd](img/my_env.PNG)
-
-
-
-
 e) Install the dependencies(Backend side)
 - notice that your virtual environment should be active while installing
 - using backend_requirments.txt file in the repo:
@@ -80,12 +73,6 @@ g) now you can run the backend server with this command:
 ```shell
 python manage.py runserver
 ```
-
-- you should see a message in your command line or terminal like this:
-
-![Screenshot of my cmd](img/runserver.PNG)
-
-
 h) If you want to see the output, open the browser and search for this address
 ```shell
 http://localhost:8000
