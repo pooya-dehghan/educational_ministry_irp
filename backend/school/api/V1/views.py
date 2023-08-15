@@ -6,7 +6,8 @@ from .serializers import SchoolSerializer, SchoolSerializerByOfficeManager, Scho
 from rest_framework import status
 from .permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManager,\
     IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager
-
+from drf_yasg.utils import swagger_auto_schema
+from .swagger_info import swagger_parameters
 
 class SchoolGet(APIView):
     def get(self, request, pk):
@@ -29,6 +30,10 @@ class SchoolList(APIView):
 class SchoolCreate(APIView):
     permission_classes = [IsSuperuserOrOfficeManager]
 
+
+    @swagger_auto_schema(
+            manual_parameters=swagger_parameters
+    )
     def post(self, request):
         if OfficeManager.objects.filter(id=request.user.id).exists():
             ser_data = SchoolSerializerByOfficeManager(data=request.POST)
