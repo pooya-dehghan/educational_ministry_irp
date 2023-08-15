@@ -26,9 +26,14 @@ const authSlice = createSlice({
       state.user = { id: null, username: '' };
       state.token = '';
     },
+    verify: (state) => {
+      // state.isAuthenticated = false;
+      // state.user = { id: null, username: '' };
+      // state.token = '';
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, verify } = authSlice.actions;
 
 export default authSlice.reducer;

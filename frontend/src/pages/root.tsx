@@ -36,12 +36,9 @@ const Root = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     console.log('handling wether user is authenticated or not');
-  },[]);
+  }, []);
 
-  return (
-    <>
-    </>
-  );
+  return <>لطفا تا اتمام داشبورد به /dashboard بروید</>;
 };
 
 export default Root;
