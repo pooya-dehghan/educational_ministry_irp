@@ -11,6 +11,8 @@ import { useDispatch } from 'react-redux';
 import { loginAsync } from '../../features/auth/authThunk';
 import { login } from '../../features/auth/authSlice';
 import { updateResponse } from '../../features/response/responseSlice';
+import { useNavigate } from 'react-router-dom';
+import * as tokenHandler from '../../utils/token/index';
 
 const useStyles = makeStyles({
   container: {
@@ -38,6 +40,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     const loginData = {
@@ -55,6 +58,8 @@ const Login = () => {
             open: true,
           })
         );
+        tokenHandler.setToken(response.token);
+        navigate('/dashboard');
       })
       .catch((error: any) => {
         console.log('error: ', error);
