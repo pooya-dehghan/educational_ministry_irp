@@ -4,6 +4,10 @@ from rest_framework.response import Response
 from .serializers import ProfessorSerializer
 from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnProfessor
+from drf_yasg.utils import swagger_auto_schema
+from .swagger_info import swagger_parameters
+
+
 
 
 class ProfessorGet(APIView):
@@ -27,6 +31,9 @@ class ProfessorList(APIView):
 class ProfessorCreate(APIView):
     permission_classes = [IsSuperuser]
 
+    @swagger_auto_schema(
+            manual_parameters=swagger_parameters
+    )
     def post(self, request):
         ser_data = ProfessorSerializer(data=request.POST)
         if ser_data.is_valid():
