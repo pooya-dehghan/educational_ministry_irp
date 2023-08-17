@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from accounts.models import Professor
 from rest_framework.response import Response
-from .serializers import ProfessorSerializer
+from .serializers import ProfessorSerializer, ProfessorSerializerForCreate
 from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnProfessor
 from drf_yasg.utils import swagger_auto_schema
@@ -33,7 +33,7 @@ class ProfessorCreate(APIView):
         manual_parameters=swagger_parameters
     )
     def post(self, request):
-        ser_data = ProfessorSerializer(data=request.POST)
+        ser_data = ProfessorSerializerForCreate(data=request.POST)
         if ser_data.is_valid():
             professor = Professor.objects.create(username=ser_data.validated_data['username'],
                                                  professor_id=ser_data.validated_data['professor_id'])

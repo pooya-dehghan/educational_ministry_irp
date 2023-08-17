@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from accounts.models import OfficeManager, School
 from rest_framework.response import Response
-from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSerializer
+from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSerializer, OfficeManagerSerializerForCreate
 from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnOfficeManager
 from drf_yasg.utils import swagger_auto_schema
@@ -35,7 +35,7 @@ class OfficeManagerCreate(APIView):
 
     )
     def post(self, request):
-        ser_data = OfficeManagerSerializer(data=request.POST)
+        ser_data = OfficeManagerSerializerForCreate(data=request.POST)
         if ser_data.is_valid():
             office_manager = OfficeManager.objects.create(username=ser_data.validated_data['username'],
                                                           region=ser_data.validated_data['region'])

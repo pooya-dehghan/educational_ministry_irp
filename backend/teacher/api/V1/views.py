@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from accounts.models import Teacher, School
 from rest_framework.response import Response
-from .serializers import TeacherSerializer
+from .serializers import TeacherSerializer, TeacherSerializerForCreate
 from rest_framework import status
 from .permissions import IsSuperuserOrSchoolManager, IsSuperuser, IsSuperuserOrOwnTeacher
 from drf_yasg.utils import swagger_auto_schema
@@ -33,7 +33,7 @@ class TeacherCreate(APIView):
         manual_parameters=swagger_parameters
     )
     def post(self, request):
-        ser_data = TeacherSerializer(data=request.POST)
+        ser_data = TeacherSerializerForCreate(data=request.POST)
         if ser_data.is_valid():
             teacher = Teacher.objects.create(username=ser_data.validated_data['username'],
                                              field=ser_data.validated_data['field'])

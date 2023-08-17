@@ -4,12 +4,12 @@ from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 
 
-class ProfessorSerializer(serializers.ModelSerializer):
+class ProfessorSerializerForCreate(serializers.ModelSerializer):
     password_confirmation = serializers.CharField(max_length=255, write_only=True)
 
     class Meta:
         model = Professor
-        fields = '__all__'
+        fields = ('username', 'password', 'password_confirmation', 'professor_id')
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -25,3 +25,12 @@ class ProfessorSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": list(e.messages)})
 
         return super().validate(attrs)
+
+
+class ProfessorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Professor
+        fields = '__all__'
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }

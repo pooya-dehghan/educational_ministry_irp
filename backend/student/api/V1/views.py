@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from accounts.models import Student, OfficeManager
 from rest_framework.response import Response
-from .serializers import StudentSerializer
+from .serializers import StudentSerializer, StudentSerializerForCreate
 from rest_framework import status
 from .permissions import IsSuperuserOrOwnStudent, IsSuperuser
 from request.models import Request
@@ -35,7 +35,7 @@ class StudentCreate(APIView):
         manual_parameters=swagger_parameters
     )
     def post(self, request):
-        ser_data = StudentSerializer(data=request.POST)
+        ser_data = StudentSerializerForCreate(data=request.POST)
         if ser_data.is_valid():
             student = Student.objects.create(username=ser_data.validated_data['username'],
                                              studentUniqueCode=ser_data.validated_data['studentUniqueCode'])

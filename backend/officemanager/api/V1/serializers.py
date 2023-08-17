@@ -4,7 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 
 
-class OfficeManagerSerializer(serializers.ModelSerializer):
+class OfficeManagerSerializerForCreate(serializers.ModelSerializer):
     password_confirmation = serializers.CharField(max_length=255, write_only=True)
 
     class Meta:
@@ -26,6 +26,14 @@ class OfficeManagerSerializer(serializers.ModelSerializer):
 
         return super().validate(attrs)
 
+
+class OfficeManagerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OfficeManager
+        fields = '__all__'
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
 class SchoolListSerializer(serializers.ModelSerializer):
     class Meta:
