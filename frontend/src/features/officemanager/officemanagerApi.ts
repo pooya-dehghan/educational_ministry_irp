@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axsioInstance from '../../utils/axios/index';
 import {
   CreateOfficeManagerRequest,
   CreateOfficeManagerResponse,
@@ -32,7 +33,7 @@ export const officeManagerApi = {
     createData: CreateOfficeManagerRequest
   ): Promise<CreateOfficeManagerResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axsioInstance.post(
         `${API_BASE_URL}/accounts/api/v1/officemanager/`,
         createData
       );
