@@ -9,7 +9,7 @@ class OfficeManagerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OfficeManager
-        fields = '__all__'
+        fields = ("username", "password", "password_confirmation", "region")
         extra_kwargs = {
             'password': {'write_only': True}
         }
