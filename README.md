@@ -230,131 +230,180 @@ This API uses token-based authentication. To access protected endpoints, include
 ```typescript
 interface User {
 id : number
-organization : Organization
-messagesSent : Message[]
-messagesRecieved : Message[]
-role : string
-tasks : Task[]
-status : string
-notifications : Notification[]
-alerts : Alert[]
-firstname : string
-lastname : string
-username : string
-phonenumber : string
-email : string
-bio : string
-school : School
-manager Manager
+username : String
+national_code : String
+phone_number : String
+email : EmailField
+first_name : String
+last_name : String
+birthday_date : DateTimeField
+gender : String
+is_active : BooleanField
+created_date : DateTimeField
+updated_date : DateTimeField
+avatar: ImageField
+is_admin: BooleanField
+personal_code : String
 }
 ```
 
+
+
 ```typescript
-interface Organization : {
+interface Teacher {
 id : number
-name : string
-role : string
-phonenumbers : string[]
-manager : Manager
-students : Student[]
-schools : School[]
+username : String
+national_code : String
+phone_number : String
+email : EmailField
+first_name : String
+last_name : String
+birthday_date : DateTimeField
+gender : String
+is_active : BooleanField
+created_date : DateTimeField
+updated_date : DateTimeField
+avatar: ImageField
+is_admin: BooleanField
+personal_code : String
+field : String
+slug: SlugField
+Level_of_education: String
 }
 ```
 
+
+
 ```typescript
-interface School : {
-  id : number
-  name : string
-  phonenumbers : string[]
-  dstrict : number
-  city : City
-  students : Student[]
-  manager  : Manager
-  organization : Organization
+interface OfficeManager {
+id : number
+username : String
+national_code : String
+phone_number : String
+email : EmailField
+first_name : String
+last_name : String
+birthday_date : DateTimeField
+gender : String
+is_active : BooleanField
+created_date : DateTimeField
+updated_date : DateTimeField
+avatar: ImageField
+is_admin: BooleanField
+personal_code : String
+region: Number
 }
 ```
 
+
+
 ```typescript
-interface Student  : {
-  id  : number
-  name : string
-  phonenumber : string
-  role : string
-  city : City
-  school  : School
-  organization : Organization
-  tasks : Task[]
-  alerts : Alert[]
-  notifications: Notification[]
+interface School {
+id : number
+username : String
+national_code : String
+phone_number : String
+email : EmailField
+first_name : String
+last_name : String
+birthday_date : DateTimeField
+gender : String
+is_active : BooleanField
+created_date : DateTimeField
+updated_date : DateTimeField
+avatar: ImageField
+is_admin: BooleanField
+personal_code : String
+name : String
+slug: SlugField
+established_year: Number
+created: DateTimeField
+updated: DateTimeField
+city: String
+region: Number
+capacity: Number
+manager: String
+title: String
+teacher: Teacher
+office_manager: OfficeManager
 }
 ```
 
+
+
 ```typescript
-interface Manager {
-  id: number;
-  firstname: string;
-  lastname: string;
-  school: School;
-  phonenumbers: string[];
-  organization: Organization;
-  tasks: Task[];
-  alerts: Alert[];
-  notifications: Notification[];
+interface Professor {
+id : number
+username : String
+national_code : String
+phone_number : String
+email : EmailField
+first_name : String
+last_name : String
+birthday_date : DateTimeField
+gender : String
+is_active : BooleanField
+created_date : DateTimeField
+updated_date : DateTimeField
+avatar: ImageField
+is_admin: BooleanField
+personal_code : String
+professor_id : String
+is_science_committee: BooleanField
 }
 ```
 
+
+
 ```typescript
-interface Notification {
-  id: number;
-  title: string;
-  body: string;
-  notification_token: string;
-  device_type: string;
-  picture_url: string;
+interface Student {
+id : number
+username : String
+national_code : String
+phone_number : String
+email : EmailField
+first_name : String
+last_name : String
+birthday_date : DateTimeField
+gender : String
+is_active : BooleanField
+created_date : DateTimeField
+updated_date : DateTimeField
+avatar: ImageField
+is_admin: BooleanField
+personal_code : String
+student_id: String
+field: String
+professor: Professor
+school: School
+teacher: Teacher
 }
 ```
 
+
+
+
+
 ```typescript
-interface Alert {
-  id : number
-  title : string
-  body : string
-  type : string #(success ,warning , error , info)
-  read : boolean
+interface StudentActivity {
+id: Number
+title: String
+slug: SlugField
+created: DateTimeField
+updated: DateTimeField
+content: String
+student: Student
+is_done: BooleanField
 }
 ```
 
-```typescript
-interface Message {
-  id: number;
-  message: string;
-  sender: User;
-  reciever: User;
-  read: boolean;
-}
-```
 
-```typescript
-interface Task {
-  id : number
-  user : User
-  title : string
-  description : string
-  dueTime : Time
-  createdTime : Time
-  giver : User
-  status : string #(done , in_progress , draft)
-}
-```
 
-```typescript
-interface City : {
-  id : number
-  name : string
-  countery : string
-  districts : number[]
-}
-```
+
+
+
+
+
 
 
 
