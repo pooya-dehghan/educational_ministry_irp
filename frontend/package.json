@@ -27,7 +27,8 @@
     "react-router-dom": "^6.11.1",
     "redux-thunk": "^2.4.2",
     "stylis": "^4.3.0",
-    "stylis-plugin-rtl": "^2.1.1"
+    "stylis-plugin-rtl": "^2.1.1",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.22",
