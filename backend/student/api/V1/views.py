@@ -15,8 +15,7 @@ class StudentGet(APIView):
             ser_data = StudentSerializer(instance=student)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'this student does not exist'})
-
+            return Response({'message': 'this student does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class StudentList(APIView):
@@ -43,7 +42,7 @@ class StudentUpdate(APIView):
 
     def put(self, request, pk):
         student = Student.objects.get(pk=pk)
-        self.check_object_permissions(request,student)
+        self.check_object_permissions(request, student)
         ser_data = StudentSerializer(instance=student, data=request.data, partial=True)
         if ser_data.is_valid():
             ser_data.save()
@@ -57,7 +56,7 @@ class StudentDelete(APIView):
     def delete(self, request, pk):
         student = Student.objects.get(pk=pk)
         student.delete()
-        return Response({'message': 'deleted successfully'})
+        return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
 
 
 class RequestForSchool(APIView):
@@ -69,4 +68,4 @@ class RequestForSchool(APIView):
         print(student)
         print(office_manager)
         req = Request.objects.create(sender=student, reciever=office_manager)
-        return Response({'message':'request sent successfully','request id':req.id}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'request sent successfully', 'request id': req.id}, status=status.HTTP_201_CREATED)

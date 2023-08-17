@@ -8,8 +8,6 @@ from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters
 
 
-
-
 class ProfessorGet(APIView):
     def get(self, request, pk):
         if Professor.objects.filter(id=pk).exists():
@@ -17,7 +15,7 @@ class ProfessorGet(APIView):
             ser_data = ProfessorSerializer(instance=professor)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'this professor does not exist'})
+            return Response({'message': 'this professor does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ProfessorList(APIView):
@@ -32,7 +30,7 @@ class ProfessorCreate(APIView):
     permission_classes = [IsSuperuser]
 
     @swagger_auto_schema(
-            manual_parameters=swagger_parameters
+        manual_parameters=swagger_parameters
     )
     def post(self, request):
         ser_data = ProfessorSerializer(data=request.POST)
@@ -61,4 +59,4 @@ class ProfessorDelete(APIView):
     def delete(self, request, pk):
         professor = Professor.objects.get(pk=pk)
         professor.delete()
-        return Response({'message': 'deleted successfully'})
+        return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
