@@ -27,7 +27,7 @@ swagger_parameters = [
            type=openapi.TYPE_STRING
        ),
               openapi.Parameter(
-           name='student_id',
+           name='studentUniqueCode',
            in_=openapi.IN_PATH,
            description='Example path parameter',
            type=openapi.TYPE_STRING

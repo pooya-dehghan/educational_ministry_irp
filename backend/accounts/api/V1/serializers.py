@@ -11,7 +11,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ["username", "password", "password_confirmation", "student_id"]  # , "field", "professor2"]
+        fields = ["username", "password", "password_confirmation", "studentUniqueCode"]  # , "field", "professor2"]
 
     def validate(self, attrs):
         password_confirmation = attrs.get("password_confirmation")

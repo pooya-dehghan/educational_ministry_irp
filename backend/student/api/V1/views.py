@@ -38,7 +38,7 @@ class StudentCreate(APIView):
         ser_data = StudentSerializer(data=request.POST)
         if ser_data.is_valid():
             student = Student.objects.create(username=ser_data.validated_data['username'],
-                                             student_id=ser_data.validated_data['student_id'])
+                                             studentUniqueCode=ser_data.validated_data['studentUniqueCode'])
             student.set_password(ser_data.validated_data['password'])
             student.save()
 

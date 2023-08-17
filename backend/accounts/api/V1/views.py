@@ -16,6 +16,7 @@ from django.core.mail import send_mail
 from .serializers import EmailSerializer, ChangePasswordSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class ApiUserRegistrationView(GenericAPIView):
@@ -25,7 +26,7 @@ class ApiUserRegistrationView(GenericAPIView):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             student = Student.objects.create(username=serializer.validated_data['username']
-                                             , student_id=serializer.validated_data['student_id'])
+                                             , studentUniqueCode=serializer.validated_data['studentUniqueCode'])
             student.set_password(serializer.validated_data['password'])
             student.save()
             user = User.objects.get(pk=student.id)
@@ -50,14 +51,13 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 class UserLogoutAPIView(APIView):
     def post(self, request):
-        # Get the user's token from the request headers
-        token_value = request.META.get('HTTP_AUTHORIZATION').split(' ')[1]
-
-        # Find the token and delete it from the database
-        token = Token.objects.get(key=token_value)
-        token.delete()
-
-        return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
+        token = request.data.get('refresh_token')
+        if token:
+            token_obj = RefreshToken(token)
+            token_obj.blacklist()
+            return Response({'message': 'Successfully logged out.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Refresh token is not provided.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserLoginAPIView(APIView):
@@ -66,7 +66,10 @@ class UserLoginAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data['username']
         password = serializer.validated_data['password']
-        user = User.objects.get(username=username)
+        try:
+            user = User.objects.get(username=username)
+        except ObjectDoesNotExist:
+            return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
         if user and check_password(password, user.password):
             if School.objects.filter(manager=user).exists():
                 type = "school manager"
@@ -82,10 +85,8 @@ class UserLoginAPIView(APIView):
                 type = "professor"
             else:
                 type = "anonymous"
-            token, created = Token.objects.get_or_create(user=user)
             refresh = RefreshToken.for_user(user=user)
             return Response({
-                # 'token': token.key,
                 'id': user.pk,
                 'type': type,
                 'username': user.username,
@@ -93,7 +94,7 @@ class UserLoginAPIView(APIView):
                 'access': str(refresh.access_token),
             })
         else:
-            return Response({'error': 'Unable to log in with provided credentials.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ForgetPassword(APIView):
