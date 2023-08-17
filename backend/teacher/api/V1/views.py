@@ -8,7 +8,6 @@ from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters
 
 
-
 class TeacherGet(APIView):
     def get(self, request, pk):
         if Teacher.objects.filter(id=pk).exists():
@@ -16,7 +15,7 @@ class TeacherGet(APIView):
             ser_data = TeacherSerializer(instance=teacher)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'this teacher does not exist'})
+            return Response({'message': 'this teacher does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class TeacherList(APIView):
@@ -31,7 +30,7 @@ class TeacherCreate(APIView):
     permission_classes = [IsSuperuserOrSchoolManager]
 
     @swagger_auto_schema(
-            manual_parameters=swagger_parameters
+        manual_parameters=swagger_parameters
     )
     def post(self, request):
         ser_data = TeacherSerializer(data=request.POST)
@@ -63,4 +62,4 @@ class TeacherDelete(APIView):
     def delete(self, request, pk):
         teacher = Teacher.objects.get(pk=pk)
         teacher.delete()
-        return Response({'message': 'deleted successfully'})
+        return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)

@@ -5,7 +5,8 @@ from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSe
 from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnOfficeManager
 from drf_yasg.utils import swagger_auto_schema
-from .swagger_info import swagger_parameters
+from .swagger_info import swagger_parameters, swagger_docs
+
 
 class OfficeManagerGet(APIView):
     def get(self, request, pk):
@@ -14,7 +15,7 @@ class OfficeManagerGet(APIView):
             ser_data = OfficeManagerSerializer(instance=office_manager)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'this office manager does not exist'})
+            return Response({'message': 'this office manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class OfficeManagerList(APIView):
@@ -29,7 +30,11 @@ class OfficeManagerCreate(APIView):
     permission_classes = [IsSuperuser]
 
     @swagger_auto_schema(
-            manual_parameters=swagger_parameters
+<<<<<<< Updated upstream
+        manual_parameters=swagger_parameters
+=======
+            manual_parameters=swagger_parameters,
+>>>>>>> Stashed changes
     )
     def post(self, request):
         ser_data = OfficeManagerSerializer(data=request.POST)
@@ -58,7 +63,7 @@ class OfficeManagerDelete(APIView):
     def delete(self, request, pk):
         office_manager = OfficeManager.objects.get(pk=pk)
         office_manager.delete()
-        return Response({'message': 'deleted successfully'})
+        return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
 
 
 class SchoolList(APIView):
