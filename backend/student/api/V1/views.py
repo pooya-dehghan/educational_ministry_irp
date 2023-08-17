@@ -6,7 +6,8 @@ from rest_framework import status
 from .permissions import IsSuperuserOrOwnStudent, IsSuperuser
 from request.models import Request
 from request.serializers import RequestSerializer
-
+from drf_yasg.utils import swagger_auto_schema
+from .swagger_info import swagger_parameters
 
 class StudentGet(APIView):
     def get(self, request, pk):
@@ -29,6 +30,9 @@ class StudentList(APIView):
 class StudentCreate(APIView):
     permission_classes = [IsSuperuser]
 
+    @swagger_auto_schema(
+            manual_parameters=swagger_parameters
+    )
     def post(self, request):
         ser_data = StudentSerializer(data=request.POST)
         if ser_data.is_valid():
