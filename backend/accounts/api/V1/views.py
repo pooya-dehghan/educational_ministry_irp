@@ -15,7 +15,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from .serializers import EmailSerializer, ChangePasswordSerializer
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class ApiUserRegistrationView(GenericAPIView):
     serializer_class = UserRegisterSerializer
@@ -25,15 +25,16 @@ class ApiUserRegistrationView(GenericAPIView):
         if serializer.is_valid():
             student = serializer.save()
             user = User.objects.get(pk=student.id)
-            token, created = Token.objects.get_or_create(user=user)
-            data = {
-                "username": serializer.validated_data["username"],
-                'type': 'student',
-                'id': student.id,
-                'token': token.key,
+            if user:
+                refresh = RefreshToken.for_user(user=user)
+                data = {
+                    "username": serializer.validated_data["username"],
+                    'type': 'student',
+                    'id': student.id,
+                    'refresh' : str(refresh),
+                    'access': str(refresh.access_token),
+                    
             }
-
-
             return Response(data=data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -96,6 +97,8 @@ class UserLoginAPIView(APIView):
         print(password)
         z = 0
         user = User.objects.get(username=username)
+        print(user.is_admin)
+        print(user.is_staff)
         if user and check_password(password, user.password):
             z = 1
         if z == 0:
@@ -103,12 +106,13 @@ class UserLoginAPIView(APIView):
             if user:
                 z = 1
 
+        print(z)
         if z == 1:
             if School.objects.filter(manager=user).exists():
                 type = "school manager"
             elif user.is_admin:
                 type = "superuser"
-            if Teacher.objects.filter(pk=user.pk).exists():
+            elif Teacher.objects.filter(pk=user.pk).exists():
                 type = "teacher"
             elif Student.objects.filter(pk=user.pk).exists():
                 type = "student"
@@ -119,11 +123,14 @@ class UserLoginAPIView(APIView):
             else:
                 type = "anonymous"
             token, created = Token.objects.get_or_create(user=user)
+            refresh = RefreshToken.for_user(user=user)
             return Response({
-                'token': token.key,
+                # 'token': token.key,
                 'id': user.pk,
                 'type': type,
-                'username': user.username
+                'username': user.username,
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
             })
         else:
             return Response({'error': 'Unable to log in with provided credentials.'},status=status.HTTP_404_NOT_FOUND)
