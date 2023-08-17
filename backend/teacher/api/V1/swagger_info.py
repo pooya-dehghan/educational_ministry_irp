@@ -32,16 +32,4 @@ swagger_parameters = [
            description='Example path parameter',
            type=openapi.TYPE_STRING
        ),
-                     openapi.Parameter(
-           name='slug',
-           in_=openapi.IN_PATH,
-           description='Example path parameter',
-           type=openapi.TYPE_STRING
-       ),
-                     openapi.Parameter(
-           name='level_of_education',
-           in_=openapi.IN_PATH,
-           description='Example path parameter',
-           type=openapi.TYPE_STRING
-       ),
 ]

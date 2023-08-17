@@ -17,13 +17,17 @@ from .serializers import EmailSerializer, ChangePasswordSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 class ApiUserRegistrationView(GenericAPIView):
     serializer_class = UserRegisterSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
-            student = serializer.save()
+            student = Student.objects.create(username=serializer.validated_data['username']
+                                             , student_id=serializer.validated_data['student_id'])
+            student.set_password(serializer.validated_data['password'])
+            student.save()
             user = User.objects.get(pk=student.id)
             if user:
                 refresh = RefreshToken.for_user(user=user)
@@ -31,10 +35,10 @@ class ApiUserRegistrationView(GenericAPIView):
                     "username": serializer.validated_data["username"],
                     'type': 'student',
                     'id': student.id,
-                    'refresh' : str(refresh),
+                    'refresh': str(refresh),
                     'access': str(refresh.access_token),
-                    
-            }
+
+                }
             return Response(data=data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -43,37 +47,6 @@ class ApiUserRegistrationView(GenericAPIView):
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
-
-#
-# class CustomObtainAuthToken(ObtainAuthToken):
-#     serializer_class = UserLoginSerializer
-#
-#     # serializer_class = CustomTokenObtainSerializer
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(data=request.data,
-#                                            context={'request': request})
-#         serializer.is_valid(raise_exception=True)
-#         print(serializer.validated_data)
-#         user = serializer.validated_data['user']
-#         token, created = Token.objects.get_or_create(user=user)
-#         if request.user.is_superuser:
-#             type = 'admin'
-#         elif user in Student.objects.all():
-#             type = "student"
-#         elif user in OfficeManager.objects.all():
-#             type = "Office manager"
-#         elif user in Teacher.objects.all():
-#             type = "Teacher"
-#         elif user in School.objects.all():
-#             type = "School"
-#         else:
-#             type = "anonymous"
-#
-#         return Response({
-#             'token': token.key,
-#             'user_id': user.pk,
-#             'type': type
-#         })
 
 class UserLogoutAPIView(APIView):
     def post(self, request):
@@ -84,7 +57,7 @@ class UserLogoutAPIView(APIView):
         token = Token.objects.get(key=token_value)
         token.delete()
 
-        return Response({'message': 'Logged out successfully'},status=status.HTTP_200_OK)
+        return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
 
 
 class UserLoginAPIView(APIView):
@@ -93,21 +66,8 @@ class UserLoginAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data['username']
         password = serializer.validated_data['password']
-        print(username)
-        print(password)
-        z = 0
         user = User.objects.get(username=username)
-        print(user.is_admin)
-        print(user.is_staff)
         if user and check_password(password, user.password):
-            z = 1
-        if z == 0:
-            user = User.objects.get(username=username, password=password)
-            if user:
-                z = 1
-
-        print(z)
-        if z == 1:
             if School.objects.filter(manager=user).exists():
                 type = "school manager"
             elif user.is_admin:
@@ -133,7 +93,7 @@ class UserLoginAPIView(APIView):
                 'access': str(refresh.access_token),
             })
         else:
-            return Response({'error': 'Unable to log in with provided credentials.'},status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Unable to log in with provided credentials.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ForgetPassword(APIView):

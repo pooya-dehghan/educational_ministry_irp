@@ -6,13 +6,13 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
 
-
 class UserRegisterSerializer(serializers.ModelSerializer):
     password_confirmation = serializers.CharField(max_length=255, write_only=True)
 
     class Meta:
         model = Student
-        fields = ["username", "password", "password_confirmation", "student_id"]#, "field", "professor2"]
+        fields = ["username", "password", "password_confirmation", "student_id"]  # , "field", "professor2"]
+
     def validate(self, attrs):
         password_confirmation = attrs.get("password_confirmation")
         password = attrs.get("password")
@@ -62,5 +62,3 @@ class EmailSerializer(serializers.Serializer):
 class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length=100)
     new_password_confirm = serializers.CharField(max_length=100)
-
-

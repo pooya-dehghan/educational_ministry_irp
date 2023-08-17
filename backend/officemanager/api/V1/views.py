@@ -37,7 +37,11 @@ class OfficeManagerCreate(APIView):
     def post(self, request):
         ser_data = OfficeManagerSerializer(data=request.POST)
         if ser_data.is_valid():
-            ser_data.save()
+            office_manager = OfficeManager.objects.create(username=ser_data.validated_data['username'],
+                                                          region=ser_data.validated_data['region'])
+            office_manager.set_password(ser_data.validated_data['password'])
+            office_manager.save()
+
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 

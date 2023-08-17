@@ -9,6 +9,7 @@ from request.serializers import RequestSerializer
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters
 
+
 class StudentGet(APIView):
     def get(self, request, pk):
         if Student.objects.filter(id=pk).exists():
@@ -31,12 +32,16 @@ class StudentCreate(APIView):
     permission_classes = [IsSuperuser]
 
     @swagger_auto_schema(
-            manual_parameters=swagger_parameters
+        manual_parameters=swagger_parameters
     )
     def post(self, request):
         ser_data = StudentSerializer(data=request.POST)
         if ser_data.is_valid():
-            ser_data.save()
+            student = Student.objects.create(username=ser_data.validated_data['username'],
+                                             student_id=ser_data.validated_data['student_id'])
+            student.set_password(ser_data.validated_data['password'])
+            student.save()
+
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 

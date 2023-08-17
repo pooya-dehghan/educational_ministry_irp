@@ -65,8 +65,8 @@ class RoleOperation(models.Model):
 
 class Teacher(User):
     field = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200)
-    Level_of_education = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, null=True, blank=True)
+    Level_of_education = models.CharField(max_length=200, null=True, blank=True)
 
 
 class OfficeManager(User):

@@ -35,7 +35,10 @@ class TeacherCreate(APIView):
     def post(self, request):
         ser_data = TeacherSerializer(data=request.POST)
         if ser_data.is_valid():
-            teacher = ser_data.save()
+            teacher = Teacher.objects.create(username=ser_data.validated_data['username'],
+                                             field=ser_data.validated_data['field'])
+            teacher.set_password(ser_data.validated_data['password'])
+            teacher.save()
             if School.objects.filter(manager=request.user).exists():
                 school = School.objects.get(manager=request.user)
                 school.teacher.add(teacher)
