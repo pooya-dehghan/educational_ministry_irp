@@ -190,3 +190,35 @@ class DashBordList(APIView):
             return Response({'list': SuperuserList, 'type': 'Superuser'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'not type user'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+######################################################################
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from rest_framework import generics, status
+
+
+
+
+class PasswordResetView(APIView):
+    serializer_class = EmailSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        user = User.objects.get(email=email)
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        reset_link = f"http://example.com/reset-password/{uid}/{token}/"
+        send_mail(
+            'Password Reset',
+            f'Click the link to reset your password: {reset_link}',
+            'from@example.com',
+            [email],
+            fail_silently=False,
+        )
+        return Response({'message': 'Password reset link sent.'}, status=status.HTTP_200_OK)
