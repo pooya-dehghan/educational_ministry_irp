@@ -97,21 +97,7 @@ python manage.py createsuperuser
 
 - Go to http://localhost:8000/admin/ ↗ and log in with your superuser credentials.
 
-# Backend Views
-As a back-end developer, here are some of the key views and endpoints that you'll want to be aware of:
-
-- school/api/v1/list/: This endpoint returns a list of all schools in the system.
-- school/api/v1/<int:pk>/: This endpoint use for create update and delete a school in the system.
-- student/api/v1/list/: This endpoint returns a list of all students in the system.
-- student/api/v1/<int:pk>/: This endpoint use for create update and delete a student in the system.
-- accounts/api/v1/registration/: endpoint for user registration.
-
-
-
-- accounts/api/v1/jwt/create/ endpoint is typically used for creating access and refresh token
-- /accounts/api/v1/jwt/refresh/ endpoint is used for refreshing user access tokens
-- accounts/api/v1/jwt/verify/ endpoint is used for validating user tokens.
-- accounts/api/v1/login/ : this endpoint is for login :))))
+  
 
 # Install the dependencies of client side and run it:
 
@@ -130,17 +116,41 @@ on your system automatically. write this command below to make sure.
 npm -v
 ```
 
-e) now we should install the required modules to our project. go to frontend directory on cmd and write
+e) now we should install the required modules to our project. first go to frontend directory on cmd
+```shell
+cd frontend
+```
+then write this command :
 ```shell
 npm install
 ```
-f)now open the vscode. open a new terminal. change directory to frontend. write this command below. this gives you local link address.
+f)now open the vscode. open a new terminal. change directory to frontend. write this command below. this gives you a vite port and a local link address.
 ```shell
 npm run dev
 ```
 
 
+
+
 Access the API at http://localhost:XXXX/XXXX/XXXX
+
+
+# Backend Views
+As a back-end developer, here are some of the key views and endpoints that you'll want to be aware of:
+
+- school/api/v1/list/: This endpoint returns a list of all schools in the system.
+- school/api/v1/<int:pk>/: This endpoint use for create update and delete a school in the system.
+- student/api/v1/list/: This endpoint returns a list of all students in the system.
+- student/api/v1/<int:pk>/: This endpoint use for create update and delete a student in the system.
+- accounts/api/v1/registration/: endpoint for user registration.
+
+
+
+- accounts/api/v1/jwt/create/ endpoint is typically used for creating access and refresh token
+- /accounts/api/v1/jwt/refresh/ endpoint is used for refreshing user access tokens
+- accounts/api/v1/jwt/verify/ endpoint is used for validating user tokens.
+- accounts/api/v1/login/ : this endpoint is for login :))))
+
 
 ## Authentication
 
