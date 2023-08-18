@@ -58,7 +58,9 @@ const Login = () => {
             open: true,
           })
         );
-        tokenHandler.setToken(response.token);
+        tokenHandler.setToken(response.access);
+        tokenHandler.setRefreshToken(response.refresh);
+        console.log('access: ', response.access);
         navigate('/dashboard');
       })
       .catch((error: any) => {

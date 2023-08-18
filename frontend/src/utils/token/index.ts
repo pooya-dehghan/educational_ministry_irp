@@ -11,3 +11,15 @@ export function getToken(): string | null {
 export function removeToken() {
   localStorage.removeItem('token');
 }
+
+export function setRefreshToken(token: string) {
+  localStorage.setItem('refresh-token', token);
+}
+
+export function getRefreshToken(): string | null {
+  return localStorage.getItem('refresh-token');
+}
+
+export function removeRefreshToken() {
+  localStorage.removeItem('refresh-token');
+}

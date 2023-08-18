@@ -23,17 +23,19 @@ import { createOfficeManager } from '../../features/officemanager/officemanagerS
 import { updateResponse } from '../../features/response/responseSlice';
 import { Values } from './interface';
 import { officeManagerValidationSchema } from '../../validations';
+
 const theme = createTheme();
 
 const CreateOfficeManager: React.FC = () => {
   const classes = useTextFieldStyles();
-  const [firstName, setFirstName] = useState('');
   const dispatch = useDispatch();
   const handleSubmit = (values: Values, setSubmitting: any) => {
     let createOfficeManagerData = {
-      firstname: firstName,
+      region: values.region,
+      password: values.password,
+      password_confirmation: values.password_confirmation,
+      username: values.username,
     };
-    console.log('values: ', values);
     (dispatch as any)(createOfficeManagerAsync(createOfficeManagerData))
       .unwrap()
       .then((response: any) => {
@@ -56,7 +58,7 @@ const CreateOfficeManager: React.FC = () => {
   return (
     <>
       <Dashboard>
-        <div className={styles.container}>
+        <div className={styles.container} dir="rtl">
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
@@ -90,58 +92,103 @@ const CreateOfficeManager: React.FC = () => {
                   region: '',
                   nationalCode: '',
                   email: '',
+                  password: '',
+                  password_confirmation: '',
+                  username: '',
                 }}
+                validationSchema={officeManagerValidationSchema} // Add validation schema
                 onSubmit={(values: Values, { setSubmitting }: any) => {
                   handleSubmit(values, setSubmitting);
                 }}
               >
-                {({ handleSubmit }) => (
+                {({ handleSubmit, errors, touched }) => (
                   <Form onSubmit={handleSubmit}>
                     <Grid container spacing={2} dir="rtl">
                       <Grid item xs={12} sm={6}>
-                        <Field
-                          component={TextField}
-                          name="firstName"
-                          label="نام"
-                          placeholder="نام"
-                          id="firstName"
-                          autoFocus
-                          onChange={(e: any) => setFirstName(e.target.value)}
-                        />
+                        <Field name="firstName">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام"
+                              placeholder="نام"
+                              id="firstName"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={
+                                touched.firstName && errors.firstName
+                                  ? true
+                                  : false
+                              }
+                              helperText={
+                                touched.firstName && errors.firstName
+                                  ? errors.username
+                                  : ''
+                              }
+                            />
+                          )}
+                        </Field>
                       </Grid>
                       <Grid item xs={12} sm={6}>
-                        <Field
-                          component={TextField}
-                          name="lastName"
-                          label="نام خانوادگی"
-                          placeholder="نام خانوادگی"
-                          id="lastName"
-                          autoFocus
-                        />
+                        <Field name="lastName">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام خانوادگی"
+                              placeholder="نام خانوادگی"
+                              id="lastName"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
                       </Grid>
                       <Grid item xs={12} sm={6}>
-                        <Field
-                          component={TextField}
-                          name="region"
-                          label="منطقه"
-                          placeholder="منطقه"
-                          id="region"
-                          autoFocus
-                        />
+                        <Field name="region">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="منطقه"
+                              placeholder="منطقه"
+                              id="region"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
                       </Grid>
                       <Grid item xs={12} sm={6}>
-                        <Field
-                          component={TextField}
-                          name="region"
-                          label="کد ملی"
-                          placeholder="کد ملی"
-                          id="nationalCode"
-                          autoFocus
-                        />
+                        <Field name="nationalCode">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="کد ملی"
+                              placeholder="کد ملی"
+                              id="nationalCode"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
                       </Grid>
                       <Grid item xs={12}>
                         <Field name="email">
-                          {({ field }: FieldProps) => (
+                          {({ field, meta }: FieldProps) => (
                             <TextField
                               {...field}
                               label="ایمیل"
@@ -150,6 +197,67 @@ const CreateOfficeManager: React.FC = () => {
                               autoFocus
                               variant="outlined"
                               fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="password">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="گذرواژه"
+                              placeholder="گذرواژه"
+                              id="password"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="password_confirmation">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="تکرار گذرواژه"
+                              placeholder="تکرار گذرواژه"
+                              id="nationalCode"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="username">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام کاربری"
+                              placeholder="نام کاربری"
+                              id="username"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
                             />
                           )}
                         </Field>

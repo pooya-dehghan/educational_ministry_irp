@@ -1,4 +1,3 @@
-
 export interface GetOfficeManagerRequest {
   officemanagerID: number;
 }
@@ -10,34 +9,22 @@ export interface GetOfficeManagerResponse {
 }
 
 export interface CreateOfficeManagerRequest {
-
+  username: string;
+  password: string;
+  password_confirmation: string;
+  region: string;
 }
 
-export interface CreateOfficeManagerResponse {
+export interface CreateOfficeManagerResponse {}
 
-}
+export interface UpdateOfficeManagerRequest {}
 
-export interface UpdateOfficeManagerRequest {
+export interface UpdateOfficeManagerResponse {}
 
-}
+export interface DeleteOfficeManagereRequest {}
 
-export interface UpdateOfficeManagerResponse {
-  
-}
+export interface DeleteOfficeManagerResponse {}
 
+export interface GetAllOfficeManagersRequest {}
 
-export interface DeleteOfficeManagereRequest { 
-
-}
-
-export interface DeleteOfficeManagerResponse {
-
-}
-
-export interface GetAllOfficeManagersRequest {
-
-}
-
-export interface GetAllOfficeManagersResponse {
-  
-}
+export interface GetAllOfficeManagersResponse {}

@@ -1,7 +1,12 @@
 // axiosInstance.ts
 
 import axios from 'axios';
-import { getToken, setToken } from '../token/index'; // Replace with your token management utility
+import {
+  getToken,
+  setToken,
+  getRefreshToken,
+  setRefreshToken,
+} from '../token/index'; // Replace with your token management utility
 
 const instance = axios.create({
   baseURL: 'http://localhost:8000', // Replace with your API base URL
@@ -11,6 +16,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const token = getToken();
+    console.log('access in interceptor: ', token);
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -28,10 +34,10 @@ instance.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const refreshToken = getToken();
+      const refresh = getRefreshToken();
       try {
-        const response = await axios.post('accounts/api/v1/jwt/refresh', {
-          refreshToken,
+        const response = await instance.post('/accounts/api/v1/jwt/refresh/', {
+          refresh,
         });
         const newAccessToken = response.data.access;
         setToken(newAccessToken);

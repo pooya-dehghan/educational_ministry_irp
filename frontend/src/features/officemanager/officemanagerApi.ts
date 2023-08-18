@@ -34,7 +34,7 @@ export const officeManagerApi = {
   ): Promise<CreateOfficeManagerResponse> => {
     try {
       const response = await axsioInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/officemanager/`,
+        `${API_BASE_URL}/officemanager/api/v1/create/`,
         createData
       );
       return response.data;

@@ -18,24 +18,7 @@ const AuthenticationHOC: React.FC<AuthenticationHOCProps> = ({ children }) => {
   const [verifyDone, setVerifyDone] = useState(false);
 
   useEffect(() => {
-    let token = tokenHandler.getToken();
-    if (token) {
-      (dispatch as any)(verifyAsync({ token }))
-        .unwrap()
-        .then((response: any) => {
-          dispatch(verify());
-          tokenHandler.setToken(response.token);
-          // navigate('/dashboard');
-        })
-        .catch((error: any) => {
-          console.log('error: ', error);
-          // navigate('/login');
-        })
-        .finally(() => {
-          setVerifyDone(true);
-        });
-    } else {
-    }
+
   }, []);
   return <>{children}</>;
 };
