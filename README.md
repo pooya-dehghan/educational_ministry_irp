@@ -80,20 +80,6 @@ or
 http://127.0.0.1:8000
 ```
 
-##runing front side
-a) first we should download node.js to our system from it's website: https://nodejs.org/en/download/
-
-b) then we should install it from it's setup wizard. 
-
-c) to make sure of installing node, open cmd and write 'node -v'. this shows you the version of node that installed on your system.
-
-d) by installing node.js , npm ( node package manager) is being installed 
-on your system automatically. write 'npm -v' to make sure. 
-
-e) now we should install the required modules to our project. go to frontend directory on cmd and write 'npm install'. 
-
-f)now open the vscode. open a new terminal. change directory to frontend. write 'npm run dev'. this gives you local link address.
-
 # migrate
 you have more than 20 unapplied migrations. so you can not use the admin panel or database. 
 - this command applies all unapplied migrations.
@@ -127,20 +113,32 @@ As a back-end developer, here are some of the key views and endpoints that you'l
 - accounts/api/v1/jwt/verify/ endpoint is used for validating user tokens.
 - accounts/api/v1/login/ : this endpoint is for login :))))
 
-# Install the dependencies(client side):
+# Install the dependencies of client side and run it:
 
+a) first we should download node.js to our system from it's website: https://nodejs.org/en/download/
 
+b) then we should install it from it's setup wizard. 
+
+c) to make sure of installing node, open cmd and write this command below. this shows you the version of node that installed on your system.
 ```shell
-cd educational_ministry_irp
+node -v
+```
+
+d) by installing node.js , npm ( node package manager) is being installed 
+on your system automatically. write this command below to make sure. 
+```shell
+npm -v
+```
+
+e) now we should install the required modules to our project. go to frontend directory on cmd and write
+```shell
 npm install
 ```
-
-
-
+f)now open the vscode. open a new terminal. change directory to frontend. write this command below. this gives you local link address.
 ```shell
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+npm run dev
 ```
+
 
 Access the API at http://localhost:XXXX/XXXX/XXXX
 
