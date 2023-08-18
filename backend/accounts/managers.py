@@ -24,24 +24,6 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.save()
         return user
-    
 
 
-# class UserManager(BaseUserManager):
-#     def create_user(self, username,password):
-#         if not password:
-#             return ValueError("user must have a password")
-#         if not username:
-#             return ValueError("user must have a username")
-        
-#         user = self.model(username=username)
-#         user.set_password(password)
-#         user.save()
-#         return user
 
-#     def create_superuser(self, username, password):
-#         user = self.create_user(username, password)
-#         user.is_admin = True
-#         user.is_superuser = True
-#         user.save()
-#         return user

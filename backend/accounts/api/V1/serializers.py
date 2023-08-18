@@ -42,14 +42,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return validated_data
 
 
-# class CustomTokenObtainSerializer(AuthTokenSerializer):
-#     def validate(self, attrs):
-#         validated_data = super().validate(attrs)
-#         validated_data["user-id"] = attrs.get("username")
-#         validated_data["username"] = attrs.get("username")
-#         return validated_data
 
-######################### Serializer for login ################################################
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
