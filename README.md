@@ -80,6 +80,20 @@ or
 http://127.0.0.1:8000
 ```
 
+##runing front side
+a) first we should download node.js to our system from it's website: https://nodejs.org/en/download/
+
+b) then we should install it from it's setup wizard. 
+
+c) to make sure of installing node, open cmd and write 'node -v'. this shows you the version of node that installed on your system.
+
+d) by installing node.js , npm ( node package manager) is being installed 
+on your system automatically. write 'npm -v' to make sure. 
+
+e) now we should install the required modules to our project. go to frontend directory on cmd and write 'npm install'. 
+
+f)now open the vscode. open a new terminal. change directory to frontend. write 'npm run dev'. this gives you local link address.
+
 # migrate
 you have more than 20 unapplied migrations. so you can not use the admin panel or database. 
 - this command applies all unapplied migrations.
