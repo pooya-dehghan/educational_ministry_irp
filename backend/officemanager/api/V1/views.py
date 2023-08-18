@@ -35,7 +35,7 @@ class OfficeManagerCreate(APIView):
 
     )
     def post(self, request):
-        ser_data = OfficeManagerSerializerForCreate(data=request.POST)
+        ser_data = OfficeManagerSerializerForCreate(data=request.data)
         if ser_data.is_valid():
             office_manager = OfficeManager.objects.create(username=ser_data.validated_data['username'],
                                                           region=ser_data.validated_data['region'])

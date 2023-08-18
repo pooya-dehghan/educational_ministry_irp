@@ -35,7 +35,7 @@ class StudentCreate(APIView):
         manual_parameters=swagger_parameters
     )
     def post(self, request):
-        ser_data = StudentSerializerForCreate(data=request.POST)
+        ser_data = StudentSerializerForCreate(data=request.data)
         if ser_data.is_valid():
             student = Student.objects.create(username=ser_data.validated_data['username'],
                                              studentUniqueCode=ser_data.validated_data['studentUniqueCode'])

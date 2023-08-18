@@ -36,14 +36,14 @@ class SchoolCreate(APIView):
     )
     def post(self, request):
         if OfficeManager.objects.filter(id=request.user.id).exists():
-            ser_data = SchoolSerializerByOfficeManager(data=request.POST)
+            ser_data = SchoolSerializerByOfficeManager(data=request.data)
             if ser_data.is_valid():
                 ser_data.validated_data['office_manager'] = OfficeManager.objects.get(id=request.user.id)
                 ser_data.save()
                 return Response(ser_data.data, status=status.HTTP_201_CREATED)
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            ser_data = SchoolSerializer(data=request.POST)
+            ser_data = SchoolSerializer(data=request.data)
             if ser_data.is_valid():
                 ser_data.save()
                 return Response(ser_data.data, status=status.HTTP_201_CREATED)
