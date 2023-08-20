@@ -33,7 +33,7 @@ class TeacherCreate(APIView):
         manual_parameters=swagger_parameters
     )
     def post(self, request):
-        ser_data = TeacherSerializerForCreate(data=request.POST)
+        ser_data = TeacherSerializerForCreate(data=request.data)
         if ser_data.is_valid():
             teacher = Teacher.objects.create(username=ser_data.validated_data['username'],
                                              field=ser_data.validated_data['field'])
