@@ -11,26 +11,26 @@ const schoolSlice = createSlice({
   name: 'school',
   initialState,
   reducers: {
-    createschool: (state, action) => {
+    createSchool: (state, action) => {
       state.schoolinfo = action.payload;
     },
-    getAllschools: (state, action) => {
+    getAllSchools: (state, action) => {
       state.allschools = action.payload;
     },
-    updateschool: (state, action) => {
+    updateSchool: (state, action) => {
       state.schoolinfo = action.payload;
     },
-    deleteschool: (state, action) => {
+    deleteSchool: (state, action) => {
       state.schoolinfo = { schoolname : ''};
     },
   },
 });
 
 export const {
-  createschool,
-  getAllschools,
-  updateschool,
-  deleteschool,
+  createSchool,
+  getAllSchools,
+  updateSchool,
+  deleteSchool,
 } = schoolSlice.actions;
 
 export default schoolSlice.reducer;

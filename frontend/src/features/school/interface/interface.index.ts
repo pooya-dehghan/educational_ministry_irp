@@ -1,41 +1,41 @@
 
-export interface GetschoolRequest {
+export interface GetSchoolRequest {
     schoolID: number;
   }
-  
-  export interface GetschoolResponse {
+
+  export interface GetSchoolResponse {
     
   }
   
-  export interface CreateschoolRequest {
+  export interface CreateSchoolRequest {
   
   }
   
-  export interface CreateschoolResponse {
+  export interface CreateSchoolResponse {
   
   }
   
-  export interface UpdateschoolRequest {
+  export interface UpdateSchoolRequest {
   
   }
   
-  export interface UpdateschoolResponse {
+  export interface UpdateSchoolResponse {
     
   }
   
   
-  export interface DeleteschooleRequest { 
+  export interface DeleteSchooleRequest { 
   
   }
   
-  export interface DeleteschoolResponse {
+  export interface DeleteSchoolResponse {
   
   }
   
-  export interface GetAllschoolsRequest {
+  export interface GetAllSchoolsRequest {
   
   }
   
-  export interface GetAllschoolsResponse {
+  export interface GetAllSchoolsResponse {
     
   }

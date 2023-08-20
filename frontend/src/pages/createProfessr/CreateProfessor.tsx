@@ -14,17 +14,42 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import styles from "./createProfessor.module.css";
 import Dashboard from "../Dashboard/Dashboard";
-
+import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
+import { useTextFieldStyles } from "../../hooks/TextFieldStyle/TextFieldStyle"; // Update the path
+import { createProfessorAsync } from "../../features/professor/professorThunk";
+import { useDispatch } from "react-redux";
+import { createProfessor } from "../../features/professor/professorSlice";
+import { updateResponse } from "../../features/response/responseSlice";
+import { Values } from "./interface";
+import { professorValidationSchema } from "../../validations/create-professor-validation";
 const theme = createTheme();
 
-const CreateOfficeManager: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+const CreateProfessor: React.FC = () => {
+  const dispatch = useDispatch();
+  const handleSubmit = (values: Values, setSubmitting: any) => {
+    let createProfessorData = {
+      proNumber: values.proNumber,
+      password: values.password,
+      password_confirmation: values.password_confirmation,
+      username: values.username,
+    };
+    (dispatch as any)(createProfessorAsync(createProfessorData))
+      .unwrap()
+      .then((response: any) => {
+        dispatch(createProfessor({}));
+      })
+      .catch((error: any) => {
+        console.log("error: ", error);
+        dispatch(
+          updateResponse({
+            severity: "error",
+            message:
+              "عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.",
+            open: true,
+          })
+        );
+      });
+    setSubmitting(false);
   };
 
   return (
@@ -58,74 +83,195 @@ const CreateOfficeManager: React.FC = () => {
                 ثبت استاد
               </Typography>
 
-              <Box
-                component="form"
-                noValidate
-                onSubmit={handleSubmit}
-                sx={{ mt: 3 }}
+              <Formik
+                initialValues={{
+                  firstName: "",
+                  lastName: "",
+                  proNumber: "",
+                  nationalCode: "",
+                  email: "",
+                  password: "",
+                  password_confirmation: "",
+                  username: "",
+                }}
+                validationSchema={professorValidationSchema} // Add validation schema
+                onSubmit={(values: Values, { setSubmitting }: any) => {
+                  handleSubmit(values, setSubmitting);
+                }}
               >
-                <Grid container spacing={2} dir="rtl">
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      autoComplete="given-name"
-                      name="firstName"
-                      required
+                {({ handleSubmit, errors, touched }) => (
+                  <Form onSubmit={handleSubmit}>
+                    <Grid container spacing={2} dir="rtl">
+                      <Grid item xs={12} sm={6}>
+                        <Field name="firstName">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام"
+                              placeholder="نام"
+                              id="firstName"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={
+                                touched.firstName && errors.firstName
+                                  ? true
+                                  : false
+                              }
+                              helperText={
+                                touched.firstName && errors.firstName
+                                  ? errors.username
+                                  : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="lastName">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام خانوادگی"
+                              placeholder="نام خانوادگی"
+                              id="lastName"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="proNumber">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="شماره استادی"
+                              placeholder="شماره استادی"
+                              id="proNumber"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="nationalCode">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="کد ملی"
+                              placeholder="کد ملی"
+                              id="nationalCode"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="email">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="ایمیل"
+                              placeholder="ایمیل"
+                              id="nationalCode"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="password">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="گذرواژه"
+                              placeholder="گذرواژه"
+                              id="password"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="password_confirmation">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="تکرار گذرواژه"
+                              placeholder="تکرار گذرواژه"
+                              id="nationalCode"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="username">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام کاربری"
+                              placeholder="نام کاربری"
+                              id="username"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                    </Grid>
+                    <Button
+                      type="submit"
                       fullWidth
-                      id="firstName"
-                      label="نام"
-                      autoFocus
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="lastName"
-                      label="نام خانوادگی"
-                      name="lastName"
-                      autoComplete="family-name"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      autoComplete="given-name"
-                      name="proNumber"
-                      required
-                      fullWidth
-                      id="proNumber"
-                      label="شماره استادی"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="nationalCode"
-                      label="کدملی "
-                      name="nationalCode"
-                      type="number"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="email"
-                      label="ایمیل"
-                      name="email"
-                      autoComplete="email"
-                    />
-                  </Grid>
-                </Grid>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  ثبت
-                </Button>
-              </Box>
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                    >
+                      ثبت
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
             </Box>
           </Container>
         </div>
@@ -134,4 +280,4 @@ const CreateOfficeManager: React.FC = () => {
   );
 };
 
-export default CreateOfficeManager;
+export default CreateProfessor;

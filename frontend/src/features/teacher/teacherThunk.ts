@@ -15,7 +15,7 @@ import {
   UpdateteacherRequest,
 } from './interface/interface.index';
 
-export const createteacherAsync = createAsyncThunk(
+export const createTeacherAsync = createAsyncThunk(
   'teacher/create',
   async (createData: CreateteacherRequest) => {
     const response = await teacherApi.createteacher(createData);
@@ -23,7 +23,7 @@ export const createteacherAsync = createAsyncThunk(
   }
 );
 
-export const updateteacherAsync = createAsyncThunk(
+export const updateTeacherAsync = createAsyncThunk(
   'teacher/create',
   async (updateData: UpdateteacherRequest) => {
     const response = await teacherApi.updateteacher(updateData);
@@ -31,7 +31,7 @@ export const updateteacherAsync = createAsyncThunk(
   }
 );
 
-export const getteacherAsync = createAsyncThunk(
+export const getTeacherAsync = createAsyncThunk(
   'teacher/get',
   async (getData: GetteacherRequest) => {
     const response = await teacherApi.getteacher(getData);
@@ -39,7 +39,7 @@ export const getteacherAsync = createAsyncThunk(
   }
 );
 
-export const getAllteachersAsync = createAsyncThunk(
+export const getAllTeachersAsync = createAsyncThunk(
   'teacher/getall',
   async (getData: GetAllteachersRequest) => {
     const response = await teacherApi.getAllteachers(getData);
@@ -47,7 +47,7 @@ export const getAllteachersAsync = createAsyncThunk(
   }
 );
 
-export const deleteteachersAsync = createAsyncThunk(
+export const deleteTeachersAsync = createAsyncThunk(
   'teacher/delete',
   async (deleteData: DeleteteachereRequest) => {
     const response = await teacherApi.deleteteacher(deleteData);

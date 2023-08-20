@@ -13,26 +13,26 @@ const teacherSlice = createSlice({
   name: 'teacher',
   initialState,
   reducers: {
-    createteacher: (state, action) => {
+    createTeacher: (state, action) => {
       state.teacherinfo = action.payload;
     },
-    getAllteachers: (state, action) => {
+    getAllTeachers: (state, action) => {
       state.allteachers = action.payload;
     },
-    updateteacher: (state, action) => {
+    updateTeacher: (state, action) => {
       state.teacherinfo = action.payload;
     },
-    deleteteacher: (state, action) => {
+    deleteTeacher: (state, action) => {
       state.teacherinfo = { username: '', avatar: '', status: '' };
     },
   },
 });
 
 export const {
-  createteacher,
-  getAllteachers,
-  updateteacher,
-  deleteteacher,
+  createTeacher,
+  getAllTeachers,
+  updateTeacher,
+  deleteTeacher,
 } = teacherSlice.actions;
 
 export default teacherSlice.reducer;

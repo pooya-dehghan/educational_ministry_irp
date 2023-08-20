@@ -18,6 +18,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import { useNavigate } from "react-router-dom";
 
 interface PageWrapper {
   children?: ReactNode;
@@ -27,6 +28,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [auth, setAuth] = useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
 
   const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
@@ -54,6 +56,10 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const accountClick = () => {
+    navigate("/dashboard");
   };
   return (
     <>
@@ -106,7 +112,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
                       onClose={handleClose}
                     >
                       <MenuItem onClick={handleClose}>Profile</MenuItem>
-                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem onClick={accountClick}>My account</MenuItem>
                     </Menu>
                   </div>
                 )}

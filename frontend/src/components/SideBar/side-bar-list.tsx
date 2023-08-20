@@ -6,11 +6,6 @@ import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 
 const ListItems = [
   {
-    list: "ثبت نام",
-    icon: <HowToReg />,
-    to: "register",
-  },
-  {
     list: "لیست مدارس",
     icon: <ApartmentIcon />,
     to: "/list/schools",
