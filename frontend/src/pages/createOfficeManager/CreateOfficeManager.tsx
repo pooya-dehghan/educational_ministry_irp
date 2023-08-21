@@ -24,10 +24,7 @@ import { updateResponse } from '../../features/response/responseSlice';
 import { Values } from './interface';
 import { officeManagerValidationSchema } from '../../validations';
 
-const theme = createTheme();
-
 const CreateOfficeManager: React.FC = () => {
-  const classes = useTextFieldStyles();
   const dispatch = useDispatch();
   const handleSubmit = (values: Values, setSubmitting: any) => {
     let createOfficeManagerData = {

@@ -1,15 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  dashboardApi,
-  DashboardRequest,
-  DashboardResponse,
-} from './dashboardApi';
-import { getDashboardInfo } from './dashboardSlice';
+import { dashboardApi } from './dashboardApi';
 
-export const dashboardAsync = createAsyncThunk(
-  'auth/loginAsync',
-  async (dashboardData: DashboardRequest) => {
-    const response = await dashboardApi.getDashboard(dashboardData);
-    return response;
-  }
-);
+export const dashboardAsync = createAsyncThunk('dashboard/info', async () => {
+  const response = await dashboardApi.getDashboard();
+  return response;
+});

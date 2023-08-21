@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../../utils/axios/index';
 
 const API_BASE_URL = 'http://localhost:8000'; // Your API base URL
 
@@ -14,13 +14,10 @@ export interface DashboardResponse {
 }
 
 export const dashboardApi = {
-  getDashboard: async (
-    DashboardData: DashboardRequest
-  ): Promise<DashboardResponse> => {
+  getDashboard: async (): Promise<DashboardResponse> => {
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/accounts/api/v1/login/`,
-        DashboardData
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/accounts/api/v1/dashbordlist/`
       );
       return response.data;
     } catch (error) {

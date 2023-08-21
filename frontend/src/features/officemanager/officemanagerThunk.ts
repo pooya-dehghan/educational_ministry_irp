@@ -19,6 +19,7 @@ export const createOfficeManagerAsync = createAsyncThunk(
   'officemanager/create',
   async (createData: CreateOfficeManagerRequest) => {
     const response = await officeManagerApi.createOfficeManager(createData);
+    //method 
     return response;
   }
 );

@@ -16,7 +16,6 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const token = getToken();
-    console.log('access in interceptor: ', token);
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -44,7 +43,6 @@ instance.interceptors.response.use(
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         return instance(originalRequest);
       } catch (refreshError) {
-        console.error('Refresh token failed:', refreshError);
       }
     }
     return Promise.reject(error);
