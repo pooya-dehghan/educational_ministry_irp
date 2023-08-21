@@ -5,7 +5,7 @@ from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSe
 from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnOfficeManager
 from drf_yasg.utils import swagger_auto_schema
-from .swagger_info import swagger_parameters
+from .swagger_info import swagger_parameters, swagger_parameters_update
 
 
 class OfficeManagerGet(APIView):
@@ -49,6 +49,11 @@ class OfficeManagerCreate(APIView):
 class OfficeManagerUpdate(APIView):
     permission_classes = [IsSuperuserOrOwnOfficeManager]
 
+    @swagger_auto_schema(
+
+        manual_parameters=swagger_parameters_update
+
+    )
     def put(self, request, pk):
         office_manager = OfficeManager.objects.get(pk=pk)
         self.check_object_permissions(request, office_manager)

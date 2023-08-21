@@ -7,7 +7,7 @@ from rest_framework import status
 from .permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManager, \
     IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager
 from drf_yasg.utils import swagger_auto_schema
-from .swagger_info import swagger_parameters
+from .swagger_info import swagger_parameters, swagger_parameters_update, swagger_parameters_set_capacity
 
 
 class SchoolGet(APIView):
@@ -53,6 +53,9 @@ class SchoolCreate(APIView):
 class SchoolUpdate(APIView):
     permission_classes = [IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager]
 
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_update
+    )
     def put(self, request, pk):
         school = School.objects.get(pk=pk)
         self.check_object_permissions(request, school)
@@ -80,6 +83,9 @@ class SchoolDelete(APIView):
 
 
 class SetCapacity(APIView):
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_set_capacity
+    )
     def post(self, request):
         if School.objects.filter(manager=request.user).exists():
             school = School.objects.get(manager=request.user)

@@ -5,7 +5,7 @@ from .serializers import ProfessorSerializer, ProfessorSerializerForCreate
 from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnProfessor
 from drf_yasg.utils import swagger_auto_schema
-from .swagger_info import swagger_parameters
+from .swagger_info import swagger_parameters, swagger_parameters_update
 
 
 class ProfessorGet(APIView):
@@ -47,6 +47,9 @@ class ProfessorCreate(APIView):
 class ProfessorUpdate(APIView):
     permission_classes = [IsSuperuserOrOwnProfessor]
 
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_update
+    )
     def put(self, request, pk):
         professor = Professor.objects.get(pk=pk)
         self.check_object_permissions(request, professor)

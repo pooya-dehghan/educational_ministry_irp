@@ -7,7 +7,7 @@ from .permissions import IsSuperuserOrOwnStudent, IsSuperuser
 from request.models import Request
 from request.serializers import RequestSerializer
 from drf_yasg.utils import swagger_auto_schema
-from .swagger_info import swagger_parameters
+from .swagger_info import swagger_parameters,swagger_parameters_update
 
 
 class StudentGet(APIView):
@@ -49,6 +49,9 @@ class StudentCreate(APIView):
 class StudentUpdate(APIView):
     permission_classes = [IsSuperuserOrOwnStudent]
 
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_update
+    )
     def put(self, request, pk):
         student = Student.objects.get(pk=pk)
         self.check_object_permissions(request, student)
