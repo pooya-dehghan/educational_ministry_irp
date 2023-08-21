@@ -1,25 +1,29 @@
-export interface GetprofessorRequest {
-  professorID: number;
+export interface GetProfessorRequest {
+  id: number;
 }
 
-export interface GetprofessorResponse {
+export interface GetProfessorResponse {
   username: string;
   region: number;
   schools: string[];
 }
 
-export interface CreateprofessorRequest {}
+export interface CreateProfessorRequest {}
 
-export interface CreateprofessorResponse {}
+export interface CreateProfessorResponse {}
 
-export interface UpdateprofessorRequest {}
+export interface UpdateProfessorRequest {
+  id: number;
+}
 
-export interface UpdateprofessorResponse {}
+export interface UpdateProfessorResponse {}
 
-export interface DeleteprofessoreRequest {}
+export interface DeleteProfessorRequest {
+  id: number;
+}
 
-export interface DeleteprofessorResponse {}
+export interface DeleteProfessorResponse {}
 
-export interface GetAllProfessorRequest {}
+export interface GetAllProfessorsRequest {}
 
 export interface GetAllProfessorResponse {}

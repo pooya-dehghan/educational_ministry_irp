@@ -160,15 +160,15 @@ This API uses token-based authentication. To access protected endpoints, include
 
 **User Authentication:**
 
-- User registration
-- User login
-- User logout
-- Password reset/forgot password
+- User registration {done}
+- User login {done}
+- User logout {done}
+- Password reset/forgot password {done}
 
 **User: All kind of user Profile:**
 
-- Retrieve user profile
-- Update user profile (name, bio, profile picture)
+- Retrieve user profile {done}
+- Update user profile (name, bio, profile picture) {done}
 - user requesting to specific Office Manager or some other user for specific roles
 - Getting notifications
 - making notification for specific user

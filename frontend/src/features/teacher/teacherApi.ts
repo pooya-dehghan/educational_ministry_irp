@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../../utils/axios/index';
 import {
   CreateteacherRequest,
   CreateteacherResponse,
@@ -18,7 +18,7 @@ export const teacherApi = {
     getData: GetteacherRequest
   ): Promise<GetteacherResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/teacher/`,
         getData
       );
@@ -32,8 +32,8 @@ export const teacherApi = {
     createData: CreateteacherRequest
   ): Promise<CreateteacherResponse> => {
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/accounts/api/v1/teacher/`,
+      const response = await axiosInstance.post(
+        `${API_BASE_URL}/teacher/api/v1/create/`,
         createData
       );
       return response.data;
@@ -46,7 +46,7 @@ export const teacherApi = {
     updateData: UpdateteacherRequest
   ): Promise<UpdateteacherResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/teacher/`,
         updateData
       );
@@ -60,7 +60,7 @@ export const teacherApi = {
     deleteData: DeleteteachereRequest
   ): Promise<DeleteteacherResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/teacher/`,
         deleteData
       );
@@ -74,7 +74,7 @@ export const teacherApi = {
     getData: GetAllteachersRequest
   ): Promise<GetAllteachersResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/teacher/`,
         getData
       );

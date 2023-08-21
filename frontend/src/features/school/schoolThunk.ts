@@ -1,55 +1,55 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { schoolApi } from './schoolApi';
 import {
-  createschool,
-  updateschool,
-  deleteschool,
-  getAllschools,
+  createSchool,
+  updateSchool,
+  deleteSchool,
+  getAllSchools,
 } from './schoolSlice';
 
 import {
-  CreateschoolRequest,
-  DeleteschooleRequest,
-  GetAllschoolsRequest,
-  GetschoolRequest,
-  UpdateschoolRequest,
+  CreateSchoolRequest,
+  DeleteSchooleRequest,
+  GetAllSchoolsRequest,
+  GetSchoolRequest,
+  UpdateSchoolRequest,
 } from './interface/interface.index';
 
-export const createschoolAsync = createAsyncThunk(
+export const createSchoolAsync = createAsyncThunk(
   'school/create',
-  async (createData: CreateschoolRequest) => {
+  async (createData: CreateSchoolRequest) => {
     const response = await schoolApi.createschool(createData);
     return response;
   }
 );
 
-export const updateschoolAsync = createAsyncThunk(
+export const updateSchoolAsync = createAsyncThunk(
   'school/create',
-  async (updateData: UpdateschoolRequest) => {
+  async (updateData: UpdateSchoolRequest) => {
     const response = await schoolApi.updateschool(updateData);
     return response;
   }
 );
 
-export const getschoolAsync = createAsyncThunk(
+export const getSchoolAsync = createAsyncThunk(
   'school/get',
-  async (getData: GetschoolRequest) => {
+  async (getData: GetSchoolRequest) => {
     const response = await schoolApi.getschool(getData);
     return response;
   }
 );
 
-export const getAllschoolsAsync = createAsyncThunk(
+export const getAllSchoolsAsync = createAsyncThunk(
   'school/getall',
-  async (getData: GetAllschoolsRequest) => {
+  async (getData: GetAllSchoolsRequest) => {
     const response = await schoolApi.getAllschools(getData);
     return response;
   }
 );
 
-export const deleteschoolsAsync = createAsyncThunk(
+export const deleteSchoolsAsync = createAsyncThunk(
   'school/delete',
-  async (deleteData: DeleteschooleRequest) => {
+  async (deleteData: DeleteSchooleRequest) => {
     const response = await schoolApi.deleteschool(deleteData);
     return response;
   }

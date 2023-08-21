@@ -1,0 +1,32 @@
+.profile {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 20px;
+  align-items: center;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profilePicture {
+  max-width: 150px;
+  border-radius: 50%;
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileName {
+  font-size: 24px;
+  margin: 0;
+}
+
+.profileAge,
+.profileBio {
+  font-size: 18px;
+  margin: 5px 0;
+}

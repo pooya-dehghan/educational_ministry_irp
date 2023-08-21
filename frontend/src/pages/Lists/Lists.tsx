@@ -5,8 +5,8 @@ import Dashboard from '../Dashboard/Dashboard';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getAllOfficeManagersAsync } from '../../features/officemanager/officemanagerThunk';
-import { createschoolAsync } from '../../features/school/schoolThunk';
-import { getProfessorsAsync } from '../../features/professor/professorThunk';
+import { getAllSchoolsAsync } from '../../features/school/schoolThunk';
+import { getAllProfessorsAsync } from '../../features/professor/professorThunk';
 import { getAllstudentsAsync } from '../../features/student/studentThunk';
 import styles from './Lists.module.css';
 
@@ -24,7 +24,7 @@ const List = () => {
         // dispatch(response.user);
       })
       .catch((error: any) => {});
-    (dispatch as any)(createschoolAsync({}))
+    (dispatch as any)(getAllSchoolsAsync({}))
       .unwrap()
       .then((response: any) => {
         console.log('hello list schools: ', response);
@@ -32,7 +32,7 @@ const List = () => {
       })
       .catch((error: any) => {});
 
-    (dispatch as any)(getProfessorsAsync({}))
+    (dispatch as any)(getAllProfessorsAsync({}))
       .unwrap()
       .then((response: any) => {
         console.log('hello list schools: ', response);

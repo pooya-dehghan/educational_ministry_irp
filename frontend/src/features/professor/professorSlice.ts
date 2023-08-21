@@ -1,23 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  professor: {
-    name: '',
-    university: '',
+  professorinfo: {
+    username: '',
+    avatar: '',
+    status: '',
   },
-  professors: [],
+  allProfessors: [],
 };
 
 const professorSlice = createSlice({
   name: 'professor',
   initialState,
   reducers: {
+    createProfessor: (state, action) => {
+      state.professorinfo = action.payload;
+    },
     getAllProfessors: (state, action) => {
-      state.professor = action.payload;
+      state.allProfessors = action.payload;
+    },
+    updateProfessor: (state, action) => {
+      state.professorinfo = action.payload;
+    },
+    deleteProfessor: (state, action) => {
+      state.professorinfo = { username: '', avatar: '', status: '' };
     },
   },
 });
 
-export const { getAllProfessors } = professorSlice.actions;
+export const {
+  createProfessor,
+  getAllProfessors,
+  updateProfessor,
+  deleteProfessor,
+} = professorSlice.actions;
 
 export default professorSlice.reducer;

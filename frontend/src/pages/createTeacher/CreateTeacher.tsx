@@ -1,30 +1,56 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import styles from "./createTeacher.module.css";
-import Dashboard from "../Dashboard/Dashboard";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import styles from './createTeacher.module.css';
+import Dashboard from '../Dashboard/Dashboard';
+import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
+import { useTextFieldStyles } from '../../hooks/TextFieldStyle/TextFieldStyle'; // Update the path
+import { createTeacherAsync } from '../../features/teacher/teacherThunk';
+import { useDispatch } from 'react-redux';
+import { createTeacher } from '../../features/teacher/teacherSlice';
+import { updateResponse } from '../../features/response/responseSlice';
+import { Values } from './interface';
+import { teacherValidationSchema } from '../../validations/create-teacher-validation';
 
-const theme = createTheme();
-
-const CreateOfficeManager: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+const CreateTeacher: React.FC = () => {
+  const dispatch = useDispatch();
+  const handleSubmit = (values: Values, setSubmitting: any) => {
+    let createTeacherData = {
+      schoolName: values.schoolName,
+      managerName: values.managerName,
+      password: values.password,
+      password_confirmation: values.password_confirmation,
+      username: values.username,
+      field: values.field,
+    };
+    (dispatch as any)(createTeacherAsync(createTeacherData))
+      .unwrap()
+      .then((response: any) => {
+        dispatch(createTeacher({}));
+      })
+      .catch((error: any) => {
+        console.log('error: ', error);
+        dispatch(
+          updateResponse({
+            severity: 'error',
+            message:
+              'عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.',
+            open: true,
+          })
+        );
+      });
+    setSubmitting(false);
   };
 
   return (
@@ -35,107 +61,258 @@ const CreateOfficeManager: React.FC = () => {
             <CssBaseline />
             <Box
               sx={{
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 marginTop: 8,
                 marginBottom: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
                 boxShadow: 3,
                 borderRadius: 2,
                 px: 4,
                 py: 6,
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography
                 component="h3"
                 variant="subtitle1"
-                sx={{ fontSize: "1rem" }}
+                sx={{ fontSize: '1rem' }}
               >
                 ثبت معلم
               </Typography>
 
-              <Box
-                component="form"
-                noValidate
-                onSubmit={handleSubmit}
-                sx={{ mt: 3 }}
+              <Formik
+                initialValues={{
+                  firstName: '',
+                  lastName: '',
+                  schoolName: '',
+                  managerName: '',
+                  nationalCode: '',
+                  email: '',
+                  password: '',
+                  password_confirmation: '',
+                  username: '',
+                  field: '',
+                }}
+                validationSchema={teacherValidationSchema} // Add validation schema
+                onSubmit={(values: Values, { setSubmitting }: any) => {
+                  handleSubmit(values, setSubmitting);
+                }}
               >
-                <Grid container spacing={2} dir="rtl">
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      autoComplete="given-name"
-                      name="firstName"
-                      required
+                {({ handleSubmit, errors, touched }) => (
+                  <Form onSubmit={handleSubmit}>
+                    <Grid container spacing={2} dir="rtl">
+                      <Grid item xs={12} sm={6}>
+                        <Field name="firstName">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام"
+                              placeholder="نام"
+                              id="firstName"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={
+                                touched.firstName && errors.firstName
+                                  ? true
+                                  : false
+                              }
+                              helperText={
+                                touched.firstName && errors.firstName
+                                  ? errors.username
+                                  : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="lastName">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام خانوادگی"
+                              placeholder="نام خانوادگی"
+                              id="lastName"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="nationalCode">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="کد ملی"
+                              placeholder="کد ملی"
+                              id="nationalCode"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="managerName">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام مدیر"
+                              placeholder="نام مدیر"
+                              id="managerName"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="schoolName">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام مدرسه"
+                              placeholder="نام مدرسه"
+                              id="schoolName"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="email">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="ایمیل"
+                              placeholder="ایمیل"
+                              id="nationalCode"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="password">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="گذرواژه"
+                              placeholder="گذرواژه"
+                              id="password"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="password_confirmation">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="تکرار گذرواژه"
+                              placeholder="تکرار گذرواژه"
+                              id="nationalCode"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Field name="username">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام کاربری"
+                              placeholder="نام کاربری"
+                              id="username"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Field name="field">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="رشته"
+                              placeholder="رشته"
+                              id="field"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                    </Grid>
+                    <Button
+                      type="submit"
                       fullWidth
-                      id="firstName"
-                      label="نام"
-                      autoFocus
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="lastName"
-                      label="نام خانوادگی"
-                      name="lastName"
-                      autoComplete="family-name"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      autoComplete="given-name"
-                      name="managerName"
-                      required
-                      fullWidth
-                      id="managerName"
-                      label="نام مدیر"
-                      autoFocus
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="schoolName"
-                      label="نام مدرسه"
-                      name="schoolName"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="nationalCode"
-                      label="کدملی "
-                      name="nationalCode"
-                      type="number"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="email"
-                      label="ایمیل"
-                      name="email"
-                      autoComplete="email"
-                    />
-                  </Grid>
-                </Grid>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  ثبت
-                </Button>
-              </Box>
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                    >
+                      ثبت
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
             </Box>
           </Container>
         </div>
@@ -144,4 +321,4 @@ const CreateOfficeManager: React.FC = () => {
   );
 };
 
-export default CreateOfficeManager;
+export default CreateTeacher;
