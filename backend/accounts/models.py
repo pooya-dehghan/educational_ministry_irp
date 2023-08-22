@@ -76,7 +76,7 @@ class OfficeManager(User):
         return f"{self.username} - {self.id}"
 
 
-class School(models.Model):
+class School(User):
     title_choices = (
         ('k', 'kar-danesh'),
         ('f', 'fani'),
@@ -84,14 +84,12 @@ class School(models.Model):
         ('n', None)
     )
     name = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200)
-    established_year = models.DateField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(max_length=200, null=True, blank=True)
+    established_year = models.DateField(null=True, blank=True)
     city = models.CharField(max_length=200)
     region = models.PositiveSmallIntegerField()
     capacity = models.PositiveSmallIntegerField(default=0)
-    manager = models.OneToOneField(User, on_delete=models.CASCADE)
+    manager = models.CharField(max_length=200)
     title = models.CharField(choices=title_choices, default='n', max_length=100)
     teacher = models.ManyToManyField(Teacher, related_name='teacher_to_school', null=True, blank=True)
     office_manager = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='office_to_school')

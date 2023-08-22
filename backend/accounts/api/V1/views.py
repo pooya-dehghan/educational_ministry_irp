@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from accounts.models import Teacher, OfficeManager, School, Student, Professor
+from accounts.models import Teacher, OfficeManager, Student, Professor, School
 from .serializers import LoginSerializer
 from rest_framework.views import APIView
 from ...models import User
@@ -76,7 +76,7 @@ class UserLoginAPIView(APIView):
         except ObjectDoesNotExist:
             return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
         if user and check_password(password, user.password):
-            if School.objects.filter(manager=user).exists():
+            if School.objects.filter(id=user.id).exists():
                 type = "school manager"
             elif user.is_admin:
                 type = "superuser"
@@ -195,7 +195,7 @@ class DashBordList(APIView):
             return Response({'list': StudentList, 'type': 'Student'}, status=status.HTTP_200_OK)
         elif OfficeManager.objects.filter(pk=user.id).exists():
             return Response({'list': OfficeManagerList, 'type': 'OfficeManager'}, status=status.HTTP_200_OK)
-        elif School.objects.filter(manager=user).exists():
+        elif School.objects.filter(id=user.id).exists():
             return Response({'list': SchoolManagerList, 'type': 'SchoolManager'}, status=status.HTTP_200_OK)
         elif user.is_admin:
             return Response({'list': SuperuserList, 'type': 'Superuser'}, status=status.HTTP_200_OK)

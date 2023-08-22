@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from accounts.models import School, OfficeManager
 from rest_framework.response import Response
-from .serializers import SchoolSerializer, SchoolSerializerByOfficeManager, SchoolSerializerBySchoolManager \
-    , SchoolCapacitySerializer
+from .serializers import SchoolSerializer, SchoolSerializerByOfficeManager, SchoolCapacitySerializer,\
+    SchoolSerializerAll, SchoolSerializerAllOffice
 from rest_framework import status
 from .permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManager, \
     IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager
@@ -39,13 +39,29 @@ class SchoolCreate(APIView):
             ser_data = SchoolSerializerByOfficeManager(data=request.data)
             if ser_data.is_valid():
                 ser_data.validated_data['office_manager'] = OfficeManager.objects.get(id=request.user.id)
-                ser_data.save()
+                school = School.objects.create(username=ser_data.validated_data['username'],
+                                                region=ser_data.validated_data['region'],
+                                                name=ser_data.validated_data['name'],
+                                                city=ser_data.validated_data['city'],
+                                                manager=ser_data.validated_data['manager'],
+                                                office_manager_id=request.user.id
+                                                )
+                school.set_password(ser_data.validated_data['password'])
+                school.save()
                 return Response(ser_data.data, status=status.HTTP_201_CREATED)
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             ser_data = SchoolSerializer(data=request.data)
             if ser_data.is_valid():
-                ser_data.save()
+                school = School.objects.create(username=ser_data.validated_data['username'],
+                                                region=ser_data.validated_data['region'],
+                                                office_manager=ser_data.validated_data['office_manager'],
+                                                name=ser_data.validated_data['name'],
+                                                city=ser_data.validated_data['city'],
+                                                manager=ser_data.validated_data['manager'],
+                                                )
+                school.set_password(ser_data.validated_data['password'])
+                school.save()
                 return Response(ser_data.data, status=status.HTTP_201_CREATED)
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -53,18 +69,16 @@ class SchoolCreate(APIView):
 class SchoolUpdate(APIView):
     permission_classes = [IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager]
 
-    @swagger_auto_schema(
-        manual_parameters=swagger_parameters_update
-    )
     def put(self, request, pk):
         school = School.objects.get(pk=pk)
         self.check_object_permissions(request, school)
-        if OfficeManager.objects.filter(id=request.user.id).exists():
-            ser_data = SchoolSerializerByOfficeManager(instance=school, data=request.data, partial=True)
-        elif school.manager.id == request.user.id:
-            ser_data = SchoolSerializerBySchoolManager(instance=school, data=request.data, partial=True)
+
+        if request.user.is_admin:
+            ser_data = SchoolSerializerAll(instance=school, data=request.data, partial=True)
+
         else:
-            ser_data = SchoolSerializer(instance=school, data=request.data, partial=True)
+            ser_data = SchoolSerializerAllOffice(instance=school, data=request.data, partial=True)
+
         if ser_data.is_valid():
             ser_data.save()
             return Response(ser_data.data, status=status.HTTP_200_OK)
@@ -87,8 +101,8 @@ class SetCapacity(APIView):
         manual_parameters=swagger_parameters_set_capacity
     )
     def post(self, request):
-        if School.objects.filter(manager=request.user).exists():
-            school = School.objects.get(manager=request.user)
+        if School.objects.filter(id=request.user.id).exists():
+            school = School.objects.get(id=request.user.id)
             ser_data = SchoolCapacitySerializer(data=request.POST)
             if ser_data.is_valid():
                 school.capacity = ser_data.validated_data['capacity']

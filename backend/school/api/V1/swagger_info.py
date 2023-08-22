@@ -14,13 +14,19 @@ swagger_parameters = [
         type=openapi.TYPE_STRING
     ),
     openapi.Parameter(
-        name='slug',
+        name='username',
         in_=openapi.IN_PATH,
         description='Example path parameter',
         type=openapi.TYPE_STRING
     ),
     openapi.Parameter(
-        name='established_year',
+        name='password',
+        in_=openapi.IN_PATH,
+        description='Example path parameter',
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        name='password_confirmation',
         in_=openapi.IN_PATH,
         description='Example path parameter',
         type=openapi.TYPE_STRING

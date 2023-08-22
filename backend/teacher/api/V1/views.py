@@ -39,8 +39,8 @@ class TeacherCreate(APIView):
                                              field=ser_data.validated_data['field'])
             teacher.set_password(ser_data.validated_data['password'])
             teacher.save()
-            if School.objects.filter(manager=request.user).exists():
-                school = School.objects.get(manager=request.user)
+            if School.objects.filter(id=request.user.id).exists():
+                school = School.objects.get(id=request.user.id)
                 school.teacher.add(teacher)
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)

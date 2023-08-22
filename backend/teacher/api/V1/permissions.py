@@ -8,7 +8,7 @@ class IsSuperuserOrSchoolManager(BasePermission):
             return True
         elif request.user.is_authenticated and request.user.is_admin:
             return True
-        elif request.user.is_authenticated and School.objects.filter(manager=request.user).exists():
+        elif request.user.is_authenticated and School.objects.filter(id=request.user.id).exists():
             # Check if the requesting user is a manager of any school
             return True
         else:

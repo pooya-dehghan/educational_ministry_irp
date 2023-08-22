@@ -45,7 +45,7 @@ class IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager(BasePermission):
         elif request.user.is_authenticated and OfficeManager.objects.filter(
                 id=request.user.id).exists() and office_manager.id == request.user.id:
             return True
-        elif request.user.is_authenticated and obj.manager.id == request.user.id:
+        elif request.user.is_authenticated and obj.id == request.user.id:
             return True
         else:
             return False
