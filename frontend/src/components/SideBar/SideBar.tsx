@@ -1,24 +1,16 @@
 import React from 'react';
 import { Box } from '@mui/system';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-import HowToReg from '@mui/icons-material/HowToReg';
-import HomeWorkIcon from '@mui/icons-material/HomeWork';
-import ApartmentIcon from '@mui/icons-material/Apartment';
-import SchoolIcon from '@mui/icons-material/School';
 import { ListItemIcon } from '@mui/material';
 import styles from './SideBar.module.css';
 import { Link, useLocation } from 'react-router-dom';
-import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import ListItems from './side-bar-list';
-import path from 'path';
 
 interface propsTypes {
   open: boolean | undefined;
@@ -42,12 +34,12 @@ const SideBar: React.FC<propsTypes> = ({ open, handleDrawerToggle }) => {
           <OpenInFullIcon />
         </IconButton>
         <Divider />
-        {ListItems.map((list) => {
+        {ListItems.map((list, index) => {
           return (
             <ListItem
+              key={index}
               component={Link}
               to={`${basePath}${list.to}`}
-              key={'information'}
               disablePadding
             >
               <ListItemButton>

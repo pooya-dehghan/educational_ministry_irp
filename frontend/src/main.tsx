@@ -99,7 +99,7 @@ ReactDOM.createRoot(rootEl).render(
     <Provider store={store}>
       <AlertWrapper>
         <ThemeProviderWrapper>
-          <RouterProvider router={router} />
+          <RouterProvider  router={router} />
         </ThemeProviderWrapper>
       </AlertWrapper>
     </Provider>

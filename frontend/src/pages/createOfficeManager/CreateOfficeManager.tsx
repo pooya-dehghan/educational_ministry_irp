@@ -1,22 +1,16 @@
 import * as React from 'react';
-import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styles from './createOM.module.css';
 import Dashboard from '../Dashboard/Dashboard';
-import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
-import { useTextFieldStyles } from '../../hooks/TextFieldStyle/TextFieldStyle'; // Update the path
+import { Formik, Form, Field, FieldProps } from 'formik';
 import { createOfficeManagerAsync } from '../../features/officemanager/officemanagerThunk';
 import { useDispatch } from 'react-redux';
 import { createOfficeManager } from '../../features/officemanager/officemanagerSlice';

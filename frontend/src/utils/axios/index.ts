@@ -42,8 +42,7 @@ instance.interceptors.response.use(
         setToken(newAccessToken);
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         return instance(originalRequest);
-      } catch (refreshError) {
-      }
+      } catch (refreshError) {}
     }
     return Promise.reject(error);
   }

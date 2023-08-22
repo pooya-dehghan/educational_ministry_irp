@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../../utils/axios/index';
 import {
   CreateschoolRequest,
   CreateschoolResponse,
@@ -14,11 +14,9 @@ import {
 const API_BASE_URL = 'http://localhost:8000'; // Your API base URL
 
 export const schoolApi = {
-  getschool: async (
-    getData: GetschoolRequest
-  ): Promise<GetschoolResponse> => {
+  getschool: async (getData: GetschoolRequest): Promise<GetschoolResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/school/`,
         getData
       );
@@ -32,8 +30,8 @@ export const schoolApi = {
     createData: CreateschoolRequest
   ): Promise<CreateschoolResponse> => {
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/accounts/api/v1/school/`,
+      const response = await axiosInstance.post(
+        `${API_BASE_URL}/school/api/v1/create/`,
         createData
       );
       return response.data;
@@ -46,7 +44,7 @@ export const schoolApi = {
     updateData: UpdateschoolRequest
   ): Promise<UpdateschoolResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/school/`,
         updateData
       );
@@ -60,7 +58,7 @@ export const schoolApi = {
     deleteData: DeleteschooleRequest
   ): Promise<DeleteschoolResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/school/`,
         deleteData
       );
@@ -74,7 +72,7 @@ export const schoolApi = {
     getData: GetAllschoolsRequest
   ): Promise<GetAllschoolsResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/school/`,
         getData
       );
