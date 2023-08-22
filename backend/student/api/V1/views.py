@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from .serializers import StudentSerializer, StudentSerializerForCreate
 from rest_framework import status
 from .permissions import IsSuperuserOrOwnStudent, IsSuperuser
-from request.models import Request
+from request.models import Request, Notification
 from request.serializers import RequestSerializer
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters,swagger_parameters_update
@@ -79,5 +79,6 @@ class RequestForSchool(APIView):
         student = Student.objects.get(id=request.user.pk)
         print(student)
         print(office_manager)
-        req = Request.objects.create(sender=student, reciever=office_manager)
-        return Response({'message': 'request sent successfully', 'request id': req.id}, status=status.HTTP_201_CREATED)
+        req = Request.objects.create(sender=student, receiver=office_manager)
+        notification = Notification.objects.create(request=req)
+        return Response({'message': 'request sent successfully', 'notification id': notification.id}, status=status.HTTP_201_CREATED)
