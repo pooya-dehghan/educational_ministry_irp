@@ -1,11 +1,13 @@
 from rest_framework.views import APIView
 from accounts.models import OfficeManager, School
+from request.models import Notification
 from rest_framework.response import Response
-from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSerializer, OfficeManagerSerializerForCreate
+from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSerializer, \
+    OfficeManagerSerializerForCreate
 from rest_framework import status
 from .permissions import IsSuperuser, IsSuperuserOrOwnOfficeManager
 from drf_yasg.utils import swagger_auto_schema
-from .swagger_info import swagger_parameters
+from .swagger_info import swagger_parameters, swagger_parameters_update
 
 
 class OfficeManagerGet(APIView):
@@ -49,6 +51,11 @@ class OfficeManagerCreate(APIView):
 class OfficeManagerUpdate(APIView):
     permission_classes = [IsSuperuserOrOwnOfficeManager]
 
+    @swagger_auto_schema(
+
+        manual_parameters=swagger_parameters_update
+
+    )
     def put(self, request, pk):
         office_manager = OfficeManager.objects.get(pk=pk)
         self.check_object_permissions(request, office_manager)
@@ -86,3 +93,50 @@ class SchoolGet(APIView):
         else:
             return Response({'message': 'not exist school in this region with this id'},
                             status=status.HTTP_404_NOT_FOUND)
+
+
+class SeenRequest(APIView):
+    permission_classes = [IsSuperuserOrOwnOfficeManager]
+
+    def post(self, request, pk):
+        notification = Notification.objects.get(pk=pk)
+        office_manager = notification.request.receiver
+        self.check_object_permissions(request, office_manager)
+        if notification.status == 'u':
+            notification.status = 's'
+            notification.save()
+            return Response({'message': 'notification seen'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'notification seen before'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangeRequestToPending(APIView):
+    permission_classes = [IsSuperuserOrOwnOfficeManager]
+
+    def post(self, request, pk):
+        notification = Notification.objects.get(pk=pk)
+        office_manager = notification.request.receiver
+        self.check_object_permissions(request, office_manager)
+        if notification.status == 'u' or notification.status == 's':
+            notification.status = 'p'
+            notification.save()
+            return Response({'message': 'notification pending'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'notification pending before or connecting or not confirmed before'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class RejectRequest(APIView):
+    permission_classes = [IsSuperuserOrOwnOfficeManager]
+
+    def post(self, request, pk):
+        notification = Notification.objects.get(pk=pk)
+        office_manager = notification.request.receiver
+        self.check_object_permissions(request, office_manager)
+        if notification.status != 'c':
+            notification.status = 'n'
+            notification.save()
+            return Response({'message': 'notification reject'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'notification connecting before'},
+                            status=status.HTTP_400_BAD_REQUEST)

@@ -5,7 +5,7 @@ from .serializers import TeacherSerializer, TeacherSerializerForCreate
 from rest_framework import status
 from .permissions import IsSuperuserOrSchoolManager, IsSuperuser, IsSuperuserOrOwnTeacher
 from drf_yasg.utils import swagger_auto_schema
-from .swagger_info import swagger_parameters
+from .swagger_info import swagger_parameters, swagger_parameters_update
 
 
 class TeacherGet(APIView):
@@ -49,6 +49,9 @@ class TeacherCreate(APIView):
 class TeacherUpdate(APIView):
     permission_classes = [IsSuperuserOrOwnTeacher]
 
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_update
+    )
     def put(self, request, pk):
         teacher = Teacher.objects.get(pk=pk)
         self.check_object_permissions(request, teacher)

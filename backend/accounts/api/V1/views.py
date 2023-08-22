@@ -17,6 +17,8 @@ from .serializers import EmailSerializer, ChangePasswordSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.exceptions import ObjectDoesNotExist
+from .swagger_info import swagger_parameters_login, swagger_parameters_forgot, swagger_parameters_reset
+from drf_yasg.utils import swagger_auto_schema
 
 
 class ApiUserRegistrationView(GenericAPIView):
@@ -61,6 +63,9 @@ class UserLogoutAPIView(APIView):
 
 
 class UserLoginAPIView(APIView):
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_login
+    )
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -98,6 +103,9 @@ class UserLoginAPIView(APIView):
 
 
 class ForgetPassword(APIView):
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_forgot
+    )
     def post(self, request):
         # Validate the user's email
         ser_data = EmailSerializer(data=request.POST)
@@ -126,6 +134,9 @@ class ForgetPassword(APIView):
 # You can use this view to verify the token and change the password
 # You can use this view to verify the token and change the password
 class ResetPassword(APIView):
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_reset
+    )
     def post(self, request):
         # Get the token and new password from the request data
         token = request.GET.get('token')
@@ -173,7 +184,7 @@ class DashBordList(APIView):
                              'دیدن لیست دانش آموزان', 'دیدن لیست معلم ها', 'دیدن پروفایل']
         SuperuserList = ['دیدن لیست مدارس', 'ثبت ظرفیت مدرسه', 'دیدن لیست معلم ها', 'دیدن پروفایل',
                          'فرستادن یک دانشجو به یک مدرسه', 'استعلام گزارش ها راجب مدارس', 'دیدن لیست مناطق',
-                         'ایجاد گزارش برای مدرسه و معلم', 'دیدن لیست دانشجوها', '', 'دادن نمره به دانشجو هاو دیدن نمره',
+                         'ایجاد گزارش برای مدرسه و معلم', 'دیدن لیست دانشجوها', 'دادن نمره به دانشجو هاو دیدن نمره',
                          'چک کردن تکالیف دانشجویان', 'پر کردن و حضور و غیاب  و نمایش حضور و غیاب دانشجویان',
                          'درخواست به مسئول اداره و بررسی وضعیت درخواست', 'پرکردن گزارش راجب دانشجوها']
         if Teacher.objects.filter(pk=user.id).exists():
