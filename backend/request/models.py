@@ -18,6 +18,7 @@ class Notification(models.Model):
     title_choices = (
         ('u', 'Unseen'),
         ('p', 'Pending'),
+        ('s', 'Seen'),
         ('n', 'not confirmed'),
         ('c', 'Connecting')
     )

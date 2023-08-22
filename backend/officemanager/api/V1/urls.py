@@ -11,4 +11,8 @@ urlpatterns = [
     path('get/<int:pk>/', views.OfficeManagerGet.as_view()),
     path('schoollist/', views.SchoolList.as_view()),
     path('schoolget/<int:pk>/', views.SchoolGet.as_view()),
+    path('seenrequest/<int:pk>/',views.SeenRequest.as_view()),
+    path('pendingrequest/<int:pk>/', views.ChangeRequestToPending.as_view()),
+    path('rejectrequest/<int:pk>/',views.RejectRequest.as_view()),
+
 ]
