@@ -5,6 +5,19 @@ from accounts.models import Student, OfficeManager
 # Create your models here.
 
 class Request(models.Model):
+    status_choices = (
+        ('n', 'not sent'),
+        ('s', 'Sent'),
+        ('p', 'Pending'),
+        ('na', 'not accepted'),
+        ('a', 'Accepted')
+    )
+    seen_choices = (
+        ('s', 'seen'),
+        ('u', 'unseen')
+    )
+    view = models.CharField(max_length=100, choices=seen_choices, default='u')
+    status = models.CharField(max_length=100, choices=status_choices, default='s')
     sender = models.ForeignKey(Student, on_delete=models.CASCADE)
     receiver = models.ForeignKey(OfficeManager, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
@@ -13,17 +26,3 @@ class Request(models.Model):
     def __str__(self) -> str:
         return f'{self.sender} sent request to {self.receiver}'
 
-
-class Notification(models.Model):
-    title_choices = (
-        ('u', 'Unseen'),
-        ('p', 'Pending'),
-        ('s', 'Seen'),
-        ('n', 'not confirmed'),
-        ('c', 'Connecting')
-    )
-    request = models.OneToOneField(Request, on_delete=models.CASCADE)
-    status = models.CharField(choices=title_choices, default='u', max_length=100)
-
-    def __str__(self) -> str:
-        return f'{self.request} in status {self.status}'
