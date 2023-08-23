@@ -14,7 +14,7 @@ class SchoolGet(APIView):
     def get(self, request, pk):
         if School.objects.filter(id=pk).exists():
             school = School.objects.get(id=pk)
-            ser_data = SchoolSerializer(instance=school)
+            ser_data = SchoolSerializerAll(instance=school)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'this school does not exist'}, status=status.HTTP_404_NOT_FOUND)
@@ -24,7 +24,7 @@ class SchoolList(APIView):
 
     def get(self, request):
         professor = School.objects.all()
-        ser_data = SchoolSerializer(instance=professor, many=True)
+        ser_data = SchoolSerializerAll(instance=professor, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
 
 
