@@ -45,3 +45,6 @@ class SchoolSerializer(serializers.ModelSerializer):  # Nested serializer for Us
     class Meta:
         model = School
         fields = "__all__"  # Include all school fields you want
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
