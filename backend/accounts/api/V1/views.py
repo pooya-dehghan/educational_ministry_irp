@@ -17,13 +17,44 @@ from .serializers import EmailSerializer, ChangePasswordSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.exceptions import ObjectDoesNotExist
-from .swagger_info import swagger_parameters_login, swagger_parameters_forgot, swagger_parameters_reset
+from .swagger_info import swagger_parameters_login, swagger_parameters_forgot, swagger_parameters_reset, \
+    swagger_parameters_register
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 class ApiUserRegistrationView(GenericAPIView):
     serializer_class = UserRegisterSerializer
 
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_register,
+        operation_description="""This endpoint allows users to register a new account.
+
+        The request should include the user's information in the request body.
+
+        The response will contain a success message including these fields:
+            - username
+            - type
+            - id
+            - refresh
+            - access""",
+        operation_summary="endpoint for User register",
+        request_body=openapi.Schema(
+            'Student',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, default="pourya"),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+                'password_confirmation': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+                'studentUniqueCode': openapi.Schema(type=openapi.TYPE_STRING, default="3981231026"),
+            },
+            required=['username', 'password', 'password_confirmation', 'studentUniqueCode'],
+        ),
+        responses={
+            '201': 'created',
+            '400': 'bad request'
+        }
+    )
     def post(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -64,7 +95,29 @@ class UserLogoutAPIView(APIView):
 
 class UserLoginAPIView(APIView):
     @swagger_auto_schema(
-        manual_parameters=swagger_parameters_login
+        manual_parameters=swagger_parameters_login,
+        operation_description="""This endpoint allows users to log in and obtain an authentication token.
+
+        The request should include the user's credentials in the request body.
+
+        The response will contain an authentication token that can be used for subsequent API calls.
+
+        Note: The authentication token should be included in the headers of all authenticated requests as a Bearer 
+        token. """,
+        operation_summary="endpoint for User login",
+        request_body=openapi.Schema(
+            'Student',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, default="pourya"),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+            },
+            required=['username', 'password'],
+        ),
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
     )
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -203,15 +256,12 @@ class DashBordList(APIView):
             return Response({'message': 'not type user'}, status=status.HTTP_404_NOT_FOUND)
 
 
-
 ######################################################################
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from rest_framework import generics, status
-
-
 
 
 class PasswordResetView(APIView):

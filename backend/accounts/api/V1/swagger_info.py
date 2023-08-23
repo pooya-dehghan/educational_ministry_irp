@@ -6,6 +6,34 @@ swagger_info = openapi.Info(
     description="Your API description",
 )
 
+
+swagger_parameters_register = [
+    openapi.Parameter(
+        name='username',
+        in_=openapi.IN_PATH,
+        description='Example PATH parameter',
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        name='password',
+        in_=openapi.IN_PATH,
+        description='Example PATH parameter',
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        name='password_confirmation',
+        in_=openapi.IN_PATH,
+        description='Example PATH parameter',
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        name='studentUniqueCode',
+        in_=openapi.IN_PATH,
+        description='Example PATH parameter',
+        type=openapi.TYPE_STRING
+    ),
+]
+
 swagger_parameters_login = [
     openapi.Parameter(
         name='username',

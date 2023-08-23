@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from accounts.models import OfficeManager, School
+from accounts.models import OfficeManager
 from request.models import Notification
 from rest_framework.response import Response
 from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSerializer, \
