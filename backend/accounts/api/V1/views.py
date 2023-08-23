@@ -83,6 +83,18 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class UserLogoutAPIView(APIView):
+
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows users to logout from account.
+
+        The request should login when use this function this function give token and block refresh token to dont use
+         from all function.""",
+        operation_summary="endpoint for User logout",
+        responses={
+            '200': 'ok',
+            '400': 'bad request'
+        }
+    )
     def post(self, request):
         token = request.data.get('refresh_token')
         if token:
@@ -157,7 +169,25 @@ class UserLoginAPIView(APIView):
 
 class ForgetPassword(APIView):
     @swagger_auto_schema(
-        manual_parameters=swagger_parameters_forgot
+        manual_parameters=swagger_parameters_forgot,
+        operation_description="""This endpoint allows users when forget password use this function.
+
+        The request should include the email and when email is correct send a email to user and after when user click to
+         link send he to reset password function.""",
+        operation_summary="endpoint for forgot password",
+        request_body=openapi.Schema(
+            'user',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, default="ali@gmail.com"),
+            },
+            required=['email'],
+        ),
+        responses={
+            '201': 'created',
+            '400': 'bad request',
+            '404': 'not found',
+        }
     )
     def post(self, request):
         # Validate the user's email
@@ -188,7 +218,26 @@ class ForgetPassword(APIView):
 # You can use this view to verify the token and change the password
 class ResetPassword(APIView):
     @swagger_auto_schema(
-        manual_parameters=swagger_parameters_reset
+        manual_parameters=swagger_parameters_reset,
+        operation_description="""This endpoint allows users to resset password when forget password.
+
+        The request should include the new password and newpassword_confirm
+        when user use forget password and with link use this view 
+        """,
+        operation_summary="endpoint for User resset password",
+        request_body=openapi.Schema(
+            'user',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'new_password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+                'new_password_confirm': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+            },
+            required=['new_password', 'new_password_confirm'],
+        ),
+        responses={
+            '200': 'ok',
+            '400': 'bad request'
+        }
     )
     def post(self, request):
         # Get the token and new password from the request data
@@ -221,6 +270,14 @@ class ResetPassword(APIView):
 class DashBordList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="""This endpoint send a dashboard list for admin """,
+        operation_summary="endpoint for dashboard list",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
     def get(self, request):
         user = request.user
         TeacherList = ['دیدن لیست دانشجوهای خودش', 'دیدن پروفایل', 'دادن نمره به دانشجو ها',
