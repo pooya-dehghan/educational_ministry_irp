@@ -13,7 +13,6 @@ urlpatterns = [
     path('schoolget/<int:pk>/', views.SchoolGet.as_view()),
     path('seenrequest/<int:pk>/', views.SeenRequest.as_view()),
     path('requests/list/', views.ListRequest.as_view(), name="requests-list"),
-    path('requests/list/<int:id>/', views.GetRequest.as_view(), name="request-get")
-    # path('pendingrequest/<int:pk>/', views.ChangeRequestToPending.as_view()),
-    # path('rejectrequest/<int:pk>/',views.RejectRequest.as_view()),
+    path('requests/list/<int:id>/', views.GetRequest.as_view(), name="request-get"),
+    path('rejectrequest/<int:pk>/',views.RejectRequest.as_view()),
 ]

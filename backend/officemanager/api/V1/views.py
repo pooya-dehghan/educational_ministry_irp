@@ -212,7 +212,6 @@ class SchoolGet(APIView):
 
 
 class SeenRequest(APIView):
-
     permission_classes = [IsSuperuserOrOwnOfficeManager]
 
     @swagger_auto_schema(
@@ -233,42 +232,24 @@ class SeenRequest(APIView):
         self.check_object_permissions(request, office_manager)
         if office_manager_notification.request.view == 'u':
             office_manager_notification.request.view = 's'
-            office_manager_notification.save()
+            office_manager_notification.request.save()
             return Response({'message': 'notification seen'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'notification seen before'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class ChangeRequestToPending(APIView):
-#     permission_classes = [IsSuperuserOrOwnOfficeManager]
-#
-#     def post(self, request, pk):
-#         notification = Notification.objects.get(pk=pk)
-#         office_manager = notification.request.receiver
-#         self.check_object_permissions(request, office_manager)
-#         if notification.status == 'u' or notification.status == 's':
-#             notification.status = 'p'
-#             notification.save()
-#             return Response({'message': 'notification pending'}, status=status.HTTP_200_OK)
-#         else:
-#             return Response({'message': 'notification pending before or connecting or not confirmed before'},
-#                             status=status.HTTP_400_BAD_REQUEST)
+class RejectRequest(APIView):
+    permission_classes = {IsSuperuserOrOwnOfficeManager}
 
-
-# class RejectRequest(APIView):
-#     permission_classes = [IsSuperuserOrOwnOfficeManager]
-#
-#     def post(self, request, pk):
-#         notification = Notification.objects.get(pk=pk)
-#         office_manager = notification.request.receiver
-#         self.check_object_permissions(request, office_manager)
-#         if notification.status != 'c':
-#             notification.status = 'n'
-#             notification.save()
-#             return Response({'message': 'notification reject'}, status=status.HTTP_200_OK)
-#         else:
-#             return Response({'message': 'notification connecting before'},
-#                             status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, pk):
+        notification = SchoolRequestNotification.objects.get(id=pk)
+        office_manager = notification.request.receiver
+        self.check_object_permissions(request, office_manager)
+        if notification.request.view == 's' and notification.request.status != 'a':
+            notification.request.status = 'na'
+            notification.request.save()
+            return Response({'message': 'notification is rejected successfully'}, status=status.HTTP_200_OK)
+        return Response({'message': 'not reject this notification'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListRequest(APIView):
