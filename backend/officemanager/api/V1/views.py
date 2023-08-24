@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from accounts.models import OfficeManager
+from accounts.models import OfficeManager, School
 from rest_framework.response import Response
 from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSerializer, \
     OfficeManagerSerializerForCreate
@@ -250,6 +250,38 @@ class RejectRequest(APIView):
             notification.request.save()
             return Response({'message': 'notification is rejected successfully'}, status=status.HTTP_200_OK)
         return Response({'message': 'not reject this notification'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AcceptRequest(APIView):
+    permission_classes = [IsSuperuserOrOwnOfficeManager]
+
+    def post(self, request, school_id, notification_id):
+        notification = SchoolRequestNotification.objects.get(id=notification_id)
+        office_manager = notification.request.receiver
+        student = notification.request.sender
+        self.check_object_permissions(request, office_manager)
+        school = School.objects.get(pk=school_id)
+        if school.office_manager == office_manager:
+            if notification.request.view == 's' and notification.request.status != 'na':
+                if student.school2 is None and school.capacity > 0:
+                    notification.request.status = 'a'
+                    notification.request.save()
+                    student.school2 = school
+                    student.save()
+                    capacity = school.capacity
+                    capacity -= 1
+                    school.capacity = capacity
+                    school.save()
+                    return Response({'message': 'this request accept and student assign to one school'},
+                                    status=status.HTTP_200_OK)
+                else:
+                    return Response({'message': 'this school not assign to this student'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'message': 'not accept this request'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message': 'this school not in this office_manager region'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListRequest(APIView):
