@@ -23,6 +23,29 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
+class DeleteProfile(APIView):
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows to admin to delete user profile.
+
+            The request should include the user's id.
+
+            """,
+        operation_summary="endpoint for delete User profile",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
+    def post(self, request, pk):
+        if User.objects.filter(id=pk).exists():
+            user = User.objects.get(id=pk)
+            user.is_active = False
+            user.save()
+            return Response({'message': 'user profile deleted'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'user whit this id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+
 class ApiUserRegistrationView(GenericAPIView):
     serializer_class = UserRegisterSerializer
 
@@ -111,7 +134,7 @@ class UserLoginAPIView(APIView):
         operation_description="""This endpoint allows users to log in and obtain an authentication token.
 
         The request should include the user's credentials in the request body.
-
+        and user should is_active 
         The response will contain an authentication token that can be used for subsequent API calls.
 
         Note: The authentication token should be included in the headers of all authenticated requests as a Bearer 
@@ -140,7 +163,7 @@ class UserLoginAPIView(APIView):
             user = User.objects.get(username=username)
         except ObjectDoesNotExist:
             return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
-        if user and check_password(password, user.password):
+        if user and check_password(password, user.password) and user.is_active:
             if School.objects.filter(id=user.id).exists():
                 type = "school manager"
             elif user.is_admin:

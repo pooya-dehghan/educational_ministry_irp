@@ -188,8 +188,13 @@ class StudentGetRequestStatus(APIView):
 
 
             The response will contain a success message including these fields:
-                - view
-                - status
+                - view seen - unseen
+                - status send - not send - pending - not accepted - accepted
+                when status is pending or accepted or not accepted means view is seen  
+                when status is not send means view is not seen 
+                when status is send sometime view is seen and sometime view is not seen  
+                
+                
                 """,
         operation_summary="endpoint for get status of request",
         responses={
