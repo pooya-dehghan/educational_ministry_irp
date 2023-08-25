@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import styles from "./createProfessor.module.css";
+//import styles from "./createProfessor.module.css";
 import Dashboard from "../Dashboard/Dashboard";
 import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
 import { useTextFieldStyles } from "../../hooks/TextFieldStyle/TextFieldStyle"; // Update the path
@@ -54,7 +54,7 @@ const CreateProfessor: React.FC = () => {
   return (
     <>
       <Dashboard>
-        <div className={styles.container}>
+        <div>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box

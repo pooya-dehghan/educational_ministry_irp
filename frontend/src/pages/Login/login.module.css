@@ -4,16 +4,12 @@
 }
 
 .container {
-  background-image: url(./signupbg.jpg);
+  background-image: url(https://s8.uupload.ir/files/signupbg_bdw.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   width: 100%;
   height: 100vh;
-  padding-left: 0;
-  padding-right: 0;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .box {
