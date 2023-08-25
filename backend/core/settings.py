@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'attendance.apps.AttendanceConfig',
     'report.apps.ReportConfig',
     'request.apps.RequestConfig',
+    'notification.apps.NotificationConfig',
     # third part
     'drf_yasg',
     'rest_framework_simplejwt',

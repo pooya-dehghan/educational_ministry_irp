@@ -21,6 +21,34 @@ from .swagger_info import swagger_parameters_login, swagger_parameters_forgot, s
     swagger_parameters_register
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from student.api.V1.serializers import StudentSerializer
+from teacher.api.V1.serializers import TeacherSerializer
+from officemanager.api.V1.serializers import OfficeManagerSerializer
+from school.api.V1.serializers import SchoolSerializerAll
+from professor.api.V1.serializers import ProfessorSerializer
+from ..V1.serializers import UserSerializer
+
+class DeleteProfile(APIView):
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows to admin to delete user profile.
+
+            The request should include the user's id.
+
+            """,
+        operation_summary="endpoint for delete User profile",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
+    def post(self, request, pk):
+        if User.objects.filter(id=pk).exists():
+            user = User.objects.get(id=pk)
+            user.is_active = False
+            user.save()
+            return Response({'message': 'user profile deleted'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'user whit this id does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ApiUserRegistrationView(GenericAPIView):
@@ -83,6 +111,18 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class UserLogoutAPIView(APIView):
+
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows users to logout from account.
+
+        The request should login when use this function this function give token and block refresh token to dont use
+         from all function.""",
+        operation_summary="endpoint for User logout",
+        responses={
+            '200': 'ok',
+            '400': 'bad request'
+        }
+    )
     def post(self, request):
         token = request.data.get('refresh_token')
         if token:
@@ -99,7 +139,7 @@ class UserLoginAPIView(APIView):
         operation_description="""This endpoint allows users to log in and obtain an authentication token.
 
         The request should include the user's credentials in the request body.
-
+        and user should is_active 
         The response will contain an authentication token that can be used for subsequent API calls.
 
         Note: The authentication token should be included in the headers of all authenticated requests as a Bearer 
@@ -128,7 +168,7 @@ class UserLoginAPIView(APIView):
             user = User.objects.get(username=username)
         except ObjectDoesNotExist:
             return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
-        if user and check_password(password, user.password):
+        if user and check_password(password, user.password) and user.is_active:
             if School.objects.filter(id=user.id).exists():
                 type = "school manager"
             elif user.is_admin:
@@ -157,7 +197,25 @@ class UserLoginAPIView(APIView):
 
 class ForgetPassword(APIView):
     @swagger_auto_schema(
-        manual_parameters=swagger_parameters_forgot
+        manual_parameters=swagger_parameters_forgot,
+        operation_description="""This endpoint allows users when forget password use this function.
+
+        The request should include the email and when email is correct send a email to user and after when user click to
+         link send he to reset password function.""",
+        operation_summary="endpoint for forgot password",
+        request_body=openapi.Schema(
+            'user',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, default="ali@gmail.com"),
+            },
+            required=['email'],
+        ),
+        responses={
+            '201': 'created',
+            '400': 'bad request',
+            '404': 'not found',
+        }
     )
     def post(self, request):
         # Validate the user's email
@@ -188,7 +246,26 @@ class ForgetPassword(APIView):
 # You can use this view to verify the token and change the password
 class ResetPassword(APIView):
     @swagger_auto_schema(
-        manual_parameters=swagger_parameters_reset
+        manual_parameters=swagger_parameters_reset,
+        operation_description="""This endpoint allows users to resset password when forget password.
+
+        The request should include the new password and newpassword_confirm
+        when user use forget password and with link use this view 
+        """,
+        operation_summary="endpoint for User resset password",
+        request_body=openapi.Schema(
+            'user',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'new_password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+                'new_password_confirm': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+            },
+            required=['new_password', 'new_password_confirm'],
+        ),
+        responses={
+            '200': 'ok',
+            '400': 'bad request'
+        }
     )
     def post(self, request):
         # Get the token and new password from the request data
@@ -221,6 +298,14 @@ class ResetPassword(APIView):
 class DashBordList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="""This endpoint send a dashboard list for admin """,
+        operation_summary="endpoint for dashboard list",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
     def get(self, request):
         user = request.user
         TeacherList = ['دیدن لیست دانشجوهای خودش', 'دیدن پروفایل', 'دادن نمره به دانشجو ها',
@@ -264,22 +349,58 @@ from django.utils.encoding import force_bytes
 from rest_framework import generics, status
 
 
-class PasswordResetView(APIView):
-    serializer_class = EmailSerializer
+# class PasswordResetView(APIView):
+#     serializer_class = EmailSerializer
+#
+#     def post(self, request):
+#         serializer = self.serializer_class(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         email = serializer.validated_data['email']
+#         user = User.objects.get(email=email)
+#         token = default_token_generator.make_token(user)
+#         uid = urlsafe_base64_encode(force_bytes(user.pk))
+#         reset_link = f"http://example.com/reset-password/{uid}/{token}/"
+#         send_mail(
+#             'Password Reset',
+#             f'Click the link to reset your password: {reset_link}',
+#             'from@example.com',
+#             [email],
+#             fail_silently=False,
+#         )
+#         return Response({'message': 'Password reset link sent.'}, status=status.HTTP_200_OK)
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data['email']
-        user = User.objects.get(email=email)
-        token = default_token_generator.make_token(user)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        reset_link = f"http://example.com/reset-password/{uid}/{token}/"
-        send_mail(
-            'Password Reset',
-            f'Click the link to reset your password: {reset_link}',
-            'from@example.com',
-            [email],
-            fail_silently=False,
-        )
-        return Response({'message': 'Password reset link sent.'}, status=status.HTTP_200_OK)
+
+class ProfileView(APIView):
+    def get(self, request, id):
+        global ser_data
+        user_type = "anonymous"
+        try:
+            user = User.objects.get(pk=id)
+        except ObjectDoesNotExist:
+            return Response({"message": "not found user", "type": user_type}, status=status.HTTP_404_NOT_FOUND)
+
+        if Teacher.objects.filter(pk=user.id).exists():
+            teacher = Teacher.objects.get(id=user.id)
+            ser_data = TeacherSerializer(teacher)
+            user_type = "teacher"
+        elif Student.objects.filter(pk=user.id).exists():
+            student = Student.objects.get(id=user.id)
+            ser_data = StudentSerializer(student)
+            print(ser_data)
+            user_type = "student"
+        elif OfficeManager.objects.filter(pk=user.id).exists():
+            office_manager = OfficeManager.objects.get(id=user.id)
+            ser_data = OfficeManagerSerializer(office_manager)
+            user_type = "office manager"
+        elif School.objects.filter(pk=user.id).exists():
+            school = School.objects.get(id=user.id)
+            ser_data = SchoolSerializerAll(school)
+            user_type = "school"
+        elif Professor.objects.filter(pk=user.id).exists():
+            professor = Professor.objects.get(id=user.id)
+            ser_data = ProfessorSerializer(professor)
+            user_type = "professor"
+        elif user.is_admin:
+            ser_data = UserSerializer(user)
+            user_type = "super user"
+        return Response({"data": ser_data.data, "type":user_type}, status=status.HTTP_200_OK)

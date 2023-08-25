@@ -99,6 +99,18 @@ openapi.Parameter(
         description='Example path parameter',
         type=openapi.TYPE_INTEGER
     ),
+    openapi.Parameter(
+        name='username',
+        in_=openapi.IN_PATH,
+        description='Example path parameter',
+        type=openapi.TYPE_INTEGER
+    ),
+    openapi.Parameter(
+        name='email',
+        in_=openapi.IN_PATH,
+        description='Example path parameter',
+        type=openapi.TYPE_INTEGER
+    ),
 ]
 swagger_parameters_set_capacity = [
     openapi.Parameter(

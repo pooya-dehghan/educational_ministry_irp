@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import ApiUserRegistrationView, CustomTokenObtainPairView, UserLoginAPIView, UserLogoutAPIView\
-    , ForgetPassword, ResetPassword, DashBordList, PasswordResetView
+    , ForgetPassword, ResetPassword, DashBordList, DeleteProfile, ProfileView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -22,5 +22,6 @@ urlpatterns = [
     path('forgot/', ForgetPassword.as_view()),
     path('reset/', ResetPassword.as_view()),
     path('dashbordlist/', DashBordList.as_view()),
-    path('passreset/', PasswordResetView.as_view(), name='reset_password'),
+    path('deleteprofile/<int:pk>/', DeleteProfile.as_view()),
+    path('profile/<int:id>/', ProfileView.as_view(), name='profile')
 ]

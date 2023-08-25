@@ -118,8 +118,9 @@ class Professor(User):
 
 class Student(User):
     studentUniqueCode = models.CharField(max_length=10)
-    field = models.CharField(max_length=200, null=True, blank=True,default='computer')
-    professor2 = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='professor_to_student', null=True, blank=True)
+    field = models.CharField(max_length=200, null=True, blank=True, default='computer')
+    professor2 = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='professor_to_student', null=True,
+                                   blank=True)
     school2 = models.ForeignKey(School, on_delete=models.CASCADE, related_name='school_to_student', null=True,
                                 blank=True)
     teacher2 = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_to_student', null=True,
@@ -127,3 +128,6 @@ class Student(User):
 
     def __str__(self):
         return f"{self.username} - {self.studentUniqueCode}-{self.id}"
+
+
+
