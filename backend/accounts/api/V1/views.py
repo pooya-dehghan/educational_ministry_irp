@@ -380,20 +380,25 @@ class ProfileView(APIView):
             return Response({"message": "not found user", "type": user_type}, status=status.HTTP_404_NOT_FOUND)
 
         if Teacher.objects.filter(pk=user.id).exists():
-            ser_data = TeacherSerializer(user)
+            teacher = Teacher.objects.get(id=user.id)
+            ser_data = TeacherSerializer(teacher)
             user_type = "teacher"
         elif Student.objects.filter(pk=user.id).exists():
-            ser_data = StudentSerializer(user)
+            student = Student.objects.get(id=user.id)
+            ser_data = StudentSerializer(student)
             print(ser_data)
             user_type = "student"
-        elif OfficeManager.objects.get(pk=user.id).exists():
-            ser_data = OfficeManagerSerializer(user)
+        elif OfficeManager.objects.filter(pk=user.id).exists():
+            office_manager = OfficeManager.objects.get(id=user.id)
+            ser_data = OfficeManagerSerializer(office_manager)
             user_type = "office manager"
-        elif School.objects.get(pk=user.id).exists():
-            ser_data = SchoolSerializerAll(user)
+        elif School.objects.filter(pk=user.id).exists():
+            school = School.objects.get(id=user.id)
+            ser_data = SchoolSerializerAll(school)
             user_type = "school"
-        elif Professor.objects.get(pk=user.id).exists():
-            ser_data = ProfessorSerializer(user)
+        elif Professor.objects.filter(pk=user.id).exists():
+            professor = Professor.objects.get(id=user.id)
+            ser_data = ProfessorSerializer(professor)
             user_type = "professor"
         elif user.is_admin:
             ser_data = UserSerializer(user)
