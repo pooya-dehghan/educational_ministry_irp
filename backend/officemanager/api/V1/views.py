@@ -241,6 +241,19 @@ class SeenRequest(APIView):
 class RejectRequest(APIView):
     permission_classes = {IsSuperuserOrOwnOfficeManager}
 
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows office_manager to reject a request.
+
+             The request should include the id of notification
+             this function check first notification is seen and notification does not accept before
+             after reject this function
+             """,
+        operation_summary="endpoint for reject request",
+        responses={
+            '200': 'ok',
+            '400': 'bad request'
+        }
+    )
     def post(self, request, pk):
         notification = SchoolRequestNotification.objects.get(id=pk)
         office_manager = notification.request.receiver
@@ -255,6 +268,21 @@ class RejectRequest(APIView):
 class AcceptRequest(APIView):
     permission_classes = [IsSuperuserOrOwnOfficeManager]
 
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows office_manager to accept a request.
+
+             The request should include the id of notification and id of school
+             this function first check the school in region of office_manager second 
+             check notification seen and does not not accept before 
+             third check student not join in any school before and school capacity larger than zero  
+             after accept this function and assign student to a school 
+             """,
+        operation_summary="endpoint for accept request and assign student to one school",
+        responses={
+            '200': 'ok',
+            '400': 'bad request'
+        }
+    )
     def post(self, request, school_id, notification_id):
         notification = SchoolRequestNotification.objects.get(id=notification_id)
         office_manager = notification.request.receiver
