@@ -21,7 +21,12 @@ from .swagger_info import swagger_parameters_login, swagger_parameters_forgot, s
     swagger_parameters_register
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
+from student.api.V1.serializers import StudentSerializer
+from teacher.api.V1.serializers import TeacherSerializer
+from officemanager.api.V1.serializers import OfficeManagerSerializer
+from school.api.V1.serializers import SchoolSerializerAll
+from professor.api.V1.serializers import ProfessorSerializer
+from ..V1.serializers import UserSerializer
 
 class DeleteProfile(APIView):
     @swagger_auto_schema(
@@ -344,22 +349,53 @@ from django.utils.encoding import force_bytes
 from rest_framework import generics, status
 
 
-class PasswordResetView(APIView):
-    serializer_class = EmailSerializer
+# class PasswordResetView(APIView):
+#     serializer_class = EmailSerializer
+#
+#     def post(self, request):
+#         serializer = self.serializer_class(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         email = serializer.validated_data['email']
+#         user = User.objects.get(email=email)
+#         token = default_token_generator.make_token(user)
+#         uid = urlsafe_base64_encode(force_bytes(user.pk))
+#         reset_link = f"http://example.com/reset-password/{uid}/{token}/"
+#         send_mail(
+#             'Password Reset',
+#             f'Click the link to reset your password: {reset_link}',
+#             'from@example.com',
+#             [email],
+#             fail_silently=False,
+#         )
+#         return Response({'message': 'Password reset link sent.'}, status=status.HTTP_200_OK)
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data['email']
-        user = User.objects.get(email=email)
-        token = default_token_generator.make_token(user)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        reset_link = f"http://example.com/reset-password/{uid}/{token}/"
-        send_mail(
-            'Password Reset',
-            f'Click the link to reset your password: {reset_link}',
-            'from@example.com',
-            [email],
-            fail_silently=False,
-        )
-        return Response({'message': 'Password reset link sent.'}, status=status.HTTP_200_OK)
+
+class ProfileView(APIView):
+    def get(self, request, id):
+        global ser_data
+        user_type = "anonymous"
+        try:
+            user = User.objects.get(pk=id)
+        except ObjectDoesNotExist:
+            return Response({"message": "not found user", "type": user_type}, status=status.HTTP_404_NOT_FOUND)
+
+        if Teacher.objects.filter(pk=user.id).exists():
+            ser_data = TeacherSerializer(user)
+            user_type = "teacher"
+        elif Student.objects.filter(pk=user.id).exists():
+            ser_data = StudentSerializer(user)
+            print(ser_data)
+            user_type = "student"
+        elif OfficeManager.objects.get(pk=user.id).exists():
+            ser_data = OfficeManagerSerializer(user)
+            user_type = "office manager"
+        elif School.objects.get(pk=user.id).exists():
+            ser_data = SchoolSerializerAll(user)
+            user_type = "school"
+        elif Professor.objects.get(pk=user.id).exists():
+            ser_data = ProfessorSerializer(user)
+            user_type = "professor"
+        elif user.is_admin:
+            ser_data = UserSerializer(user)
+            user_type = "super user"
+        return Response({"data": ser_data.data, "type":user_type}, status=status.HTTP_200_OK)

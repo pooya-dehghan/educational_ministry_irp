@@ -55,3 +55,9 @@ class EmailSerializer(serializers.Serializer):
 class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length=100)
     new_password_confirm = serializers.CharField(max_length=100)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
