@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import "./index.module.css";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -20,7 +20,7 @@ import CreateSchool from "./pages/createSchool/CreateSchool";
 import CreateTeacher from "./pages/createTeacher/CreateTeacher";
 import CreateProfessor from "./pages/createProfessr/CreateProfessor";
 import AlertWrapper from "./HOC/alertWrapper/alertWrapper";
-import "./index.css";
+import "./index.module.css";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import AuthenticationHOC from "./HOC/authenticationHOC/authentifcationHOC";
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
     element: <CreateProfessor />,
   },
   {
-    path: "/profile",
+    path: "dashboard/profile",
     element: <Profile />,
   },
   {
@@ -99,7 +99,7 @@ ReactDOM.createRoot(rootEl).render(
     <Provider store={store}>
       <AlertWrapper>
         <ThemeProviderWrapper>
-          <RouterProvider  router={router} />
+          <RouterProvider router={router} />
         </ThemeProviderWrapper>
       </AlertWrapper>
     </Provider>

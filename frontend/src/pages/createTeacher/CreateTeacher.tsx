@@ -1,27 +1,27 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import styles from './createTeacher.module.css';
-import Dashboard from '../Dashboard/Dashboard';
-import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
-import { useTextFieldStyles } from '../../hooks/TextFieldStyle/TextFieldStyle'; // Update the path
-import { createTeacherAsync } from '../../features/teacher/teacherThunk';
-import { useDispatch } from 'react-redux';
-import { createTeacher } from '../../features/teacher/teacherSlice';
-import { updateResponse } from '../../features/response/responseSlice';
-import { Values } from './interface';
-import { teacherValidationSchema } from '../../validations/create-teacher-validation';
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+//import styles from './createTeacher.module.css';
+import Dashboard from "../Dashboard/Dashboard";
+import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
+import { useTextFieldStyles } from "../../hooks/TextFieldStyle/TextFieldStyle"; // Update the path
+import { createTeacherAsync } from "../../features/teacher/teacherThunk";
+import { useDispatch } from "react-redux";
+import { createTeacher } from "../../features/teacher/teacherSlice";
+import { updateResponse } from "../../features/response/responseSlice";
+import { Values } from "./interface";
+import { teacherValidationSchema } from "../../validations/create-teacher-validation";
 
 const CreateTeacher: React.FC = () => {
   const dispatch = useDispatch();
@@ -40,12 +40,12 @@ const CreateTeacher: React.FC = () => {
         dispatch(createTeacher({}));
       })
       .catch((error: any) => {
-        console.log('error: ', error);
+        console.log("error: ", error);
         dispatch(
           updateResponse({
-            severity: 'error',
+            severity: "error",
             message:
-              'عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.',
+              "عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.",
             open: true,
           })
         );
@@ -56,46 +56,46 @@ const CreateTeacher: React.FC = () => {
   return (
     <>
       <Dashboard>
-        <div className={styles.container}>
+        <div>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
               sx={{
-                backgroundColor: 'white',
+                backgroundColor: "white",
                 marginTop: 8,
                 marginBottom: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
                 boxShadow: 3,
                 borderRadius: 2,
                 px: 4,
                 py: 6,
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography
                 component="h3"
                 variant="subtitle1"
-                sx={{ fontSize: '1rem' }}
+                sx={{ fontSize: "1rem" }}
               >
                 ثبت معلم
               </Typography>
 
               <Formik
                 initialValues={{
-                  firstName: '',
-                  lastName: '',
-                  schoolName: '',
-                  managerName: '',
-                  nationalCode: '',
-                  email: '',
-                  password: '',
-                  password_confirmation: '',
-                  username: '',
-                  field: '',
+                  firstName: "",
+                  lastName: "",
+                  schoolName: "",
+                  managerName: "",
+                  nationalCode: "",
+                  email: "",
+                  password: "",
+                  password_confirmation: "",
+                  username: "",
+                  field: "",
                 }}
                 validationSchema={teacherValidationSchema} // Add validation schema
                 onSubmit={(values: Values, { setSubmitting }: any) => {
@@ -124,7 +124,7 @@ const CreateTeacher: React.FC = () => {
                               helperText={
                                 touched.firstName && errors.firstName
                                   ? errors.username
-                                  : ''
+                                  : ""
                               }
                             />
                           )}
@@ -143,7 +143,7 @@ const CreateTeacher: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -162,7 +162,7 @@ const CreateTeacher: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -181,7 +181,7 @@ const CreateTeacher: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -200,7 +200,7 @@ const CreateTeacher: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -219,7 +219,7 @@ const CreateTeacher: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -238,7 +238,7 @@ const CreateTeacher: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -257,7 +257,7 @@ const CreateTeacher: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -276,7 +276,7 @@ const CreateTeacher: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -295,7 +295,7 @@ const CreateTeacher: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}

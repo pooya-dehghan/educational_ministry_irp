@@ -1,22 +1,23 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import styles from './createOM.module.css';
-import Dashboard from '../Dashboard/Dashboard';
-import { Formik, Form, Field, FieldProps } from 'formik';
-import { createOfficeManagerAsync } from '../../features/officemanager/officemanagerThunk';
-import { useDispatch } from 'react-redux';
-import { createOfficeManager } from '../../features/officemanager/officemanagerSlice';
-import { updateResponse } from '../../features/response/responseSlice';
-import { Values } from './interface';
-import { officeManagerValidationSchema } from '../../validations';
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+//import "../../index.module.css";
+//import styles from "./createOM.module.css";
+import Dashboard from "../Dashboard/Dashboard";
+import { Formik, Form, Field, FieldProps } from "formik";
+import { createOfficeManagerAsync } from "../../features/officemanager/officemanagerThunk";
+import { useDispatch } from "react-redux";
+import { createOfficeManager } from "../../features/officemanager/officemanagerSlice";
+import { updateResponse } from "../../features/response/responseSlice";
+import { Values } from "./interface";
+import { officeManagerValidationSchema } from "../../validations";
 
 const CreateOfficeManager: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,12 +34,12 @@ const CreateOfficeManager: React.FC = () => {
         dispatch(createOfficeManager({}));
       })
       .catch((error: any) => {
-        console.log('error: ', error);
+        console.log("error: ", error);
         dispatch(
           updateResponse({
-            severity: 'error',
+            severity: "error",
             message:
-              'عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.',
+              "عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.",
             open: true,
           })
         );
@@ -49,43 +50,43 @@ const CreateOfficeManager: React.FC = () => {
   return (
     <>
       <Dashboard>
-        <div className={styles.container} dir="rtl">
+        <div dir="rtl">
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
               sx={{
-                backgroundColor: 'white',
+                backgroundColor: "white",
                 marginTop: 8,
                 marginBottom: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
                 boxShadow: 3,
                 borderRadius: 2,
                 px: 4,
                 py: 6,
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography
                 component="h3"
                 variant="subtitle1"
-                sx={{ fontSize: '1rem' }}
+                sx={{ fontSize: "1rem" }}
               >
                 ثبت مسئول اداره آموزش و پرورش
               </Typography>
               <Formik
                 initialValues={{
-                  firstName: '',
-                  lastName: '',
-                  region: '',
-                  nationalCode: '',
-                  email: '',
-                  password: '',
-                  password_confirmation: '',
-                  username: '',
+                  firstName: "",
+                  lastName: "",
+                  region: "",
+                  nationalCode: "",
+                  email: "",
+                  password: "",
+                  password_confirmation: "",
+                  username: "",
                 }}
                 validationSchema={officeManagerValidationSchema} // Add validation schema
                 onSubmit={(values: Values, { setSubmitting }: any) => {
@@ -114,7 +115,7 @@ const CreateOfficeManager: React.FC = () => {
                               helperText={
                                 touched.firstName && errors.firstName
                                   ? errors.username
-                                  : ''
+                                  : ""
                               }
                             />
                           )}
@@ -133,7 +134,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -152,7 +153,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -171,7 +172,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -190,7 +191,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -209,7 +210,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -228,7 +229,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
@@ -247,7 +248,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ''
+                                meta.touched && meta.error ? meta.error : ""
                               }
                             />
                           )}
