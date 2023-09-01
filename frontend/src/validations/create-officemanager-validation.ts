@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 export const officeManagerValidationSchema = Yup.object().shape({
-  region: Yup.string().required('منطقه اجباریست'),
+  region: Yup.number().required('منطقه اجباریست'),
   username: Yup.string().required('نام کاربری اجباریست'),
   password: Yup.string().required('رمز عبور اجباریست'),
   password_confirmation: Yup.string()

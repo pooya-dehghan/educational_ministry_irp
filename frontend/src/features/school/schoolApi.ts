@@ -72,8 +72,8 @@ export const schoolApi = {
     getData: GetAllschoolsRequest
   ): Promise<GetAllschoolsResponse> => {
     try {
-      const response = await axiosInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/school/`,
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/school/api/v1/list/`,
         getData
       );
       return response.data;

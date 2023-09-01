@@ -1,33 +1,33 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 //import styles from "./createProfessor.module.css";
-import Dashboard from "../Dashboard/Dashboard";
-import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
-import { useTextFieldStyles } from "../../hooks/TextFieldStyle/TextFieldStyle"; // Update the path
-import { createProfessorAsync } from "../../features/professor/professorThunk";
-import { useDispatch } from "react-redux";
-import { createProfessor } from "../../features/professor/professorSlice";
-import { updateResponse } from "../../features/response/responseSlice";
-import { Values } from "./interface";
-import { professorValidationSchema } from "../../validations/create-professor-validation";
+import Dashboard from '../Dashboard/Dashboard';
+import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
+import { useTextFieldStyles } from '../../hooks/TextFieldStyle/TextFieldStyle'; // Update the path
+import { createProfessorAsync } from '../../features/professor/professorThunk';
+import { useDispatch } from 'react-redux';
+import { createProfessor } from '../../features/professor/professorSlice';
+import { updateResponse } from '../../features/response/responseSlice';
+import { Values } from './interface';
+import { professorValidationSchema } from '../../validations/create-professor-validation';
 
 const CreateProfessor: React.FC = () => {
   const dispatch = useDispatch();
   const handleSubmit = (values: Values, setSubmitting: any) => {
     let createProfessorData = {
-      proNumber: values.proNumber,
+      professor_id: values.professor_id,
       password: values.password,
       password_confirmation: values.password_confirmation,
       username: values.username,
@@ -36,14 +36,20 @@ const CreateProfessor: React.FC = () => {
       .unwrap()
       .then((response: any) => {
         dispatch(createProfessor({}));
-      })
-      .catch((error: any) => {
-        console.log("error: ", error);
         dispatch(
           updateResponse({
-            severity: "error",
+            severity: 'success',
+            message: 'مسئول مربوطه با موفقیت اضافه شد.',
+            open: true,
+          })
+        );
+      })
+      .catch((error: any) => {
+        dispatch(
+          updateResponse({
+            severity: 'error',
             message:
-              "عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.",
+              'عملیات ناموفق لطفا از وارد شدن تمامی اطلاعات اطمینان حاصل فرمایید.',
             open: true,
           })
         );
@@ -59,39 +65,39 @@ const CreateProfessor: React.FC = () => {
             <CssBaseline />
             <Box
               sx={{
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 marginTop: 8,
                 marginBottom: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
                 boxShadow: 3,
                 borderRadius: 2,
                 px: 4,
                 py: 6,
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography
                 component="h3"
                 variant="subtitle1"
-                sx={{ fontSize: "1rem" }}
+                sx={{ fontSize: '1rem' }}
               >
                 ثبت استاد
               </Typography>
 
               <Formik
                 initialValues={{
-                  firstName: "",
-                  lastName: "",
-                  proNumber: "",
-                  nationalCode: "",
-                  email: "",
-                  password: "",
-                  password_confirmation: "",
-                  username: "",
+                  firstName: '',
+                  lastName: '',
+                  professor_id: '',
+                  nationalCode: '',
+                  email: '',
+                  password: '',
+                  password_confirmation: '',
+                  username: '',
                 }}
                 validationSchema={professorValidationSchema} // Add validation schema
                 onSubmit={(values: Values, { setSubmitting }: any) => {
@@ -120,7 +126,7 @@ const CreateProfessor: React.FC = () => {
                               helperText={
                                 touched.firstName && errors.firstName
                                   ? errors.firstName
-                                  : ""
+                                  : ''
                               }
                             />
                           )}
@@ -139,26 +145,26 @@ const CreateProfessor: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
                         </Field>
                       </Grid>
                       <Grid item xs={12} sm={6}>
-                        <Field name="proNumber">
+                        <Field name="professor_id">
                           {({ field, meta }: FieldProps) => (
                             <TextField
                               {...field}
                               label="شماره استادی"
                               placeholder="شماره استادی"
-                              id="proNumber"
+                              id="professor_id"
                               autoFocus
                               variant="outlined"
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -177,7 +183,7 @@ const CreateProfessor: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -196,7 +202,7 @@ const CreateProfessor: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -215,7 +221,7 @@ const CreateProfessor: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -234,7 +240,7 @@ const CreateProfessor: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -253,7 +259,7 @@ const CreateProfessor: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}

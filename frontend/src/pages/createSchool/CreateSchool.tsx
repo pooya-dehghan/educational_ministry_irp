@@ -1,31 +1,37 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import styles from "./createSchool.module.css";
-import Dashboard from "../Dashboard/Dashboard";
-import { Formik, Form, Field, FieldProps } from "formik";
-import { createSchoolAsync } from "../../features/school/schoolThunk";
-import { useDispatch } from "react-redux";
-import { createSchool } from "../../features/school/schoolSlice";
-import { updateResponse } from "../../features/response/responseSlice";
-import { Values } from "./interface/formikValues";
-// import { schoolValidationSchema } from '../../validations/create-school-validation';
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import styles from './createSchool.module.css';
+import Dashboard from '../Dashboard/Dashboard';
+import { Formik, Form, Field, FieldProps } from 'formik';
+import { createSchoolAsync } from '../../features/school/schoolThunk';
+import { useDispatch } from 'react-redux';
+import { createSchool } from '../../features/school/schoolSlice';
+import { updateResponse } from '../../features/response/responseSlice';
+import { Values } from './interface/formikValues';
+import { schoolValidationSchema } from '../../validations/create-school-validation';
 
 const CreateSchool: React.FC = () => {
   const dispatch = useDispatch();
 
   const handleFormSubmit = (values: Values, setSubmitting: any) => {
     let createSchoolData = {
-      schoolName: values.schoolName,
-      managerName: values.managerName,
+      name: values.name,
+      manager: values.manager,
       address: values.address,
+      username: values.username,
+      password: values.password,
+      password_confirmation: values.password_confirmation,
+      region: values.region,
+      office_manager: values.office_manager,
+      city: values.city,
     };
     (dispatch as any)(createSchoolAsync(createSchoolData))
       .unwrap()
@@ -33,12 +39,12 @@ const CreateSchool: React.FC = () => {
         dispatch(createSchool({}));
       })
       .catch((error: any) => {
-        console.log("error: ", error);
+        console.log('error: ', error);
         dispatch(
           updateResponse({
-            severity: "error",
+            severity: 'error',
             message:
-              "عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.",
+              'عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.',
             open: true,
           })
         );
@@ -54,35 +60,41 @@ const CreateSchool: React.FC = () => {
             <CssBaseline />
             <Box
               sx={{
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 marginTop: 8,
                 marginBottom: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
                 boxShadow: 3,
                 borderRadius: 2,
                 px: 4,
                 py: 6,
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography
                 component="h3"
                 variant="subtitle1"
-                sx={{ fontSize: "1rem" }}
+                sx={{ fontSize: '1rem' }}
               >
                 ثبت مدرسه
               </Typography>
               <Formik
                 initialValues={{
-                  schoolName: "",
-                  managerName: "",
-                  address: "",
+                  username: '',
+                  password: '',
+                  password_confirmation: '',
+                  name: '',
+                  manager: '',
+                  address: '',
+                  region: '',
+                  office_manager: '',
+                  city: '',
                 }}
-                // validationSchema={schoolValidationSchema}
+                validationSchema={schoolValidationSchema}
                 onSubmit={(values: Values, { setSubmitting }: any) => {
                   handleFormSubmit(values, setSubmitting);
                 }}
@@ -91,38 +103,114 @@ const CreateSchool: React.FC = () => {
                   <Form onSubmit={handleSubmit}>
                     <Grid container spacing={2} dir="rtl">
                       <Grid item xs={12} sm={6}>
-                        <Field name="schoolName">
+                        <Field name="name">
                           {({ field, meta }: FieldProps) => (
                             <TextField
                               {...field}
                               label="نام مدرسه"
                               placeholder="نام مدرسه"
-                              id="schoolName"
+                              id="name"
                               autoFocus
                               variant="outlined"
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
                         </Field>
                       </Grid>
                       <Grid item xs={12} sm={6}>
-                        <Field name="managerName">
+                        <Field name="username">
                           {({ field, meta }: FieldProps) => (
                             <TextField
                               {...field}
-                              label="نام مدیر"
-                              placeholder="نام مدیر"
-                              id="managerName"
+                              label="نام کاربری"
+                              placeholder="نام کاربری"
+                              id="username"
                               autoFocus
                               variant="outlined"
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="manager">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام مدیر"
+                              placeholder="نام مدیر"
+                              id="manager"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="office_manager">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="شماره مسئول اموزش پرورش"
+                              placeholder="شماره مسئول اموزش پرورش"
+                              id="office_manager"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="password">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="گذرواژه"
+                              placeholder="گذرواژه"
+                              id="password"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field name="password_confirmation">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="تایید گذرواژه"
+                              placeholder="تایید گذرواژه"
+                              id="password_confirmation"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -141,7 +229,45 @@ const CreateSchool: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="region">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="منطقه"
+                              placeholder="منطقه"
+                              id="region"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field name="city">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="شهر"
+                              placeholder="شهر"
+                              id="city"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}

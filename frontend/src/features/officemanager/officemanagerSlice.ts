@@ -17,6 +17,7 @@ const officeManagerSlice = createSlice({
       state.officeManagerinfo = action.payload;
     },
     getAllOfficeManagers: (state, action) => {
+      console.log('stateallofficemanagers: ', action.payload);
       state.allOfficeManagers = action.payload;
     },
     updateOfficeManager: (state, action) => {

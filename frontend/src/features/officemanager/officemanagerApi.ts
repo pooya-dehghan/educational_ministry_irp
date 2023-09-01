@@ -1,4 +1,3 @@
-import axios from 'axios';
 import axsioInstance from '../../utils/axios/index';
 import {
   CreateOfficeManagerRequest,
@@ -19,7 +18,7 @@ export const officeManagerApi = {
     getData: GetOfficeManagerRequest
   ): Promise<GetOfficeManagerResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axsioInstance.post(
         `${API_BASE_URL}/accounts/api/v1/officemanager/`,
         getData
       );
@@ -47,7 +46,7 @@ export const officeManagerApi = {
     updateData: UpdateOfficeManagerRequest
   ): Promise<UpdateOfficeManagerResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axsioInstance.post(
         `${API_BASE_URL}/accounts/api/v1/officemanager/`,
         updateData
       );
@@ -61,7 +60,7 @@ export const officeManagerApi = {
     deleteData: DeleteOfficeManagereRequest
   ): Promise<DeleteOfficeManagerResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axsioInstance.post(
         `${API_BASE_URL}/accounts/api/v1/officemanager/`,
         deleteData
       );
@@ -75,7 +74,7 @@ export const officeManagerApi = {
     getData: GetAllOfficeManagersRequest
   ): Promise<GetAllOfficeManagersResponse> => {
     try {
-      const response = await axios.get(
+      const response = await axsioInstance.get(
         `${API_BASE_URL}/officemanager/api/v1/list/`,
         getData
       );

@@ -60,7 +60,6 @@ const Login = () => {
         );
         tokenHandler.setToken(response.access);
         tokenHandler.setRefreshToken(response.refresh);
-        console.log('access: ', response.access);
         navigate('/dashboard');
       })
       .catch((error: any) => {
