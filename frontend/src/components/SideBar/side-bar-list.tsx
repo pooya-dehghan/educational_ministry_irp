@@ -1,59 +1,59 @@
-import SchoolIcon from '@mui/icons-material/School';
-import HowToReg from '@mui/icons-material/HowToReg';
-import HomeWorkIcon from '@mui/icons-material/HomeWork';
-import ApartmentIcon from '@mui/icons-material/Apartment';
-import PersonSharpIcon from '@mui/icons-material/PersonSharp';
+import SchoolIcon from "@mui/icons-material/School";
+import HowToReg from "@mui/icons-material/HowToReg";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 
 const ListItems = [
   {
-    list: 'لیست مدارس',
-    icon: <ApartmentIcon />,
-    to: '/list/schools',
+    list: "لیست مدارس",
+    icon: <SchoolIcon />,
+    to: "/list/schools",
   },
   {
-    list: 'لیست مدیران',
+    list: "لیست مدیران",
     icon: <PersonSharpIcon />,
-    to: '/list/managers',
+    to: "/list/managers",
   },
   {
-    list: 'لیست ادارات',
+    list: "لیست ادارات",
     icon: <ApartmentIcon />,
-    to: '/list/organs',
+    to: "/list/organs",
   },
   {
-    list: 'لیست اساتید',
-    icon: <ApartmentIcon />,
-    to: '/list/professors',
-  },
-  {
-    list: 'لیست دانشگاه ها',
-    icon: <ApartmentIcon />,
-    to: 'university',
-  },
-  {
-    list: 'افزودن مدرسه',
-    icon: <ApartmentIcon />,
-    to: '/createSchool',
-  },
-  {
-    list: 'افزودن مدیر مدرسه',
+    list: "لیست اساتید",
     icon: <PersonSharpIcon />,
-    to: '/createSchoolManager',
+    to: "/list/professors",
   },
   {
-    list: 'افزودن مسئول اداره آموزش و پرورش',
-    icon: <PersonSharpIcon />,
-    to: '/createOfficeManager',
+    list: "لیست دانشگاه ها",
+    icon: <SchoolIcon />,
+    to: "university",
   },
   {
-    list: 'افزودن استاد',
-    icon: <PersonSharpIcon />,
-    to: '/createProfessor',
+    list: "افزودن مدرسه",
+    icon: <SchoolIcon />,
+    to: "/createSchool",
   },
   {
-    list: 'افزودن معلم مدرسه',
+    list: "افزودن مدیر مدرسه",
     icon: <PersonSharpIcon />,
-    to: '/createTeacher',
+    to: "/createSchoolManager",
+  },
+  {
+    list: "افزودن مسئول اداره آموزش و پرورش",
+    icon: <PersonSharpIcon />,
+    to: "/createOfficeManager",
+  },
+  {
+    list: "افزودن استاد",
+    icon: <PersonSharpIcon />,
+    to: "/createProfessor",
+  },
+  {
+    list: "افزودن معلم مدرسه",
+    icon: <PersonSharpIcon />,
+    to: "/createTeacher",
   },
 ];
 
