@@ -3,6 +3,7 @@ import HowToReg from "@mui/icons-material/HowToReg";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import PersonSharpIcon from "@mui/icons-material/PersonSharp";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 
 const ListItems = [
   {
@@ -11,9 +12,9 @@ const ListItems = [
     to: "/list/schools",
   },
   {
-    list: "لیست مدیران",
+    list: "لیست مسئولین آموزش و پرورش",
     icon: <PersonSharpIcon />,
-    to: "/list/managers",
+    to: "/list/officemanagers",
   },
   {
     list: "لیست ادارات",
@@ -26,33 +27,23 @@ const ListItems = [
     to: "/list/professors",
   },
   {
-    list: "لیست دانشگاه ها",
-    icon: <SchoolIcon />,
-    to: "university",
-  },
-  {
     list: "افزودن مدرسه",
     icon: <SchoolIcon />,
     to: "/createSchool",
   },
   {
-    list: "افزودن مدیر مدرسه",
-    icon: <PersonSharpIcon />,
-    to: "/createSchoolManager",
-  },
-  {
     list: "افزودن مسئول اداره آموزش و پرورش",
-    icon: <PersonSharpIcon />,
+    icon: <PersonAddAlt1Icon />,
     to: "/createOfficeManager",
   },
   {
     list: "افزودن استاد",
-    icon: <PersonSharpIcon />,
+    icon: <PersonAddAlt1Icon />,
     to: "/createProfessor",
   },
   {
     list: "افزودن معلم مدرسه",
-    icon: <PersonSharpIcon />,
+    icon: <PersonAddAlt1Icon />,
     to: "/createTeacher",
   },
 ];

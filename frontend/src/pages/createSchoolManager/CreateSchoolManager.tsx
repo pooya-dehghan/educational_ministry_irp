@@ -16,41 +16,41 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Dashboard from "../Dashboard/Dashboard";
 import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
 import { useTextFieldStyles } from "../../hooks/TextFieldStyle/TextFieldStyle"; // Update the path
-import { createSchoolManagerAsync } from "../../features/schoolmanager/schoolmanagerThunk";
+//import { createSchoolManagerAsync } from "../../features/schoolmanager/schoolmanagerThunk";
 import { useDispatch } from "react-redux";
-import { createSchoolManager } from "../../features/schoolmanager/schoolmanagerSlice";
+//import { createSchoolManager } from "../../features/schoolmanager/schoolmanagerSlice";
 import { updateResponse } from "../../features/response/responseSlice";
 import { Values } from "./interface";
 import { schoolManagerValidationSchema } from "../../validations/create-schoolmanger-validation";
 
 const theme = createTheme();
 
-const CreateOfficeManager: React.FC = () => {
+const CreateSchoolManager: React.FC = () => {
   const dispatch = useDispatch();
-  const handleSubmit = (values: Values, setSubmitting: any) => {
-    let createOfficeManagerData = {
-      password: values.password,
-      password_confirmation: values.password_confirmation,
-      username: values.username,
-    };
-    (dispatch as any)(createSchoolManagerAsync(createOfficeManagerData))
-      .unwrap()
-      .then((response: any) => {
-        dispatch(createSchoolManager({}));
-      })
-      .catch((error: any) => {
-        console.log("error: ", error);
-        dispatch(
-          updateResponse({
-            severity: "error",
-            message:
-              "عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.",
-            open: true,
-          })
-        );
-      });
-    setSubmitting(false);
-  };
+  // const handleSubmit = (values: Values, setSubmitting: any) => {
+  //   let createOfficeManagerData = {
+  //     password: values.password,
+  //     password_confirmation: values.password_confirmation,
+  //     username: values.username,
+  //   };
+  //   (dispatch as any)(createSchoolManagerAsync(createOfficeManagerData))
+  //     .unwrap()
+  //     .then((response: any) => {
+  //       dispatch(createSchoolManager({}));
+  //     })
+  //     .catch((error: any) => {
+  //       console.log("error: ", error);
+  //       dispatch(
+  //         updateResponse({
+  //           severity: "error",
+  //           message:
+  //             "عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.",
+  //           open: true,
+  //         })
+  //       );
+  //     });
+  //   setSubmitting(false);
+  // };
 
   return (
     <>
@@ -96,7 +96,7 @@ const CreateOfficeManager: React.FC = () => {
                 }}
                 validationSchema={schoolManagerValidationSchema} // Add validation schema
                 onSubmit={(values: Values, { setSubmitting }: any) => {
-                  handleSubmit(values, setSubmitting);
+                  // handleSubmit(values, setSubmitting);
                 }}
               >
                 {({ handleSubmit, errors, touched }) => (
@@ -280,4 +280,4 @@ const CreateOfficeManager: React.FC = () => {
   );
 };
 
-export default CreateOfficeManager;
+export default CreateSchoolManager;

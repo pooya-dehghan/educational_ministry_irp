@@ -7,13 +7,13 @@ import { useDispatch } from "react-redux";
 import { getAllOfficeManagersAsync } from "../../features/officemanager/officemanagerThunk";
 import { getAllSchoolsAsync } from "../../features/school/schoolThunk";
 import { getAllProfessorsAsync } from "../../features/professor/professorThunk";
-import { getAllSchoolManagersAsync } from "../../features/schoolmanager/schoolmanagerThunk";
+//import { getAllSchoolManagersAsync } from "../../features/schoolmanager/schoolmanagerThunk";
 import { getAllTeachersAsync } from "../../features/teacher/teacherThunk";
 import { getAllstudentsAsync } from "../../features/student/studentThunk";
 import { getAllOfficeManagers } from "../../features/officemanager/officemanagerSlice";
 import { getAllProfessors } from "../../features/professor/professorSlice";
 import { getAllSchools } from "../../features/school/schoolSlice";
-import { getAllSchoolManagers } from "../../features/schoolmanager/schoolmanagerSlice";
+//import { getAllSchoolManagers } from "../../features/schoolmanager/schoolmanagerSlice";
 import { getAllstudents } from "../../features/student/studentSlice";
 import { getAllTeachers } from "../../features/teacher/teacherSlice";
 import styles from "./Lists.module.css";
@@ -34,9 +34,9 @@ const List = () => {
   );
   const allSchools = useSelector((state: RootState) => state.school.allschools);
 
-  const allSchoolManagers = useSelector(
-    (state: RootState) => state.schoolManager.allSchoolManagers
-  );
+  // const allSchoolManagers = useSelector(
+  //   (state: RootState) => state.schoolManager.allSchoolManagers
+  // );
   const allTeachers = useSelector(
     (state: RootState) => state.teacher.allteachers
   );
@@ -68,13 +68,13 @@ const List = () => {
       })
       .catch((error: any) => {});
 
-    (dispatch as any)(getAllSchoolManagersAsync({}))
-      .unwrap()
-      .then((response: any) => {
-        dispatch(getAllSchoolManagers(response));
-        console.log("respons schoolmanager: ", response);
-      })
-      .catch((error: any) => {});
+    // (dispatch as any)(getAllSchoolManagersAsync({}))
+    //   .unwrap()
+    //   .then((response: any) => {
+    //     dispatch(getAllSchoolManagers(response));
+    //     console.log("respons schoolmanager: ", response);
+    //   })
+    //   .catch((error: any) => {});
 
     (dispatch as any)(getAllstudentsAsync({}))
       .unwrap()

@@ -38,14 +38,20 @@ const CreateTeacher: React.FC = () => {
       .unwrap()
       .then((response: any) => {
         dispatch(createTeacher({}));
+        dispatch(
+          updateResponse({
+            severity: "success",
+            message: "مسئول مربوطه با موفقیت اضافه شد.",
+            open: true,
+          })
+        );
       })
       .catch((error: any) => {
         console.log("error: ", error);
         dispatch(
           updateResponse({
             severity: "error",
-            message:
-              "عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.",
+            message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
             open: true,
           })
         );
@@ -168,6 +174,44 @@ const CreateTeacher: React.FC = () => {
                           )}
                         </Field>
                       </Grid>
+                      <Grid item xs={6}>
+                        <Field name="username">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="نام کاربری"
+                              placeholder="نام کاربری"
+                              id="username"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Field name="field">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="رشته"
+                              placeholder="رشته"
+                              id="field"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ""
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
                       <Grid item xs={12} sm={6}>
                         <Field name="managerName">
                           {({ field, meta }: FieldProps) => (
@@ -252,44 +296,6 @@ const CreateTeacher: React.FC = () => {
                               label="تکرار گذرواژه"
                               placeholder="تکرار گذرواژه"
                               id="nationalCode"
-                              autoFocus
-                              variant="outlined"
-                              fullWidth
-                              error={meta.touched && meta.error ? true : false}
-                              helperText={
-                                meta.touched && meta.error ? meta.error : ""
-                              }
-                            />
-                          )}
-                        </Field>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Field name="username">
-                          {({ field, meta }: FieldProps) => (
-                            <TextField
-                              {...field}
-                              label="نام کاربری"
-                              placeholder="نام کاربری"
-                              id="username"
-                              autoFocus
-                              variant="outlined"
-                              fullWidth
-                              error={meta.touched && meta.error ? true : false}
-                              helperText={
-                                meta.touched && meta.error ? meta.error : ""
-                              }
-                            />
-                          )}
-                        </Field>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Field name="field">
-                          {({ field, meta }: FieldProps) => (
-                            <TextField
-                              {...field}
-                              label="رشته"
-                              placeholder="رشته"
-                              id="field"
                               autoFocus
                               variant="outlined"
                               fullWidth
