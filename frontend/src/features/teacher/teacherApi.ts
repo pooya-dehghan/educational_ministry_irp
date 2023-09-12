@@ -74,8 +74,8 @@ export const teacherApi = {
     getData: GetAllteachersRequest
   ): Promise<GetAllteachersResponse> => {
     try {
-      const response = await axiosInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/teacher/`,
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/teacher/api/v1/list/`,
         getData
       );
       return response.data;

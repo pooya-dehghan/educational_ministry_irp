@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../../utils/axios/index';
 import {
   CreatestudentRequest,
   CreatestudentResponse,
@@ -18,7 +18,7 @@ export const studentApi = {
     getData: GetstudentRequest
   ): Promise<GetstudentResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/student/`,
         getData
       );
@@ -32,7 +32,7 @@ export const studentApi = {
     createData: CreatestudentRequest
   ): Promise<CreatestudentResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/student/`,
         createData
       );
@@ -46,7 +46,7 @@ export const studentApi = {
     updateData: UpdatestudentRequest
   ): Promise<UpdatestudentResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/student/`,
         updateData
       );
@@ -60,7 +60,7 @@ export const studentApi = {
     deleteData: DeletestudenteRequest
   ): Promise<DeletestudentResponse> => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/student/`,
         deleteData
       );
@@ -74,8 +74,8 @@ export const studentApi = {
     getData: GetAllstudentsRequest
   ): Promise<GetAllstudentsResponse> => {
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/accounts/api/v1/student/`,
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/student/api/v1/list/`,
         getData
       );
       return response.data;
