@@ -6,7 +6,6 @@ import responseReducer from '../features/response/responseSlice';
 import officeManagerReducer from '../features/officemanager/officemanagerSlice';
 import professorReducer from '../features/professor/professorSlice';
 import schoolReducer from '../features/school/schoolSlice';
-import schoolManagerReducer from '../features/schoolmanager/schoolmanagerSlice';
 import teacherReducer from '../features/teacher/teacherSlice';
 import studentReducer from '../features/student/studentSlice';
 const store = configureStore({
@@ -17,7 +16,6 @@ const store = configureStore({
     officeManager: officeManagerReducer,
     professor: professorReducer,
     school: schoolReducer,
-    schoolManager: schoolManagerReducer,
     teacher: teacherReducer,
     student: studentReducer,
     // ...other reducers
