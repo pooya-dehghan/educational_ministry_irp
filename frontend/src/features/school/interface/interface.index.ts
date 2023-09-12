@@ -12,7 +12,9 @@ export interface UpdateSchoolRequest {}
 
 export interface UpdateSchoolResponse {}
 
-export interface DeleteSchooleRequest {}
+export interface DeleteSchooleRequest {
+  id: number;
+}
 
 export interface DeleteSchoolResponse {}
 

@@ -81,7 +81,11 @@ const List = () => {
         {allOfficeManagers.map((office_manager: any, index) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
-              <ListOf type="officemanager" username={office_manager.username} />
+              <ListOf
+                type="officemanager"
+                username={office_manager.username}
+                id={office_manager.id}
+              />
             </Grid>
           );
         })}{' '}
@@ -91,7 +95,11 @@ const List = () => {
         {allProfessors.map((professor: any, index) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
-              <ListOf type="professor" username={professor.username} />
+              <ListOf
+                type="professor"
+                username={professor.username}
+                id={professor.id}
+              />
             </Grid>
           );
         })}{' '}
@@ -101,7 +109,7 @@ const List = () => {
         {allSchools.map((school: any, index) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
-              <ListOf type="school" username={school.username} />
+              <ListOf type="school" username={school.username} id={school.id} />
             </Grid>
           );
         })}{' '}
@@ -111,7 +119,11 @@ const List = () => {
         {allTeachers.map((teacher: any, index) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
-              <ListOf type="teacher" username={teacher.username} />
+              <ListOf
+                type="teacher"
+                username={teacher.username}
+                id={teacher.id}
+              />
             </Grid>
           );
         })}{' '}
@@ -121,7 +133,11 @@ const List = () => {
         {allStudents.map((student: any, index) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
-              <ListOf type="student" username={student.username} />
+              <ListOf
+                type="student"
+                username={student.username}
+                id={student.id}
+              />
             </Grid>
           );
         })}{' '}

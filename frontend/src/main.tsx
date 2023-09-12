@@ -25,6 +25,8 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import AuthenticationHOC from './HOC/authenticationHOC/authentifcationHOC';
 import Profile from './pages/profile/Profile';
+import UserInfo from './pages/UserInfo/UserInfo';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -74,6 +76,10 @@ const router = createBrowserRouter([
   {
     path: 'dashboard/profile',
     element: <Profile />,
+  },
+  {
+    path: '/dashboard/:userType/:id',
+    element: <UserInfo />,
   },
   {
     path: '/dashboard/createTeacher',

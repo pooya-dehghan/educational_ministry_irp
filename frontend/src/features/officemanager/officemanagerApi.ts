@@ -60,9 +60,8 @@ export const officeManagerApi = {
     deleteData: DeleteOfficeManagereRequest
   ): Promise<DeleteOfficeManagerResponse> => {
     try {
-      const response = await axsioInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/officemanager/`,
-        deleteData
+      const response = await axsioInstance.delete(
+        `${API_BASE_URL}/officemanager/api/v1/delete/${deleteData.id}`
       );
       return response.data;
     } catch (error) {

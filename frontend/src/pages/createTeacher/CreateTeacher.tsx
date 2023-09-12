@@ -12,7 +12,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-//import styles from './createTeacher.module.css';
 import Dashboard from "../Dashboard/Dashboard";
 import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
 import { useTextFieldStyles } from "../../hooks/TextFieldStyle/TextFieldStyle"; // Update the path
@@ -22,6 +21,7 @@ import { createTeacher } from "../../features/teacher/teacherSlice";
 import { updateResponse } from "../../features/response/responseSlice";
 import { Values } from "./interface";
 import { teacherValidationSchema } from "../../validations/create-teacher-validation";
+//import styles from './createTeacher.module.css';
 
 const CreateTeacher: React.FC = () => {
   const dispatch = useDispatch();

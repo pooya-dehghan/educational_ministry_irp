@@ -61,7 +61,7 @@ export const teacherApi = {
   ): Promise<DeleteteacherResponse> => {
     try {
       const response = await axiosInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/teacher/`,
+        `${API_BASE_URL}/teacher/api/v1/delete/${deleteData.id}`,
         deleteData
       );
       return response.data;

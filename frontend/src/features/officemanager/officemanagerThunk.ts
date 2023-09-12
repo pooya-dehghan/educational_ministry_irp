@@ -6,7 +6,6 @@ import {
   deleteOfficeManager,
   getAllOfficeManagers,
 } from './officemanagerSlice';
-
 import {
   CreateOfficeManagerRequest,
   DeleteOfficeManagereRequest,
@@ -19,7 +18,7 @@ export const createOfficeManagerAsync = createAsyncThunk(
   'officemanager/create',
   async (createData: CreateOfficeManagerRequest) => {
     const response = await officeManagerApi.createOfficeManager(createData);
-    //method 
+    //method
     return response;
   }
 );

@@ -58,8 +58,8 @@ export const schoolApi = {
     deleteData: DeleteschooleRequest
   ): Promise<DeleteschoolResponse> => {
     try {
-      const response = await axiosInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/school/`,
+      const response = await axiosInstance.delete(
+        `${API_BASE_URL}/school/api/v1/delete/${deleteData.id}`,
         deleteData
       );
       return response.data;

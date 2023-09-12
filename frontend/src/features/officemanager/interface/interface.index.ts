@@ -21,7 +21,9 @@ export interface UpdateOfficeManagerRequest {}
 
 export interface UpdateOfficeManagerResponse {}
 
-export interface DeleteOfficeManagereRequest {}
+export interface DeleteOfficeManagereRequest {
+  id: number;
+}
 
 export interface DeleteOfficeManagerResponse {}
 
