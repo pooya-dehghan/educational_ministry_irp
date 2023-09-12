@@ -135,17 +135,7 @@ const List = () => {
           );
         })}{" "}
       </Grid>
-    ) : userType.trim() === "schoolmanagers" ? (
-      <Grid container spacing={2} className={styles.grid}>
-        {allSchoolManagers.map((school_manager: any, index) => {
-          return (
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-              <ListOf type="schoolmanager" username={school_manager.username} />
-            </Grid>
-          );
-        })}{" "}
-      </Grid>
-    ) : userType.trim() === "teachers" ? (
+    )  : userType.trim() === "teachers" ? (
       <Grid container spacing={2} className={styles.grid}>
         {allTeachers.map((teacher: any, index) => {
           return (
