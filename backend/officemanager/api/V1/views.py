@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from accounts.models import OfficeManager, School
+from accounts.models import OfficeManager, School, Student
 from rest_framework.response import Response
 from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSerializer, \
     OfficeManagerSerializerForCreate
@@ -228,7 +228,8 @@ class SeenRequest(APIView):
     )
     def post(self, request, pk):
         office_manager_notification = SchoolRequestNotification.objects.get(pk=pk)
-        office_manager = office_manager_notification.request.receiver
+        office_manager_id = office_manager_notification.request.receiver.id
+        office_manager = OfficeManager.objects.get(id=office_manager_id)
         self.check_object_permissions(request, office_manager)
         if office_manager_notification.request.view == 'u':
             office_manager_notification.request.view = 's'
@@ -256,7 +257,8 @@ class RejectRequest(APIView):
     )
     def post(self, request, pk):
         notification = SchoolRequestNotification.objects.get(id=pk)
-        office_manager = notification.request.receiver
+        office_manager_id = notification.request.receiver.id
+        office_manager = OfficeManager.objects.get(id=office_manager_id)
         self.check_object_permissions(request, office_manager)
         if notification.request.view == 's' and notification.request.status != 'a':
             notification.request.status = 'na'
@@ -285,8 +287,10 @@ class AcceptRequest(APIView):
     )
     def post(self, request, school_id, notification_id):
         notification = SchoolRequestNotification.objects.get(id=notification_id)
-        office_manager = notification.request.receiver
-        student = notification.request.sender
+        office_manager_id = notification.request.receiver.id
+        office_manager = OfficeManager.objects.get(id=office_manager_id)
+        student_id = notification.request.sender.id
+        student = Student.objects.get(id=student_id)
         self.check_object_permissions(request, office_manager)
         school = School.objects.get(pk=school_id)
         if school.office_manager == office_manager:

@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from accounts.models import Student, OfficeManager
+from accounts.models import Student, OfficeManager, User
 from rest_framework.response import Response
 from .serializers import StudentSerializer, StudentSerializerForCreate
 from rest_framework import status
@@ -170,16 +170,19 @@ class RequestForSchool(APIView):
         }
     )
     def get(self, request, pk):
-        office_manager = OfficeManager.objects.get(id=pk)
-        student = Student.objects.get(id=request.user.pk)
-        print(student)
-        print(office_manager)
-        req = Request.objects.create(sender=student, receiver=office_manager)
-        notification = SchoolRequestNotification.objects.create(request=req)
-        notification.content = f"{student.username} requested for school"
-        notification.save()
-        return Response({'message': 'request sent successfully', 'notification id': notification.id},
-                        status=status.HTTP_201_CREATED)
+        if OfficeManager.objects.filter(id=pk).exists() and Student.objects.filter(id=request.user.pk).exists():
+            sender = User.objects.get(id=request.user.pk)
+            receiver = User.objects.get(id=pk)
+            if Request.objects.filter(sender=sender).exists():
+                return Response({'message': 'you have request been before'})
+            req = Request.objects.create(sender=sender, receiver=receiver)
+            notification = SchoolRequestNotification.objects.create(request=req)
+            notification.content = f"{sender.username} requested for school"
+            notification.save()
+            return Response({'message': 'request sent successfully', 'notification id': notification.id},
+                            status=status.HTTP_201_CREATED)
+        else:
+            return Response({'message': 'office_manager not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class StudentGetRequestStatus(APIView):
@@ -203,7 +206,7 @@ class StudentGetRequestStatus(APIView):
         }
     )
     def get(self, request):
-        student = Student.objects.get(pk=request.user.id)
+        student = User.objects.get(pk=request.user.id)
         stu_request = Request.objects.get(sender=student)
         if stu_request:
             if stu_request.status == "s":
