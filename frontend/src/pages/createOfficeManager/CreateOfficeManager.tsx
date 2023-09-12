@@ -1,25 +1,25 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Dashboard from "../Dashboard/Dashboard";
-import { Formik, Form, Field, FieldProps } from "formik";
-import { createOfficeManagerAsync } from "../../features/officemanager/officemanagerThunk";
-import { useDispatch } from "react-redux";
-import { createOfficeManager } from "../../features/officemanager/officemanagerSlice";
-import { updateResponse } from "../../features/response/responseSlice";
-import { Values } from "./interface";
-import { officeManagerValidationSchema } from "../../validations";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Dashboard from '../Dashboard/Dashboard';
+import { Formik, Form, Field, FieldProps } from 'formik';
+import { createOfficeManagerAsync } from '../../features/officemanager/officemanagerThunk';
+import { useDispatch } from 'react-redux';
+import { createOfficeManager } from '../../features/officemanager/officemanagerSlice';
+import { updateResponse } from '../../features/response/responseSlice';
+import { Values } from './interface';
+import { officeManagerValidationSchema } from '../../validations';
 
 const CreateOfficeManager: React.FC = () => {
   const dispatch = useDispatch();
@@ -37,18 +37,18 @@ const CreateOfficeManager: React.FC = () => {
         dispatch(createOfficeManager({}));
         dispatch(
           updateResponse({
-            severity: "success",
-            message: "مسئول مربوطه با موفقیت اضافه شد.",
+            severity: 'success',
+            message: 'مسئول مربوطه با موفقیت اضافه شد.',
             open: true,
           })
         );
       })
       .catch((error: any) => {
-        console.log("error: ", error);
+        console.log('error: ', error);
         dispatch(
           updateResponse({
-            severity: "error",
-            message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
+            severity: 'error',
+            message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
             open: true,
           })
         );
@@ -64,38 +64,38 @@ const CreateOfficeManager: React.FC = () => {
             <CssBaseline />
             <Box
               sx={{
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 marginTop: 8,
                 marginBottom: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
                 boxShadow: 3,
                 borderRadius: 2,
                 px: 4,
                 py: 6,
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography
                 component="h3"
                 variant="subtitle1"
-                sx={{ fontSize: "1rem" }}
+                sx={{ fontSize: '1rem' }}
               >
                 ثبت مسئول اداره آموزش و پرورش
               </Typography>
               <Formik
                 initialValues={{
-                  firstName: "",
-                  lastName: "",
-                  region: "",
-                  nationalCode: "",
-                  email: "",
-                  password: "",
-                  password_confirmation: "",
-                  username: "",
+                  firstName: '',
+                  lastName: '',
+                  region: '',
+                  nationalCode: '',
+                  email: '',
+                  password: '',
+                  password_confirmation: '',
+                  username: '',
                 }}
                 validationSchema={officeManagerValidationSchema} // Add validation schema
                 onSubmit={(values: Values, { setSubmitting }: any) => {
@@ -124,7 +124,7 @@ const CreateOfficeManager: React.FC = () => {
                               helperText={
                                 touched.firstName && errors.firstName
                                   ? errors.username
-                                  : ""
+                                  : ''
                               }
                             />
                           )}
@@ -143,7 +143,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -151,59 +151,46 @@ const CreateOfficeManager: React.FC = () => {
                       </Grid>
                       <Grid item xs={12} sm={6}>
                         <Box sx={{ minWidth: 120 }}>
-                          <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">
-                              منطقه
-                            </InputLabel>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              //value={age}
-                              label="Age"
-                              onChange={handleRegionChange}
-                            >
-                              <MenuItem value={1}>منطقه 1</MenuItem>
-                              <MenuItem value={2}>منطقه 2</MenuItem>
-                              <MenuItem value={3}>منطقه 3</MenuItem>
-                              <MenuItem value={4}>منطقه 4</MenuItem>
-                              <MenuItem value={5}>منطقه 5</MenuItem>
-                              <MenuItem value={6}>منطقه 6</MenuItem>
-                              <MenuItem value={7}>منطقه 7</MenuItem>
-                              <MenuItem value={8}>منطقه 8</MenuItem>
-                              <MenuItem value={9}>منطقه 9</MenuItem>
-                              <MenuItem value={10}>منطقه 10</MenuItem>
-                              <MenuItem value={11}>منطقه 11</MenuItem>
-                              <MenuItem value={12}>منطقه 12</MenuItem>
-                              <MenuItem value={13}>منطقه 13</MenuItem>
-                              <MenuItem value={14}>منطقه 14</MenuItem>
-                              <MenuItem value={15}>منطقه 15</MenuItem>
-                              <MenuItem value={16}>منطقه 16</MenuItem>
-                              <MenuItem value={17}>منطقه 17</MenuItem>
-                              <MenuItem value={18}>منطقه 18</MenuItem>
-                              <MenuItem value={19}>منطقه 19</MenuItem>
-                              <MenuItem value={20}>منطقه 20</MenuItem>
-                              <MenuItem value={21}>منطقه 21</MenuItem>
-                              <MenuItem value={22}>منطقه 22</MenuItem>
-                            </Select>
-                          </FormControl>
+                          <Field name="region">
+                            {({ field, meta }: FieldProps) => (
+                              <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">
+                                  منطقه
+                                </InputLabel>
+                                <Select
+                                  labelId="demo-simple-select-label"
+                                  id="demo-simple-select"
+                                  //value={age}
+                                  label="Age"
+                                  {...field}
+                                >
+                                  <MenuItem value={1}>منطقه 1</MenuItem>
+                                  <MenuItem value={2}>منطقه 2</MenuItem>
+                                  <MenuItem value={3}>منطقه 3</MenuItem>
+                                  <MenuItem value={4}>منطقه 4</MenuItem>
+                                  <MenuItem value={5}>منطقه 5</MenuItem>
+                                  <MenuItem value={6}>منطقه 6</MenuItem>
+                                  <MenuItem value={7}>منطقه 7</MenuItem>
+                                  <MenuItem value={8}>منطقه 8</MenuItem>
+                                  <MenuItem value={9}>منطقه 9</MenuItem>
+                                  <MenuItem value={10}>منطقه 10</MenuItem>
+                                  <MenuItem value={11}>منطقه 11</MenuItem>
+                                  <MenuItem value={12}>منطقه 12</MenuItem>
+                                  <MenuItem value={13}>منطقه 13</MenuItem>
+                                  <MenuItem value={14}>منطقه 14</MenuItem>
+                                  <MenuItem value={15}>منطقه 15</MenuItem>
+                                  <MenuItem value={16}>منطقه 16</MenuItem>
+                                  <MenuItem value={17}>منطقه 17</MenuItem>
+                                  <MenuItem value={18}>منطقه 18</MenuItem>
+                                  <MenuItem value={19}>منطقه 19</MenuItem>
+                                  <MenuItem value={20}>منطقه 20</MenuItem>
+                                  <MenuItem value={21}>منطقه 21</MenuItem>
+                                  <MenuItem value={22}>منطقه 22</MenuItem>
+                                </Select>
+                              </FormControl>
+                            )}
+                          </Field>
                         </Box>
-                        {/* <Field name="region">
-                          {({ field, meta }: FieldProps) => (
-                            <TextField
-                              {...field}
-                              label="منطقه"
-                              placeholder="منطقه"
-                              id="region"
-                              autoFocus
-                              variant="outlined"
-                              fullWidth
-                              error={meta.touched && meta.error ? true : false}
-                              helperText={
-                                meta.touched && meta.error ? meta.error : ""
-                              }
-                            />
-                          )}
-                        </Field> */}
                       </Grid>
                       <Grid item xs={12} sm={6}>
                         <Field name="nationalCode">
@@ -218,7 +205,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -237,7 +224,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -256,7 +243,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -275,7 +262,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
@@ -294,7 +281,7 @@ const CreateOfficeManager: React.FC = () => {
                               fullWidth
                               error={meta.touched && meta.error ? true : false}
                               helperText={
-                                meta.touched && meta.error ? meta.error : ""
+                                meta.touched && meta.error ? meta.error : ''
                               }
                             />
                           )}
