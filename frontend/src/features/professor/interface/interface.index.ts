@@ -1,5 +1,5 @@
 export interface GetProfessorRequest {
-  id: number;
+  professorId: number;
 }
 
 export interface GetProfessorResponse {

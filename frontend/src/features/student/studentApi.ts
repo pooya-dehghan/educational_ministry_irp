@@ -18,9 +18,8 @@ export const studentApi = {
     getData: GetstudentRequest
   ): Promise<GetstudentResponse> => {
     try {
-      const response = await axiosInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/student/`,
-        getData
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/student/api/v1/get/${getData.studentID}`
       );
       return response.data;
     } catch (error) {

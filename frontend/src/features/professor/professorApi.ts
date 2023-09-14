@@ -58,7 +58,7 @@ export const professorApi = {
   ): Promise<GetProfessorResponse> => {
     try {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}/professor/api/v1/get/${getData.id}`
+        `${API_BASE_URL}/professor/api/v1/get/${getData.professorId}`
       );
       return response.data;
     } catch (error) {

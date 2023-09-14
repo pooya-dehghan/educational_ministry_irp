@@ -1,24 +1,23 @@
 import axiosInstance from '../../utils/axios/index';
 import {
-  CreateschoolRequest,
-  CreateschoolResponse,
-  DeleteschooleRequest,
-  DeleteschoolResponse,
-  GetAllschoolsRequest,
-  GetAllschoolsResponse,
-  GetschoolRequest,
-  GetschoolResponse,
-  UpdateschoolRequest,
-  UpdateschoolResponse,
-} from './interface/interface.index';
+  CreateSchoolRequest,
+  CreateSchoolResponse,
+  DeleteSchooleRequest,
+  DeleteSchoolResponse,
+  GetAllSchoolsRequest,
+  GetAllSchoolsResponse,
+  GetSchoolRequest,
+  GetSchoolResponse,
+  UpdateSchoolRequest,
+  UpdateSchoolResponse,
+} from './interface';
 const API_BASE_URL = 'http://localhost:8000'; // Your API base URL
 
 export const schoolApi = {
-  getschool: async (getData: GetschoolRequest): Promise<GetschoolResponse> => {
+  getschool: async (getData: GetSchoolRequest): Promise<GetSchoolResponse> => {
     try {
-      const response = await axiosInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/school/`,
-        getData
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/school/api/v1/get/${getData.schoolID}`
       );
       return response.data;
     } catch (error) {
@@ -27,8 +26,8 @@ export const schoolApi = {
   },
 
   createschool: async (
-    createData: CreateschoolRequest
-  ): Promise<CreateschoolResponse> => {
+    createData: CreateSchoolRequest
+  ): Promise<CreateSchoolResponse> => {
     try {
       const response = await axiosInstance.post(
         `${API_BASE_URL}/school/api/v1/create/`,
@@ -41,8 +40,8 @@ export const schoolApi = {
   },
 
   updateschool: async (
-    updateData: UpdateschoolRequest
-  ): Promise<UpdateschoolResponse> => {
+    updateData: UpdateSchoolRequest
+  ): Promise<UpdateSchoolResponse> => {
     try {
       const response = await axiosInstance.post(
         `${API_BASE_URL}/accounts/api/v1/school/`,
@@ -55,12 +54,11 @@ export const schoolApi = {
   },
 
   deleteschool: async (
-    deleteData: DeleteschooleRequest
-  ): Promise<DeleteschoolResponse> => {
+    deleteData: DeleteSchooleRequest
+  ): Promise<DeleteSchoolResponse> => {
     try {
       const response = await axiosInstance.delete(
-        `${API_BASE_URL}/school/api/v1/delete/${deleteData.id}`,
-        deleteData
+        `${API_BASE_URL}/school/api/v1/delete/${deleteData.id}`
       );
       return response.data;
     } catch (error) {
@@ -69,8 +67,8 @@ export const schoolApi = {
   },
 
   getAllschools: async (
-    getData: GetAllschoolsRequest
-  ): Promise<GetAllschoolsResponse> => {
+    getData: GetAllSchoolsRequest
+  ): Promise<GetAllSchoolsResponse> => {
     try {
       const response = await axiosInstance.get(
         `${API_BASE_URL}/school/api/v1/list/`,
