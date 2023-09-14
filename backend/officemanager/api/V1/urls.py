@@ -16,5 +16,7 @@ urlpatterns = [
     path('requests/list/<int:id>/', views.GetRequest.as_view(), name="request-get"),
     path('rejectrequest/<int:pk>/', views.RejectRequest.as_view()),
     path('acceptrequest/<int:school_id>/<int:notification_id>/', views.AcceptRequest.as_view()),
-    path('requests/list/<int:id>/', views.GetRequest.as_view(), name="request-get")
+    path('requests/list/<int:id>/', views.GetRequest.as_view(), name="request-get"),
+    path('requests/list/unseen/', views.UnSeenRequest.as_view()),
+    path('requests/list/pending/', views.PendingRequest.as_view()),
 ]

@@ -3,9 +3,9 @@ from accounts.models import Student, OfficeManager, User
 from rest_framework.response import Response
 from .serializers import StudentSerializer, StudentSerializerForCreate
 from rest_framework import status
-from .permissions import IsSuperuserOrOwnStudent, IsSuperuser
+from .permissions import IsSuperuserOrOwnStudent, IsSuperuser, IsSuperuserOrStudent
 from request.models import Request
-from request.serializers import RequestSerializer
+from notification.serializers import NotificationSerializer
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters, swagger_parameters_update
 from notification.models import SchoolRequestNotification
@@ -173,7 +173,7 @@ class RequestForSchool(APIView):
         if OfficeManager.objects.filter(id=pk).exists() and Student.objects.filter(id=request.user.pk).exists():
             sender = User.objects.get(id=request.user.pk)
             receiver = User.objects.get(id=pk)
-            if Request.objects.filter(sender=sender).exists():
+            if Request.objects.filter(sender=sender, status='s').exists():
                 return Response({'message': 'you have request been before'})
             req = Request.objects.create(sender=sender, receiver=receiver)
             notification = SchoolRequestNotification.objects.create(request=req)
@@ -182,7 +182,8 @@ class RequestForSchool(APIView):
             return Response({'message': 'request sent successfully', 'notification id': notification.id},
                             status=status.HTTP_201_CREATED)
         else:
-            return Response({'message': 'office_manager not exist'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'office_manager not exist or you not a student'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class StudentGetRequestStatus(APIView):
@@ -211,9 +212,11 @@ class StudentGetRequestStatus(APIView):
         if stu_request:
             if stu_request.status == "s":
                 if stu_request.view == "s":
-                    return Response({'status': "ارسال شده و در حال انتظار", 'view': "دیده شده"}, status=status.HTTP_200_OK)
+                    return Response({'status': "ارسال شده و در حال انتظار", 'view': "دیده شده"},
+                                    status=status.HTTP_200_OK)
                 else:
-                    return Response({'status': "ارسال شده و در حال انتظار", 'view': "دیده نشده"}, status=status.HTTP_200_OK)
+                    return Response({'status': "ارسال شده و در حال انتظار", 'view': "دیده نشده"},
+                                    status=status.HTTP_200_OK)
             if stu_request.status == "n":
                 return Response({'status': "ارسال نشده", 'view': "دیده نشده"}, status=status.HTTP_200_OK)
             if stu_request.status == "na":
@@ -222,3 +225,86 @@ class StudentGetRequestStatus(APIView):
                 return Response({'status': "تایید", 'view': "دیده شده"}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'you do not have any request'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class NotificationList(APIView):
+    permission_classes = [IsSuperuserOrStudent]
+
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows student to see list off notification.
+
+            The response will contain a success message including these fields:
+                - view
+                - status
+                - sender
+                - receiver
+                off all request
+                """,
+        operation_summary="endpoint for list of student notification",
+
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
+    def post(self, request):
+        requests = SchoolRequestNotification.objects.filter(request__receiver=request.user)
+        ser_data = NotificationSerializer(requests, many=True)
+        if requests.count() > 0:
+            return Response(data=ser_data.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class NotificationUnSeenList(APIView):
+    permission_classes = [IsSuperuserOrStudent]
+
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows student to see list off unseen_notification.
+
+            The response will contain a success message including these fields:
+                - view
+                - status
+                - sender
+                - receiver
+                off all request
+                """,
+        operation_summary="endpoint for list of student_unseen_notification",
+
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
+    def post(self, request):
+        requests = SchoolRequestNotification.objects.filter(request__receiver=request.user, request__view='u')
+        ser_data = NotificationSerializer(requests, many=True)
+        if requests.count() > 0:
+            return Response(data=ser_data.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class SeenNotification(APIView):
+    permission_classes = [IsSuperuserOrStudent]
+
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows student to seen a notofication.
+
+                The request should include the id of notification
+
+                """,
+        operation_summary="endpoint for seen notification",
+        responses={
+            '200': 'ok',
+            '400': 'bad request'
+        }
+    )
+    def post(self, request, pk):
+        student_notification = SchoolRequestNotification.objects.get(pk=pk)
+        if student_notification.request.view == 'u':
+            student_notification.request.view = 's'
+            student_notification.request.save()
+            return Response({'message': 'notification seen'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'notification seen before'}, status=status.HTTP_400_BAD_REQUEST)
