@@ -12,16 +12,11 @@ class Request(models.Model):
         ('na', 'not accepted'),
         ('a', 'Accepted')
     )
-    seen_choices = (
-        ('s', 'seen'),
-        ('u', 'unseen')
-    )
-    view = models.CharField(max_length=100, choices=seen_choices, default='u')
     status = models.CharField(max_length=100, choices=status_choices, default='s')
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver')
+    sender = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='request_sender')
+    receiver = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='request_receiver')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f'{self.sender} sent request to {self.receiver}'
+        return f'{self.sender} sent request to {self.receiver} and id = {self.id}'
