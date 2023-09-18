@@ -8,7 +8,7 @@ from .permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManag
     IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters, swagger_parameters_update, swagger_parameters_set_capacity
-
+from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg import openapi
 
 
@@ -198,11 +198,17 @@ class SchoolDelete(APIView):
         }
     )
     def delete(self, request, pk):
-        school = School.objects.get(pk=pk)
-        office_manager = school.office_manager
-        self.check_object_permissions(request, office_manager)
-        school.delete()
-        return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
+        try:
+            school = School.objects.get(pk=pk)
+            office_manager = school.office_manager
+            self.check_object_permissions(request, office_manager)
+            school.delete()
+            return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response({'message': 'fuck your bullshit request this school does not exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 class SetCapacity(APIView):
