@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SchoolRequestNotification
+from .models import Notification
 # Register your models here.
 
-admin.site.register(SchoolRequestNotification)
+admin.site.register(Notification)

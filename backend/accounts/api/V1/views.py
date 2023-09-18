@@ -27,6 +27,9 @@ from officemanager.api.V1.serializers import OfficeManagerSerializer
 from school.api.V1.serializers import SchoolSerializerAll
 from professor.api.V1.serializers import ProfessorSerializer
 from ..V1.serializers import UserSerializer
+from notification.models import Notification
+from notification.serializers import NotificationSerializer
+
 
 class DeleteProfile(APIView):
     @swagger_auto_schema(
@@ -403,4 +406,72 @@ class ProfileView(APIView):
         elif user.is_admin:
             ser_data = UserSerializer(user)
             user_type = "super user"
-        return Response({"data": ser_data.data, "type":user_type}, status=status.HTTP_200_OK)
+        return Response({"data": ser_data.data, "type": user_type}, status=status.HTTP_200_OK)
+
+
+class NotificationList(APIView):
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows user to see list of notification.
+
+            """,
+        operation_summary="endpoint for see list of notification",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
+    def post(self, request):
+        user = User.objects.get(id=request.user.id)
+        notification = Notification.objects.filter(receiver=user)
+        ser_data = NotificationSerializer(notification, many=True)
+        if notification.count() > 0:
+            return Response(data=ser_data.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class NotificationGet(APIView):
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows user to see one of his notification.
+
+            The request should include the id of notification
+
+            """,
+        operation_summary="endpoint for see one of notification",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
+    def post(self, request, pk):
+        user = User.objects.get(id=request.user.id)
+        notification = Notification.objects.filter(receiver=user, id=pk)
+        ser_data = NotificationSerializer(notification, many=True)
+        if notification.count() > 0:
+            return Response(data=ser_data.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": " شما همجین  درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class SeenNotification(APIView):
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows user to seen a notification.
+
+            The request should include the id of notification
+
+            """,
+        operation_summary="endpoint for seen notification",
+        responses={
+            '200': 'ok',
+            '400': 'bad request'
+        }
+    )
+    def post(self, request, pk):
+        user = User.objects.get(id=request.user.id)
+        notification = Notification.objects.filter(receiver=user, id=pk).first()
+        if notification:
+            notification.view = 's'
+            notification.save()
+            return Response({'message': 'notification seen'})
+        else:
+            return Response({'message': 'you not have this notification by this id'},status=status.HTTP_400_BAD_REQUEST)

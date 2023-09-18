@@ -1,7 +1,9 @@
 from rest_framework import serializers
-from request.serializers import RequestSerializer
+from notification.models import Notification
 
 
-class NotificationSerializer(serializers.Serializer):
-    content = serializers.CharField()
-    request = RequestSerializer()
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+
