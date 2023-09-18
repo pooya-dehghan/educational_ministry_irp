@@ -1,6 +1,8 @@
 import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -25,6 +27,13 @@ import { teacherValidationSchema } from "../../validations/create-teacher-valida
 
 const CreateTeacher: React.FC = () => {
   const dispatch = useDispatch();
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const handleButtonClick = () => {
+    setButtonLoading(true);
+    setTimeout(function () {
+      setButtonLoading(false);
+    }, 2000);
+  };
   const handleSubmit = (values: Values, setSubmitting: any) => {
     let createTeacherData = {
       schoolName: values.schoolName,
@@ -309,12 +318,25 @@ const CreateTeacher: React.FC = () => {
                       </Grid>
                     </Grid>
                     <Button
+                      onClick={() => handleButtonClick()}
+                      variant="contained"
+                      disabled={buttonLoading}
                       type="submit"
                       fullWidth
-                      variant="contained"
                       sx={{ mt: 3, mb: 2 }}
                     >
-                      ثبت
+                      {buttonLoading ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <CircularProgress size={24} color="inherit" />{" "}
+                          <Typography
+                            style={{ fontSize: "13px", marginRight: "8px" }}
+                          >
+                            در حال ثبت
+                          </Typography>
+                        </div>
+                      ) : (
+                        "ثبت"
+                      )}
                     </Button>
                   </Form>
                 )}
