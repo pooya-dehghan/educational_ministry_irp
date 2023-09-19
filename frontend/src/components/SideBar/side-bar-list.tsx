@@ -27,6 +27,11 @@ const ListItems = [
     to: "/list/professors",
   },
   {
+    list: "لیست دانشجویان",
+    icon: <PersonSharpIcon />,
+    to: "/list/students",
+  },
+  {
     list: "افزودن مدرسه",
     icon: <SchoolIcon />,
     to: "/createSchool",

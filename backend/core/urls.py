@@ -6,8 +6,6 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 
-
-
 schema_view = get_schema_view(
    openapi.Info(
       title="Snippets API",
@@ -22,10 +20,6 @@ schema_view = get_schema_view(
 )
 
 
-
-
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls', namespace="accounts")),
@@ -37,5 +31,6 @@ urlpatterns = [
     path('officemanager/', include('officemanager.urls', namespace='officemanager')),
     path('teacher/', include('teacher.urls', namespace='teacher')),
     path('professor/', include('professor.urls', namespace='professor')),
+    path('notification/', include('notification.urls', namespace='notification'))
 
 ]

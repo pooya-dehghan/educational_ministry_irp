@@ -10,5 +10,5 @@ urlpatterns = [
     path('delete/<int:pk>/', views.StudentDelete.as_view()),
     path('get/<int:pk>/', views.StudentGet.as_view()),
     path('request/<int:pk>/', views.RequestForSchool.as_view(), name='request-for-school'),
-    path('status/', views.StudentGetRequestStatus.as_view(), name='status')
+    path('status/', views.StudentGetRequestStatus.as_view(), name='status'),
 ]

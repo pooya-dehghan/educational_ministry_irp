@@ -3,12 +3,12 @@ from accounts.models import Student, OfficeManager, User
 from rest_framework.response import Response
 from .serializers import StudentSerializer, StudentSerializerForCreate
 from rest_framework import status
-from .permissions import IsSuperuserOrOwnStudent, IsSuperuser
+from .permissions import IsSuperuserOrOwnStudent, IsSuperuser, IsSuperuserOrStudent
 from request.models import Request
-from request.serializers import RequestSerializer
+from notification.serializers import NotificationSerializer
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters, swagger_parameters_update
-from notification.models import SchoolRequestNotification
+from notification.models import Notification
 from drf_yasg import openapi
 
 
@@ -170,19 +170,16 @@ class RequestForSchool(APIView):
         }
     )
     def get(self, request, pk):
-        if OfficeManager.objects.filter(id=pk).exists() and Student.objects.filter(id=request.user.pk).exists():
-            sender = User.objects.get(id=request.user.pk)
-            receiver = User.objects.get(id=pk)
-            if Request.objects.filter(sender=sender).exists():
-                return Response({'message': 'you have request been before'})
-            req = Request.objects.create(sender=sender, receiver=receiver)
-            notification = SchoolRequestNotification.objects.create(request=req)
-            notification.content = f"{sender.username} requested for school"
-            notification.save()
-            return Response({'message': 'request sent successfully', 'notification id': notification.id},
-                            status=status.HTTP_201_CREATED)
-        else:
-            return Response({'message': 'office_manager not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        sender = Student.objects.get(id=request.user.id)
+        receiver = OfficeManager.objects.get(id=pk)
+        if Request.objects.filter(sender=sender, status='s').exists():
+            return Response({'message': 'you have request been before'})
+        if Request.objects.filter(sender=sender, receiver=receiver).exists():
+            return Response({'message': 'you requested to this office manager before'})
+        req = Request.objects.create(sender=sender, receiver=receiver)
+        Notification.objects.create(sender=request.user, receiver=User.objects.get(id=pk), code=301)
+        return Response({'message': 'request sent successfully', 'request id': req.id},
+                        status=status.HTTP_201_CREATED)
 
 
 class StudentGetRequestStatus(APIView):
@@ -206,19 +203,17 @@ class StudentGetRequestStatus(APIView):
         }
     )
     def get(self, request):
-        student = User.objects.get(pk=request.user.id)
-        stu_request = Request.objects.get(sender=student)
+        student = Student.objects.get(pk=request.user.id)
+        stu_request = Request.objects.filter(sender=student).last()
         if stu_request:
             if stu_request.status == "s":
-                if stu_request.view == "s":
-                    return Response({'status': "ارسال شده و در حال انتظار", 'view': "دیده شده"}, status=status.HTTP_200_OK)
-                else:
-                    return Response({'status': "ارسال شده و در حال انتظار", 'view': "دیده نشده"}, status=status.HTTP_200_OK)
+                return Response({'status': "ارسال شده و در حال انتظار"},
+                                status=status.HTTP_200_OK)
             if stu_request.status == "n":
-                return Response({'status': "ارسال نشده", 'view': "دیده نشده"}, status=status.HTTP_200_OK)
+                return Response({'status': "ارسال نشده"}, status=status.HTTP_200_OK)
             if stu_request.status == "na":
-                return Response({'status': "عدم تایید", 'view': "دیده شده"}, status=status.HTTP_200_OK)
+                return Response({'status': "عدم تایید"}, status=status.HTTP_200_OK)
             if stu_request.status == "a":
-                return Response({'status': "تایید", 'view': "دیده شده"}, status=status.HTTP_200_OK)
+                return Response({'status': "تایید" }, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'you do not have any request'}, status=status.HTTP_404_NOT_FOUND)

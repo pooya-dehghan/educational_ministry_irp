@@ -1,16 +1,16 @@
 from rest_framework.views import APIView
-from accounts.models import OfficeManager, School, Student
+from accounts.models import OfficeManager, School, Student, User
 from rest_framework.response import Response
 from .serializers import OfficeManagerSerializer, SchoolListSerializer, SchoolSerializer, \
     OfficeManagerSerializerForCreate
 from rest_framework import status
-from .permissions import IsSuperuser, IsSuperuserOrOwnOfficeManager
+from .permissions import IsSuperuser, IsSuperuserOrOwnOfficeManager, IsSuperuserOrOfficeManager
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters, swagger_parameters_update
 from request.models import Request
 from request.serializers import RequestSerializer
 from django.core.exceptions import ObjectDoesNotExist
-from notification.models import SchoolRequestNotification
+from notification.models import Notification
 from drf_yasg import openapi
 
 
@@ -211,43 +211,15 @@ class SchoolGet(APIView):
                             status=status.HTTP_404_NOT_FOUND)
 
 
-class SeenRequest(APIView):
-    permission_classes = [IsSuperuserOrOwnOfficeManager]
-
-    @swagger_auto_schema(
-        operation_description="""This endpoint allows office_manager to seen a request.
-
-            The request should include the id of notification
-
-            """,
-        operation_summary="endpoint for seen request",
-        responses={
-            '200': 'ok',
-            '400': 'bad request'
-        }
-    )
-    def post(self, request, pk):
-        office_manager_notification = SchoolRequestNotification.objects.get(pk=pk)
-        office_manager_id = office_manager_notification.request.receiver.id
-        office_manager = OfficeManager.objects.get(id=office_manager_id)
-        self.check_object_permissions(request, office_manager)
-        if office_manager_notification.request.view == 'u':
-            office_manager_notification.request.view = 's'
-            office_manager_notification.request.save()
-            return Response({'message': 'notification seen'}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message': 'notification seen before'}, status=status.HTTP_400_BAD_REQUEST)
-
-
 class RejectRequest(APIView):
     permission_classes = {IsSuperuserOrOwnOfficeManager}
 
     @swagger_auto_schema(
         operation_description="""This endpoint allows office_manager to reject a request.
 
-             The request should include the id of notification
-             this function check first notification is seen and notification does not accept before
-             after reject this function
+             The request should include the id of request
+             this function check  notification does not accept before
+             after reject this function and sent a notification to student
              """,
         operation_summary="endpoint for reject request",
         responses={
@@ -256,15 +228,20 @@ class RejectRequest(APIView):
         }
     )
     def post(self, request, pk):
-        notification = SchoolRequestNotification.objects.get(id=pk)
-        office_manager_id = notification.request.receiver.id
-        office_manager = OfficeManager.objects.get(id=office_manager_id)
-        self.check_object_permissions(request, office_manager)
-        if notification.request.view == 's' and notification.request.status != 'a':
-            notification.request.status = 'na'
-            notification.request.save()
-            return Response({'message': 'notification is rejected successfully'}, status=status.HTTP_200_OK)
-        return Response({'message': 'not reject this notification'}, status=status.HTTP_400_BAD_REQUEST)
+
+        req = Request.objects.filter(id=pk).first()
+        if req:
+            office_manager = req.receiver
+            student = req.sender
+            self.check_object_permissions(request, office_manager)
+            if req.status != 'a':
+                req.status = 'na'
+                req.save()
+                Notification.objects.create(code=401, sender=request.user, receiver=User.objects.get(id=student.id))
+                return Response({'message': 'request is rejected successfully'}, status=status.HTTP_200_OK)
+            return Response({'message': 'this request accept before'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message': 'not exist request by this id'})
 
 
 class AcceptRequest(APIView):
@@ -273,11 +250,12 @@ class AcceptRequest(APIView):
     @swagger_auto_schema(
         operation_description="""This endpoint allows office_manager to accept a request.
 
-             The request should include the id of notification and id of school
+             The request should include the id of request and id of school
              this function first check the school in region of office_manager second 
-             check notification seen and does not not accept before 
+             check  does not not accept before 
              third check student not join in any school before and school capacity larger than zero  
              after accept this function and assign student to a school 
+             and send a notification to student whit content your request accept
              """,
         operation_summary="endpoint for accept request and assign student to one school",
         responses={
@@ -285,43 +263,44 @@ class AcceptRequest(APIView):
             '400': 'bad request'
         }
     )
-    def post(self, request, school_id, notification_id):
-        notification = SchoolRequestNotification.objects.get(id=notification_id)
-        office_manager_id = notification.request.receiver.id
-        office_manager = OfficeManager.objects.get(id=office_manager_id)
-        student_id = notification.request.sender.id
-        student = Student.objects.get(id=student_id)
+    def post(self, request, school_id, request_id):
+        req = Request.objects.get(id=request_id)
+        office_manager = req.receiver
+        student = req.sender
         self.check_object_permissions(request, office_manager)
         school = School.objects.get(pk=school_id)
         if school.office_manager == office_manager:
-            if notification.request.view == 's' and notification.request.status != 'na':
+            if req.status != 'na':
                 if student.school2 is None and school.capacity > 0:
-                    notification.request.status = 'a'
-                    notification.request.save()
+                    req.status = 'a'
+                    req.save()
                     student.school2 = school
                     student.save()
                     capacity = school.capacity
                     capacity -= 1
                     school.capacity = capacity
                     school.save()
-                    return Response({'message': 'this request accept and student assign to one school'},
+                    Notification.objects.create(code=501, sender=request.user, receiver=User.objects.get(id=student.id))
+                    return Response({'message': 'this request accept and student assign to one school and sent a '
+                                                'notification to student'},
                                     status=status.HTTP_200_OK)
                 else:
                     return Response({'message': 'this school not assign to this student'},
                                     status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({'message': 'not accept this request'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message': 'this request reject before'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'message': 'this school not in this office_manager region'},
                             status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListRequest(APIView):
+    permission_classes = [IsSuperuserOrOfficeManager]
+
     @swagger_auto_schema(
         operation_description="""This endpoint allows office_manager to see list off request.
 
             The response will contain a success message including these fields:
-                - view
                 - status
                 - sender
                 - receiver
@@ -335,23 +314,24 @@ class ListRequest(APIView):
         }
     )
     def get(self, request):
-        officemanager = OfficeManager.objects.get(id=request.user.id)
-        requests = Request.objects.filter(receiver=officemanager)
-        ser_data = RequestSerializer(requests, many=True)
-        if requests.count() > 0:
+        office_manager = OfficeManager.objects.get(id=request.user.id)
+        req = Request.objects.filter(receiver=office_manager)
+        ser_data = RequestSerializer(req, many=True)
+        if req:
             return Response(data=ser_data.data, status=status.HTTP_200_OK)
         else:
             return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class GetRequest(APIView):
+    permission_classes = [IsSuperuserOrOfficeManager]
+
     @swagger_auto_schema(
-        operation_description="""This endpoint allows office_manager to get information off all request.
+        operation_description="""This endpoint allows office_manager to get information off one request.
 
             The request should include the id off request.
 
             The response will contain a success message including these fields:
-                - view
                 - status
                 - sender
                 - refresh
@@ -363,9 +343,11 @@ class GetRequest(APIView):
         }
     )
     def get(self, request, id):
-        try:
-            stu_request = Request.objects.get(id=id)
-            ser_data = RequestSerializer(stu_request)
+        office_manager = OfficeManager.objects.get(id=request.user.id)
+        req = Request.objects.filter(receiver=office_manager, id=id)
+        ser_data = RequestSerializer(req, many=True)
+        if req:
             return Response(data=ser_data.data, status=status.HTTP_200_OK)
-        except ObjectDoesNotExist:
-            return Response({"message": "not found"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+
