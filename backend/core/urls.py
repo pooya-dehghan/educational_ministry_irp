@@ -31,6 +31,7 @@ urlpatterns = [
     path('officemanager/', include('officemanager.urls', namespace='officemanager')),
     path('teacher/', include('teacher.urls', namespace='teacher')),
     path('professor/', include('professor.urls', namespace='professor')),
-    path('notification/', include('notification.urls', namespace='notification'))
+    path('notification/', include('notification.urls', namespace='notification')),
+    path('request/',include('request.urls', namespace='request'))
 
 ]

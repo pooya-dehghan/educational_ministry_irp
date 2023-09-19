@@ -169,7 +169,7 @@ class RequestForSchool(APIView):
             '201': 'created',
         }
     )
-    def get(self, request, pk):
+    def post(self, request, pk):
         sender = Student.objects.get(id=request.user.id)
         receiver = OfficeManager.objects.get(id=pk)
         if Request.objects.filter(sender=sender, status='s').exists():

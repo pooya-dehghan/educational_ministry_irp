@@ -6,9 +6,7 @@ from accounts.models import Student
 class IsSuperuserOrOwnStudent(BasePermission):
     def has_object_permission(self, request, view, obj):
 
-        if request.method in SAFE_METHODS:
-            return True
-        elif request.user.is_authenticated and request.user.is_admin:
+        if request.user.is_authenticated and request.user.is_admin:
             return True
         elif request.user.is_authenticated and obj.id == request.user.id:
             return True

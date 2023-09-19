@@ -13,6 +13,7 @@ from drf_yasg import openapi
 
 
 class SchoolGet(APIView):
+    permission_classes = [IsSuperuserOrOwnOfficeManager]
     @swagger_auto_schema(
         operation_description="""This endpoint allows user to get all of information of one school.
 
@@ -40,6 +41,8 @@ class SchoolGet(APIView):
     def get(self, request, pk):
         if School.objects.filter(id=pk).exists():
             school = School.objects.get(id=pk)
+            office_manager = school.office_manager
+            self.check_object_permissions(request, office_manager)
             ser_data = SchoolSerializerAll(instance=school)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
@@ -69,8 +72,8 @@ class SchoolList(APIView):
         }
     )
     def get(self, request):
-        professor = School.objects.all()
-        ser_data = SchoolSerializerAll(instance=professor, many=True)
+        school = School.objects.all()
+        ser_data = SchoolSerializerAll(instance=school, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
 
 
@@ -193,6 +196,7 @@ class SchoolUpdate(APIView):
                         - name
                         - title
                         - established_year
+                        -capacity
                         and all of school information""",
         operation_summary="endpoint for update school",
         responses={
@@ -241,37 +245,3 @@ class SchoolDelete(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-class SetCapacity(APIView):
-    @swagger_auto_schema(
-        manual_parameters=swagger_parameters_set_capacity,
-        operation_description="""This endpoint allows school manager to set capacity of school .
-
-            The request should include the capacity in the request body.
-
-            """,
-        operation_summary="endpoint for cet school capacity",
-        request_body=openapi.Schema(
-            'School',
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'capacity': openapi.Schema(type=openapi.TYPE_INTEGER, default="10"),
-            },
-            required=['capacity'],
-        ),
-        responses={
-            '201': 'created',
-            '400': 'bad request',
-            '404': 'not found'
-        }
-    )
-    def post(self, request):
-        if School.objects.filter(id=request.user.id).exists():
-            school = School.objects.get(id=request.user.id)
-            ser_data = SchoolCapacitySerializer(data=request.POST)
-            if ser_data.is_valid():
-                school.capacity = ser_data.validated_data['capacity']
-                school.save()
-                return Response({'message': 'capacity is set'}, status=status.HTTP_200_OK)
-            return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'message': 'this user not a school manager'}, status=status.HTTP_404_NOT_FOUND)
