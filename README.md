@@ -231,6 +231,8 @@ This API uses token-based authentication. To access protected endpoints, include
 - getting notification for specific user
 
 
+i use 3 code 301 means you have a request from student for assign to school 401 means your request rejected from office_manager and 501 means your request accepted and you assigned to one school
+
 **Report**
 - CRUD
 - Generate PDF
