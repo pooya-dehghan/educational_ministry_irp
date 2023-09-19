@@ -1,34 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import styles from './Signup.module.css';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import { makeStyles } from '@material-ui/styles';
-import { Container, Link } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useDispatch, useSelector } from 'react-redux';
-import { signUpAsync } from '../../features/signup/signUpThunk';
-import { signup } from '../../features/signup/signUpSlice';
-import { RootState } from '../../store/store'; // Make sure to provide the correct path
+import React, { useState, useEffect } from "react";
+import styles from "./Signup.module.css";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
+import { makeStyles } from "@material-ui/styles";
+import { Container, Link } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useDispatch, useSelector } from "react-redux";
+import { signUpAsync } from "../../features/signup/signUpThunk";
+import { signup } from "../../features/signup/signUpSlice";
+import { RootState } from "../../store/store"; // Make sure to provide the correct path
 
 const useStyles = makeStyles({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100vw !important',
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100vw !important",
   },
   loginHeader: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   buttonContainer: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   textAreaContainer: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   loginLink: {
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 
@@ -39,13 +41,15 @@ const Root = () => {
   );
   const user = useSelector((state: RootState) => state.signup.user);
   const classes = useStyles();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [studentNumber, setStudentNumber] = useState('');
-  const isSmallScreen = useMediaQuery('(max-width: 600px)');
+  const [username, setUsername] = useState("");
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [password, setPassword] = useState("");
+  const [password_confirmation, setPasswordConfirmation] = useState("");
+  const [studentNumber, setStudentNumber] = useState("");
+  const isSmallScreen = useMediaQuery("(max-width: 600px)");
 
   const handleSignUp = () => {
+    setButtonLoading(true);
     const signUpData = {
       username,
       password,
@@ -57,8 +61,11 @@ const Root = () => {
       .unwrap()
       .then((response: any) => {
         dispatch(signup(response.user)); // Dispatch your signup action to update the state
+        setButtonLoading(false);
       })
-      .catch((error: any) => {});
+      .catch((error: any) => {
+        setButtonLoading(false);
+      });
   };
 
   return (
@@ -67,9 +74,9 @@ const Root = () => {
         <Container
           component="main"
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Box
@@ -79,11 +86,11 @@ const Root = () => {
               px: 4,
               py: 6,
               marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: isSmallScreen ? '300px' : '500px',
-              justifyContent: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: isSmallScreen ? "300px" : "500px",
+              justifyContent: "center",
             }}
             className={styles.box}
           >
@@ -125,8 +132,23 @@ const Root = () => {
                 />
               </Grid>
               <Grid item xs={8} className={classes.buttonContainer}>
-                <Button onClick={() => handleSignUp()} variant="contained">
-                  ثبت نام
+                <Button
+                  onClick={() => handleSignUp()}
+                  variant="contained"
+                  disabled={buttonLoading}
+                >
+                  {buttonLoading ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <CircularProgress size={24} color="inherit" />{" "}
+                      <Typography
+                        style={{ fontSize: "13px", marginRight: "8px" }}
+                      >
+                        در حال ثبت نام
+                      </Typography>
+                    </div>
+                  ) : (
+                    "ثبت نام"
+                  )}
                 </Button>
               </Grid>
               <Grid item xs={12} className={classes.loginLink}>
