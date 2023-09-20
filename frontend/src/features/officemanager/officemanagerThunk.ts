@@ -24,7 +24,7 @@ export const createOfficeManagerAsync = createAsyncThunk(
 );
 
 export const updateOfficeManagerAsync = createAsyncThunk(
-  'officemanager/create',
+  'officemanager/update',
   async (updateData: UpdateOfficeManagerRequest) => {
     const response = await officeManagerApi.updateOfficeManager(updateData);
     return response;

@@ -19,7 +19,7 @@ export const officeManagerApi = {
   ): Promise<GetOfficeManagerResponse> => {
     try {
       const response = await axsioInstance.get(
-        `${API_BASE_URL}/officemanager/api/v1/get/${getData.officemanagerID}`
+        `${API_BASE_URL}/officemanager/api/v1/get/${getData.officemanagerID}/`
       );
       return response.data;
     } catch (error) {
@@ -45,8 +45,8 @@ export const officeManagerApi = {
     updateData: UpdateOfficeManagerRequest
   ): Promise<UpdateOfficeManagerResponse> => {
     try {
-      const response = await axsioInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/officemanager/`,
+      const response = await axsioInstance.put(
+        `${API_BASE_URL}/officemanager/api/v1/update/${updateData.id}/`,
         updateData
       );
       return response.data;

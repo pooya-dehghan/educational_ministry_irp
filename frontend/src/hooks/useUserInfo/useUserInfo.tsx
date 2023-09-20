@@ -18,7 +18,7 @@ function useUserInfo(userType: string | undefined, id: number | undefined) {
   useEffect(() => {
     if (id) {
       switch (userType) {
-        case 'offficemanager':
+        case 'officemanager':
           (dispatch as any)(getOfficeManagerAsync({ officemanagerID: id }))
             .unwrap()
             .then((response: any) => {

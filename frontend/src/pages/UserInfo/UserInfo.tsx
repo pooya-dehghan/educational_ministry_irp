@@ -32,6 +32,21 @@ const UserInfo = () => {
       field: values.field,
     };
   };
+  const putRightListOnScreen = (userInfo: any, id: number) => {
+    return userType.trim() === 'officemanager' ? (
+      <OfficeManagerProfile userInfo={userInfo} id={+id} />
+    ) : userType.trim() === 'professor' ? (
+      <div>did not develop</div>
+    ) : userType.trim() === 'school' ? (
+      <div>did not develop</div>
+    ) : userType.trim() === 'teacher' ? (
+      <div>did not develop</div>
+    ) : userType.trim() === 'student' ? (
+      <div>did not develop</div>
+    ) : (
+      <div>did not develop</div>
+    );
+  };
   return (
     <>
       <CustomModal
@@ -46,9 +61,7 @@ const UserInfo = () => {
         body={error || 'مشکلی پیش آمده است'}
       />
       {!openModal && (
-        <Dashboard>
-          <OfficeManagerProfile />
-        </Dashboard>
+        <Dashboard>{userInfo && putRightListOnScreen(userInfo, +id)}</Dashboard>
       )}
     </>
   );
