@@ -1,6 +1,6 @@
 from rest_framework import permissions
 from accounts.models import OfficeManager
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import BasePermission
 
 
 class IsSuperuser(permissions.BasePermission):
@@ -34,9 +34,7 @@ class IsSuperuserOrOwnOfficeManager(BasePermission):
 class IsSuperuserOrOwnOfficeManagerOrOwnSchoolManager(BasePermission):
     def has_object_permission(self, request, view, obj):
         office_manager = obj.office_manager
-        if request.method in SAFE_METHODS:
-            return True
-        elif request.user.is_authenticated and request.user.is_admin:
+        if request.user.is_authenticated and request.user.is_admin:
             return True
         elif request.user.is_authenticated and OfficeManager.objects.filter(
                 id=request.user.id).exists() and office_manager.id == request.user.id:
