@@ -1,3 +1,6 @@
+import { OfficeManagerInterface } from '../../../interfaces';
+import OfficeManagerProfile from '../../../pages/profiles/OfficeManager/OfficeManager';
+
 export interface GetOfficeManagerRequest {
   officemanagerID: number;
 }
@@ -17,7 +20,9 @@ export interface CreateOfficeManagerRequest {
 
 export interface CreateOfficeManagerResponse {}
 
-export interface UpdateOfficeManagerRequest {}
+export interface UpdateOfficeManagerRequest extends OfficeManagerInterface {
+  id: number;
+}
 
 export interface UpdateOfficeManagerResponse {}
 
