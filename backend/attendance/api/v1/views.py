@@ -5,10 +5,26 @@ from .permissions import IsSuperuserOrSchoolManager
 from rest_framework import status
 from .serializers import DateSerializer
 from attendance.models import Attendance
+from drf_yasg.utils import swagger_auto_schema
+from .swagger_info import swagger_parameters
 
 
 class FillAttendance(APIView):
     permission_classes = [IsSuperuserOrSchoolManager]
+
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters,
+        operation_description="""This endpoint allows school manager to fill attendance of  one student
+
+                    The request should include the student id and date of day
+
+                        """,
+        operation_summary="endpoint for fill attendance",
+        responses={
+            '201': 'created',
+            '400': 'bad request'
+        }
+    )
 
     def post(self, request, pk):
         student = Student.objects.filter(id=pk).first()
