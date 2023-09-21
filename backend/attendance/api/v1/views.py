@@ -28,10 +28,13 @@ class FillAttendance(APIView):
 
     def post(self, request, pk):
         student = Student.objects.filter(id=pk).first()
+        self.check_object_permissions(request,student)
         if student:
             ser_data = DateSerializer(data=request.data)
             if ser_data.is_valid():
                 date = ser_data.validated_data['date']
+                if Attendance.objects.filter(student=student, date=date).exists():
+                    return Response({'message': 'you filled before'})
                 Attendance.objects.create(student=student, date=date)
                 return Response({'message': f'attendance set in time {date} for student {student.username}'})
             else:
