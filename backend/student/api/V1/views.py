@@ -172,6 +172,8 @@ class RequestForSchool(APIView):
     def post(self, request, pk):
         sender = Student.objects.get(id=request.user.id)
         receiver = OfficeManager.objects.get(id=pk)
+        if sender.school2 is not None:
+            return Response({'message': 'you have school you cant send request again'})
         if Request.objects.filter(sender=sender, status='s').exists():
             return Response({'message': 'you have request been before'})
         if Request.objects.filter(sender=sender, receiver=receiver).exists():

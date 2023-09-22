@@ -8,4 +8,5 @@ urlpatterns = [
     path('get/<int:id>/', views.GetRequest.as_view(), name="request-get"),
     path('reject/<int:pk>/', views.RejectRequest.as_view()),
     path('accept/<int:school_id>/<int:request_id>/', views.AcceptRequest.as_view()),
+    path('cancel/', views.CancelRequest.as_view()),
 ]
