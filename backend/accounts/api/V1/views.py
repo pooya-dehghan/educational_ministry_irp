@@ -13,7 +13,7 @@ from ...models import User
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
-from .serializers import EmailSerializer, ChangePasswordSerializer
+from .serializers import EmailSerializer, ChangePasswordSerializer, ChangePasswordSerializerOriginal
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.exceptions import ObjectDoesNotExist
@@ -281,7 +281,7 @@ class ResetPassword(APIView):
         # Check if the token is valid
 
         # Validate the new password and confirmation
-        ser_data = ChangePasswordSerializer(data=request.POST)
+        ser_data = ChangePasswordSerializer(data=request.data)
         if ser_data.is_valid():
             new_password = ser_data.validated_data['new_password']
             new_password_confirm = ser_data.validated_data['new_password_confirm']
@@ -409,3 +409,22 @@ class ProfileView(APIView):
         return Response({"data": ser_data.data, "type": user_type}, status=status.HTTP_200_OK)
 
 
+class ChangePassword(APIView):
+    def post(self,request):
+        ser_data = ChangePasswordSerializerOriginal(data=request.data)
+        if ser_data.is_valid():
+            username = ser_data.validated_data['username']
+            old_password = ser_data.validated_data['old_password']
+            new_password = ser_data.validated_data['new_password']
+            try:
+                user = User.objects.get(username=username)
+            except ObjectDoesNotExist:
+                return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
+            if user and check_password(old_password, user.password) and user.is_active:
+                user.set_password(new_password)
+                user.save()
+                return Response({'message': 'password changed'})
+            else:
+                return Response({'message': 'username or old_password the mistake'})
+        else:
+            return Response(ser_data.errors)
