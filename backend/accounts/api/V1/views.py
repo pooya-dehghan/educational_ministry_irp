@@ -13,12 +13,12 @@ from ...models import User
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
-from .serializers import EmailSerializer, ChangePasswordSerializer
+from .serializers import EmailSerializer, ChangePasswordSerializer, ChangePasswordSerializerOriginal
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.exceptions import ObjectDoesNotExist
 from .swagger_info import swagger_parameters_login, swagger_parameters_forgot, swagger_parameters_reset, \
-    swagger_parameters_register
+    swagger_parameters_register, swagger_parameters_change
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from student.api.V1.serializers import StudentSerializer
@@ -284,7 +284,7 @@ class ResetPassword(APIView):
         # Check if the token is valid
 
         # Validate the new password and confirmation
-        ser_data = ChangePasswordSerializer(data=request.POST)
+        ser_data = ChangePasswordSerializer(data=request.data)
         if ser_data.is_valid():
             new_password = ser_data.validated_data['new_password']
             new_password_confirm = ser_data.validated_data['new_password_confirm']
@@ -412,6 +412,7 @@ class ProfileView(APIView):
         return Response({"data": ser_data.data, "type": user_type}, status=status.HTTP_200_OK)
 
 
+
 class UploadAvatarView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -434,9 +435,55 @@ class UploadAvatarView(APIView):
             user.avatar = new_file_path
             print(file_extension)
             user.save()
-            return Response({"message": "آواتار شما با موفقیت آپلود شد"}, status=status.HTTP_200_OK)
+            return Response({"message": "آواتار شما با موفقیت آپلود شد", 'location':f'backend/media/{user.avatar.name}'}, status=status.HTTP_200_OK)
 
         else:
             return Response({"message": "متاسفانه آواتار آپلود شده شما نا معتبر است"},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+class ChangePassword(APIView):
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_change,
+        operation_description="""This endpoint allows users to change his password.
+
+        The request should include the username and old_password new_password and new_password_confirm
+
+        """,
+        operation_summary="endpoint for change password",
+        request_body=openapi.Schema(
+            'user',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, default="ali"),
+                'old_password': openapi.Schema(type=openapi.TYPE_STRING, default="6789"),
+                'new_password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+                'new_password_confirm': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+            },
+            required=['username', 'old_password', 'new_password', 'new_password_confirm'],
+        ),
+        responses={
+            '200': 'ok',
+            '400': 'bad request',
+            '404': 'not found'
+
+        }
+    )
+    def post(self, request):
+        ser_data = ChangePasswordSerializerOriginal(data=request.data)
+        if ser_data.is_valid():
+            username = ser_data.validated_data['username']
+            old_password = ser_data.validated_data['old_password']
+            new_password = ser_data.validated_data['new_password']
+            try:
+                user = User.objects.get(username=username)
+            except ObjectDoesNotExist:
+                return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
+            if user and check_password(old_password, user.password) and user.is_active:
+                user.set_password(new_password)
+                user.save()
+                return Response({'message': 'password changed'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'message': 'username or old_password the mistake'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)

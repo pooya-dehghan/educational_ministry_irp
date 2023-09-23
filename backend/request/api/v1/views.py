@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from officemanager.api.V1.permissions import IsSuperuserOrOfficeManager, IsSuperuserOrOwnOfficeManager
-from accounts.models import OfficeManager, User, School
+from accounts.models import OfficeManager, User, School, Student
 from request.models import Request
 from request.serializers import RequestSerializer
 from drf_yasg.utils import swagger_auto_schema
@@ -149,3 +149,31 @@ class AcceptRequest(APIView):
             return Response({'message': 'this school not in this office_manager region'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+class CancelRequest(APIView):
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows student to cancel his request
+
+              This view first check a student use this function then get a request from this student with status sent 
+              means accept and not accept then get notification of this request and then deleted
+              """,
+        operation_summary="endpoint for cancel request",
+        responses={
+            '200': 'ok',
+            '400': 'bad request'
+        }
+    )
+    def post(self, request):
+        student = Student.objects.filter(id=request.user.id).first()
+        if student:
+            req = Request.objects.filter(sender=student, status='s').last()
+            if req:
+                notification = Notification.objects.filter(sender=User.objects.get(id=student.id),
+                                                           receiver=User.objects.get(id=req.receiver.id)).last()
+                req.delete()
+                notification.delete()
+                return Response({'message': 'request and notification deleted'})
+            else:
+                return Response({'message': 'you have not request for canceling'})
+        else:
+            return Response({'message': 'you are not student'})
