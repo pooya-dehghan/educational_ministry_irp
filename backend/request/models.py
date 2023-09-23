@@ -17,6 +17,12 @@ class Request(models.Model):
     receiver = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='request_receiver')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    body = models.CharField(max_length=100)
+
+    def save(self, *args, **kwargs):
+        if not self.body:
+            self.body = f'{self.sender.username} sent request to region {self.receiver.region}'
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f'{self.sender} sent request to {self.receiver} and id = {self.id}'
