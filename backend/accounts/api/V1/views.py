@@ -3,7 +3,7 @@ from .serializers import UserRegisterSerializer, EmailSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
+from .serializers import CustomTokenObtainPairSerializer, UserProfileAvatarSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from accounts.models import Teacher, OfficeManager, Student, Professor, School
@@ -29,6 +29,9 @@ from professor.api.V1.serializers import ProfessorSerializer
 from ..V1.serializers import UserSerializer
 from notification.models import Notification
 from notification.serializers import NotificationSerializer
+from django.core.files.storage import default_storage
+import os
+from django.http import FileResponse
 
 
 class DeleteProfile(APIView):
@@ -408,4 +411,32 @@ class ProfileView(APIView):
             user_type = "super user"
         return Response({"data": ser_data.data, "type": user_type}, status=status.HTTP_200_OK)
 
+
+class UploadAvatarView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            user = User.objects.get(id=request.user.id)
+        except:
+            return Response({"message": "کاربر شناسایی نشده(نا معتبر)"}, status=status.HTTP_400_BAD_REQUEST)
+        ser_data = UserProfileAvatarSerializer(data=request.data)
+        if ser_data.is_valid():
+            uploaded_avatar = ser_data.validated_data["avatar"]
+            file_extension = os.path.splitext(uploaded_avatar.name)[1]
+            new_file_name = f"{user.username}_avatar{file_extension}"  # Customize the naming convention as needed
+            new_file_path = os.path.join("avatars", new_file_name)  # 'avatars' is the media subdirectory
+            # Save the uploaded file with the new name
+            if user.avatar:
+                default_storage.delete(user.avatar.name)
+            default_storage.save(new_file_path, uploaded_avatar)
+            # Update the user's 'avatar' field with the new file path
+            user.avatar = new_file_path
+            print(file_extension)
+            user.save()
+            return Response({"message": "آواتار شما با موفقیت آپلود شد"}, status=status.HTTP_200_OK)
+
+        else:
+            return Response({"message": "متاسفانه آواتار آپلود شده شما نا معتبر است"},
+                            status=status.HTTP_400_BAD_REQUEST)
 

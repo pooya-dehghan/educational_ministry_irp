@@ -42,7 +42,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return validated_data
 
 
-
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -64,3 +63,9 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+
+
+class UserProfileAvatarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('avatar',)  # Include other fields as needed
