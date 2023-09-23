@@ -42,7 +42,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return validated_data
 
 
-
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -66,6 +65,12 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
 
+
+class UserProfileAvatarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('avatar',)  # Include other fields as needed
+
 class ChangePasswordSerializerOriginal(serializers.Serializer):
     username = serializers.CharField(max_length=100)
     old_password = serializers.CharField(max_length=100)
@@ -82,3 +87,4 @@ class ChangePasswordSerializerOriginal(serializers.Serializer):
         except exceptions.ValidationError as e:
             raise serializers.ValidationError({"password": list(e.messages)})
         return attrs
+
