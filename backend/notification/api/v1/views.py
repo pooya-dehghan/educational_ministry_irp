@@ -8,13 +8,15 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+
 class NotificationListView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         try:
-            user = User.objects.get(id=request.id)
+            user = User.objects.get(id=request.user.id)
         except:
-            return Response({"message":"this user does not exists"})
+            return Response({"message": "this user does not exists"})
         seen_param = request.query_params.get('seen')
         unseen_param = request.query_params.get('unseen')
         print(seen_param)
@@ -32,7 +34,6 @@ class NotificationListView(APIView):
 
         elif seen_param == '1' and unseen_param == '1':
             print("all")
-
 
         ser_data = NotificationSerializer(queryset, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
@@ -82,4 +83,5 @@ class SeenNotification(APIView):
             notification.save()
             return Response({'message': 'notification seen'})
         else:
-            return Response({'message': 'you not have this notification by this id'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'you not have this notification by this id'},
+                            status=status.HTTP_400_BAD_REQUEST)
