@@ -205,7 +205,10 @@ class SchoolUpdate(APIView):
         }
     )
     def put(self, request, pk):
-        school = School.objects.get(pk=pk)
+        try:
+            school = School.objects.get(pk=pk)
+        except School.DoesNotExist:
+            return Response({'message': 'school does not exist'}, status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, school)
 
         if request.user.is_admin:

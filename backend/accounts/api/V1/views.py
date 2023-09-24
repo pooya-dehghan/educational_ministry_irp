@@ -48,13 +48,14 @@ class DeleteProfile(APIView):
         }
     )
     def post(self, request, pk):
-        if User.objects.filter(id=pk).exists():
+        try:
             user = User.objects.get(id=pk)
-            user.is_active = False
-            user.save()
-            return Response({'message': 'user profile deleted'}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message': 'user whit this id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            # Code to handle when the user exists
+        except User.DoesNotExist:
+            return Response({'message': 'user not exist'},status=status.HTTP_404_NOT_FOUND)
+        user.is_active = False
+        user.save()
+        return Response({'message': 'user profile deleted'}, status=status.HTTP_200_OK)
 
 
 class ApiUserRegistrationView(GenericAPIView):

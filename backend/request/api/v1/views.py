@@ -29,7 +29,10 @@ class ListRequest(APIView):
         }
     )
     def get(self, request):
-        office_manager = OfficeManager.objects.get(id=request.user.id)
+        try:
+            office_manager = OfficeManager.objects.get(id=request.user.id)
+        except OfficeManager.DoesNotExist:
+            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
         req = Request.objects.filter(receiver=office_manager)
         ser_data = RequestSerializer(req, many=True)
         if req:
@@ -58,7 +61,10 @@ class GetRequest(APIView):
         }
     )
     def get(self, request, id):
-        office_manager = OfficeManager.objects.get(id=request.user.id)
+        try:
+            office_manager = OfficeManager.objects.get(id=request.user.id)
+        except OfficeManager.DoesNotExist:
+            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
         req = Request.objects.filter(receiver=office_manager, id=id)
         ser_data = RequestSerializer(req, many=True)
         if req:
@@ -120,11 +126,17 @@ class AcceptRequest(APIView):
         }
     )
     def post(self, request, school_id, request_id):
-        req = Request.objects.get(id=request_id)
+        try:
+            req = Request.objects.get(id=request_id)
+        except Request.DoesNotExist:
+            return Response({'message': 'request does not exist'}, status=status.HTTP_404_NOT_FOUND)
         office_manager = req.receiver
         student = req.sender
         self.check_object_permissions(request, office_manager)
-        school = School.objects.get(pk=school_id)
+        try:
+            school = School.objects.get(pk=school_id)
+        except School.DoesNotExist:
+            return Response({'message': 'school does not exist'}, status=status.HTTP_404_NOT_FOUND)
         if school.office_manager == office_manager:
             if req.status != 'na':
                 if student.school2 is None and school.capacity > 0:

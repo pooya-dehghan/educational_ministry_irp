@@ -128,7 +128,10 @@ class StudentUpdate(APIView):
         }
     )
     def put(self, request, pk):
-        student = Student.objects.get(pk=pk)
+        try:
+            student = Student.objects.get(pk=pk)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, student)
         ser_data = StudentSerializer(instance=student, data=request.data, partial=True)
         if ser_data.is_valid():
@@ -151,7 +154,10 @@ class StudentDelete(APIView):
         }
     )
     def delete(self, request, pk):
-        student = Student.objects.get(pk=pk)
+        try:
+            student = Student.objects.get(pk=pk)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
         student.delete()
         return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
 
@@ -170,8 +176,14 @@ class RequestForSchool(APIView):
         }
     )
     def post(self, request, pk):
-        sender = Student.objects.get(id=request.user.id)
-        receiver = OfficeManager.objects.get(id=pk)
+        try:
+            sender = Student.objects.get(id=request.user.id)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            receiver = OfficeManager.objects.get(id=pk)
+        except OfficeManager.DoesNotExist:
+            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
         if sender.school2 is not None:
             return Response({'message': 'you have school you cant send request again'})
         if Request.objects.filter(sender=sender, status='s').exists():
@@ -205,7 +217,10 @@ class StudentGetRequestStatus(APIView):
         }
     )
     def get(self, request):
-        student = Student.objects.get(pk=request.user.id)
+        try:
+            student = Student.objects.get(id=request.user.id)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
         stu_request = Request.objects.filter(sender=student).last()
         if stu_request:
             if stu_request.status == "s":

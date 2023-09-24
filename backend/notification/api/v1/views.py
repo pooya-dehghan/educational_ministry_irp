@@ -15,8 +15,8 @@ class NotificationListView(APIView):
     def get(self, request, *args, **kwargs):
         try:
             user = User.objects.get(id=request.user.id)
-        except:
-            return Response({"message": "this user does not exists"})
+        except User.DoesNotExist:
+            return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
         seen_param = request.query_params.get('seen')
         unseen_param = request.query_params.get('unseen')
         print(seen_param)
@@ -53,7 +53,10 @@ class NotificationGet(APIView):
         }
     )
     def get(self, request, pk):
-        user = User.objects.get(id=request.user.id)
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
         notification = Notification.objects.filter(receiver=user, id=pk)
         ser_data = NotificationSerializer(notification, many=True)
         if notification.count() > 0:
@@ -76,7 +79,10 @@ class SeenNotification(APIView):
         }
     )
     def post(self, request, pk):
-        user = User.objects.get(id=request.user.id)
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
         notification = Notification.objects.filter(receiver=user, id=pk).first()
         if notification:
             notification.view = 's'
