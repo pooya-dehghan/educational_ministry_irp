@@ -95,3 +95,12 @@ swagger_parameters_change = [
         type=openapi.TYPE_STRING
     ),
 ]
+
+swagger_parameters_avatar = [
+    openapi.Parameter(
+        name='avatar',
+        in_=openapi.IN_PATH,
+        description='Example PATH parameter',
+        type=openapi.TYPE_FILE
+    ),
+]
