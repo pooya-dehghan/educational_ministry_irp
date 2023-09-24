@@ -18,7 +18,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.exceptions import ObjectDoesNotExist
 from .swagger_info import swagger_parameters_login, swagger_parameters_forgot, swagger_parameters_reset, \
-    swagger_parameters_register, swagger_parameters_change
+    swagger_parameters_register, swagger_parameters_change, swagger_parameters_avatar
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from student.api.V1.serializers import StudentSerializer
@@ -412,15 +412,34 @@ class ProfileView(APIView):
         return Response({"data": ser_data.data, "type": user_type}, status=status.HTTP_200_OK)
 
 
-
 class UploadAvatarView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_avatar,
+        operation_description="""This endpoint allows users to upload an image for their profile
+        """,
+        operation_summary="endpoint for upload avatar",
+        request_body=openapi.Schema(
+            'avatar',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'avatar': openapi.Schema(type=openapi.TYPE_FILE, default="image.png"),
+            },
+            required=['avatar'],
+        ),
+        responses={
+            '200': 'ok',
+            '400': 'bad request',
+            '404': 'not found'
+
+        }
+    )
     def post(self, request):
         try:
             user = User.objects.get(id=request.user.id)
         except:
-            return Response({"message": "کاربر شناسایی نشده(نا معتبر)"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "کاربر شناسایی نشده(نا معتبر)"}, status=status.HTTP_404_NOT_FOUND)
         ser_data = UserProfileAvatarSerializer(data=request.data)
         if ser_data.is_valid():
             uploaded_avatar = ser_data.validated_data["avatar"]
@@ -435,10 +454,12 @@ class UploadAvatarView(APIView):
             user.avatar = new_file_path
             print(file_extension)
             user.save()
-            return Response({"message": "آواتار شما با موفقیت آپلود شد", 'location':f'backend/media/{user.avatar.name}'}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": "آواتار شما با موفقیت آپلود شد", 'location': f'backend/media/{user.avatar.name}'},
+                status=status.HTTP_200_OK)
 
         else:
-            return Response({"message": "متاسفانه آواتار آپلود شده شما نا معتبر است"},
+            return Response({"message": "متاسفانه فایل آپلود شده شما نا معتبر است"},
                             status=status.HTTP_400_BAD_REQUEST)
 
 
