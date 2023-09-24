@@ -17,11 +17,10 @@ class Request(models.Model):
     receiver = models.ForeignKey(OfficeManager, on_delete=models.CASCADE, related_name='request_receiver')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    body = models.CharField(max_length=100)
+    body = models.CharField(max_length=200)
 
     def save(self, *args, **kwargs):
-        if not self.body:
-            self.body = f'{self.sender.username} sent request to region {self.receiver.region}'
+        self.body = f'آقای {self.sender.username} با شماره دانشجویی {self.sender.studentUniqueCode} از دانشگاه تربیت دبیر شهید رجایی به اداره منطقه {self.receiver.region} درخواست داده است '
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:

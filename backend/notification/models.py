@@ -22,14 +22,14 @@ class Notification(models.Model):
 
     def save(self, *args, **kwargs):
         if self.code == 301:
-            self.title = 'student request'
-            self.body = f'the {self.sender.username} send a request to you to find a school for he'
+            self.title = 'درخواست مدرسه توسط دانشجو'
+            self.body = f'دانشجوی {self.sender.username} به شما درخواست داده است لطفا بررسی کنید'
         elif self.code == 401:
-            self.title = 'reject request'
-            self.body = f'{self.sender.username} rejected your request'
+            self.title = 'رد شدن درخواست'
+            self.body = f'آقای {self.sender.username} درخواست شما را رد کرده است '
         elif self.code == 501:
-            self.title = 'accept request'
-            self.body = f'{self.sender.username} accept your request and assign you to one school'
+            self.title = 'تایید شدن درخواست'
+            self.body = f'آقای {self.sender.username} درخواست شما را تایید کرده است '
 
         super().save(*args, **kwargs)
 
