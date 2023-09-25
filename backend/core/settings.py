@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'teacher.apps.TeacherConfig',
     'professor.apps.ProfessorConfig',
     'corsheaders',
+    'jalali_date',
     #'django_rest_passwordreset',
 ]
 

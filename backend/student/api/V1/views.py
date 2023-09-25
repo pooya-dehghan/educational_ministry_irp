@@ -10,6 +10,8 @@ from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters, swagger_parameters_update
 from notification.models import Notification
 from drf_yasg import openapi
+from jalali_date import datetime2jalali
+from django.utils import timezone
 
 
 class StudentGet(APIView):
@@ -191,6 +193,22 @@ class RequestForSchool(APIView):
         if Request.objects.filter(sender=sender, receiver=receiver).exists():
             return Response({'message': 'you requested to this office manager before'})
         req = Request.objects.create(sender=sender, receiver=receiver)
+        req.save()
+        dt = timezone.now()
+        dt = datetime2jalali(dt).strftime('%y-%m-%d')
+        dt = "14" + dt
+        dt = dt.replace('-', '')
+        id_number = req.id
+        if id_number < 10:
+            str_id = "000" + str(id_number)
+        elif id_number < 100:
+            str_id = "00" + str(id_number)
+        elif id_number < 1000:
+            str_id = "0" + str(id_number)
+        elif id_number > 1000 or id_number == 1000:
+            str_id = str(id_number)
+        req.code = dt + str_id
+        req.save()
         Notification.objects.create(sender=request.user, receiver=User.objects.get(id=pk), code=301)
         return Response({'message': 'request sent successfully', 'request id': req.id},
                         status=status.HTTP_201_CREATED)
