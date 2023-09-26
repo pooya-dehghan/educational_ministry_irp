@@ -127,7 +127,10 @@ class TeacherUpdate(APIView):
         }
     )
     def put(self, request, pk):
-        teacher = Teacher.objects.get(pk=pk)
+        try:
+            teacher = Teacher.objects.get(pk=pk)
+        except Teacher.DoesNotExist:
+            return Response({'message': 'teacher does not exist'}, status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, teacher)
         ser_data = TeacherSerializer(instance=teacher, data=request.data, partial=True)
         if ser_data.is_valid():
@@ -150,6 +153,9 @@ class TeacherDelete(APIView):
         }
     )
     def delete(self, request, pk):
-        teacher = Teacher.objects.get(pk=pk)
+        try:
+            teacher = Teacher.objects.get(pk=pk)
+        except Teacher.DoesNotExist:
+            return Response({'message': 'teacher does not exist'}, status=status.HTTP_404_NOT_FOUND)
         teacher.delete()
         return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)

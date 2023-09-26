@@ -1,16 +1,7 @@
 from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+import os
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-@s263e1ebd3sfvt-s)da(3zn*)vp7@83=3x=hc9u7kebqa1n9&'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -42,6 +33,7 @@ INSTALLED_APPS = [
     'teacher.apps.TeacherConfig',
     'professor.apps.ProfessorConfig',
     'corsheaders',
+    'jalali_date',
     #'django_rest_passwordreset',
 ]
 
@@ -124,6 +116,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+
+# Media files (such as images that uploaded by user)
+MEDIA_URL = '/media/'  # URL for serving media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Absolute file system path to the media directory
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -139,7 +137,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTO_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
 }
-
 
 # CORS handeling
 CORS_ORIGIN_ALLOW_ALL = True
@@ -164,7 +161,6 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000',
     'http://example.com',
 ]
-
 
 
 SWAGGER_SETTINGS = {

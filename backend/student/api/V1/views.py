@@ -10,6 +10,8 @@ from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters, swagger_parameters_update
 from notification.models import Notification
 from drf_yasg import openapi
+from jalali_date import datetime2jalali
+from django.utils import timezone
 
 
 class StudentGet(APIView):
@@ -128,7 +130,10 @@ class StudentUpdate(APIView):
         }
     )
     def put(self, request, pk):
-        student = Student.objects.get(pk=pk)
+        try:
+            student = Student.objects.get(pk=pk)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, student)
         ser_data = StudentSerializer(instance=student, data=request.data, partial=True)
         if ser_data.is_valid():
@@ -151,7 +156,10 @@ class StudentDelete(APIView):
         }
     )
     def delete(self, request, pk):
-        student = Student.objects.get(pk=pk)
+        try:
+            student = Student.objects.get(pk=pk)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
         student.delete()
         return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
 
@@ -170,8 +178,14 @@ class RequestForSchool(APIView):
         }
     )
     def post(self, request, pk):
-        sender = Student.objects.get(id=request.user.id)
-        receiver = OfficeManager.objects.get(id=pk)
+        try:
+            sender = Student.objects.get(id=request.user.id)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            receiver = OfficeManager.objects.get(id=pk)
+        except OfficeManager.DoesNotExist:
+            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
         if sender.school2 is not None:
             return Response({'message': 'you have school you cant send request again'})
         if Request.objects.filter(sender=sender, status='s').exists():
@@ -179,6 +193,22 @@ class RequestForSchool(APIView):
         if Request.objects.filter(sender=sender, receiver=receiver).exists():
             return Response({'message': 'you requested to this office manager before'})
         req = Request.objects.create(sender=sender, receiver=receiver)
+        req.save()
+        dt = timezone.now()
+        dt = datetime2jalali(dt).strftime('%y-%m-%d')
+        dt = "14" + dt
+        dt = dt.replace('-', '')
+        id_number = req.id
+        if id_number < 10:
+            str_id = "000" + str(id_number)
+        elif id_number < 100:
+            str_id = "00" + str(id_number)
+        elif id_number < 1000:
+            str_id = "0" + str(id_number)
+        elif id_number > 1000 or id_number == 1000:
+            str_id = str(id_number)
+        req.code = dt + str_id
+        req.save()
         Notification.objects.create(sender=request.user, receiver=User.objects.get(id=pk), code=301)
         return Response({'message': 'request sent successfully', 'request id': req.id},
                         status=status.HTTP_201_CREATED)
@@ -205,7 +235,10 @@ class StudentGetRequestStatus(APIView):
         }
     )
     def get(self, request):
-        student = Student.objects.get(pk=request.user.id)
+        try:
+            student = Student.objects.get(id=request.user.id)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
         stu_request = Request.objects.filter(sender=student).last()
         if stu_request:
             if stu_request.status == "s":

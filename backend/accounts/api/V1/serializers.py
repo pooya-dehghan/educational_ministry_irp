@@ -42,7 +42,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return validated_data
 
 
-
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -64,3 +63,28 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+
+
+
+class UserProfileAvatarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('avatar',)  # Include other fields as needed
+
+class ChangePasswordSerializerOriginal(serializers.Serializer):
+    username = serializers.CharField(max_length=100)
+    old_password = serializers.CharField(max_length=100)
+    new_password = serializers.CharField(max_length=100)
+    new_password_confirm = serializers.CharField(max_length=100)
+
+    def validate(self,attrs):
+        new_password = attrs.get("new_password")
+        new_password_confirm = attrs.get("new_password_confirm")
+        if new_password != new_password_confirm:
+            raise serializers.ValidationError("passwords must be match")
+        try:
+            validate_password(new_password)
+        except exceptions.ValidationError as e:
+            raise serializers.ValidationError({"password": list(e.messages)})
+        return attrs
+

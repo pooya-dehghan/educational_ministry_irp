@@ -22,7 +22,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    avatar = models.ImageField(null=True, blank=True)
+    avatar = models.ImageField(null=True, blank=True, upload_to='avatars/')
     is_admin = models.BooleanField(default=False)
     personal_code = models.CharField(max_length=8, null=True, blank=True)
     USERNAME_FIELD = "username"

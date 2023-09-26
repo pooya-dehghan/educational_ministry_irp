@@ -8,13 +8,15 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+
 class NotificationListView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         try:
-            user = User.objects.get(id=request.id)
-        except:
-            return Response({"message":"this user does not exists"})
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
         seen_param = request.query_params.get('seen')
         unseen_param = request.query_params.get('unseen')
         print(seen_param)
@@ -32,7 +34,6 @@ class NotificationListView(APIView):
 
         elif seen_param == '1' and unseen_param == '1':
             print("all")
-
 
         ser_data = NotificationSerializer(queryset, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
@@ -52,7 +53,10 @@ class NotificationGet(APIView):
         }
     )
     def get(self, request, pk):
-        user = User.objects.get(id=request.user.id)
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
         notification = Notification.objects.filter(receiver=user, id=pk)
         ser_data = NotificationSerializer(notification, many=True)
         if notification.count() > 0:
@@ -75,11 +79,27 @@ class SeenNotification(APIView):
         }
     )
     def post(self, request, pk):
-        user = User.objects.get(id=request.user.id)
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
         notification = Notification.objects.filter(receiver=user, id=pk).first()
         if notification:
             notification.view = 's'
             notification.save()
             return Response({'message': 'notification seen'})
         else:
-            return Response({'message': 'you not have this notification by this id'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'you not have this notification by this id'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class Create(APIView):
+    def post(self, request, pk):
+        sender = request.user
+        receiver = User.objects.filter(id=pk).first()
+        if sender and receiver:
+            Notification.objects.create(sender=sender, receiver=receiver, code=401)
+            return Response({'message': 'notification create'})
+        else:
+            return Response({'the pk is mistake and does not user with this id'})
+

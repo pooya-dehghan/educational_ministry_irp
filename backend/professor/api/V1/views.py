@@ -125,7 +125,10 @@ class ProfessorUpdate(APIView):
         }
     )
     def put(self, request, pk):
-        professor = Professor.objects.get(pk=pk)
+        try:
+            professor = Professor.objects.get(pk=pk)
+        except Professor.DoesNotExist:
+            return Response({'message': 'professor does not exist'}, status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, professor)
         ser_data = ProfessorSerializer(instance=professor, data=request.data, partial=True)
         if ser_data.is_valid():
@@ -148,6 +151,9 @@ class ProfessorDelete(APIView):
         }
     )
     def delete(self, request, pk):
-        professor = Professor.objects.get(pk=pk)
+        try:
+            professor = Professor.objects.get(pk=pk)
+        except Professor.DoesNotExist:
+            return Response({'message': 'professor does not exist'}, status=status.HTTP_404_NOT_FOUND)
         professor.delete()
         return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
