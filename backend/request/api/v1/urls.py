@@ -11,4 +11,6 @@ urlpatterns = [
     path('cancel/', views.CancelRequest.as_view()),
     path('send/<int:pk>/', views.RequestForSchool.as_view(), name='request-for-school'),
     path('status/', views.StudentGetRequestStatus.as_view(), name='status'),
+    path('create/<int:student_id>/<int:office_manager_id>/',views.create.as_view()),
+    path('all/',views.All.as_view()),
 ]

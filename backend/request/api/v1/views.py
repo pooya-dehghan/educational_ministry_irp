@@ -281,3 +281,37 @@ class StudentGetRequestStatus(APIView):
                 return Response({'status': "تایید"}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'you do not have any request'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class create(APIView):
+    def post(self, request,student_id, office_manager_id):
+        sender = Student.objects.filter(id=student_id).first()
+        receiver = OfficeManager.objects.filter(id=office_manager_id).first()
+        if sender and receiver:
+            req = Request.objects.create(sender=sender, receiver=receiver)
+            req.save()
+            dt = timezone.now()
+            dt = datetime2jalali(dt).strftime('%y-%m-%d')
+            dt = "14" + dt
+            dt = dt.replace('-', '')
+            id_number = req.id
+            str_id = ''
+            if id_number < 10:
+                str_id = "000" + str(id_number)
+            elif id_number < 100:
+                str_id = "00" + str(id_number)
+            elif id_number < 1000:
+                str_id = "0" + str(id_number)
+            elif id_number > 1000 or id_number == 1000:
+                str_id = str(id_number)
+            req.code = dt + str_id
+            req.save()
+            return Response({'message': 'create'})
+        return Response({'message': 'one id not correct'})
+
+class All(APIView):
+    def get(self,request):
+        req = Request.objects.all()
+        ser_data = RequestSerializer(instance=req, many=True)
+        return Response(ser_data.data, status=status.HTTP_200_OK)
+
