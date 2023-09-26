@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import styles from "./professor.module.css";
-import { ProfessorInterface } from "../../../interfaces/professor.interface";
-import { useDispatch } from "react-redux";
-import { updateProfessor } from "../../../features/professor/professorSlice";
-import { updateResponse } from "../../../features/response/responseSlice";
-import { updateProfessorAsync } from "../../../features/professor/professorThunk";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import styles from './professor.module.css';
+import { ProfessorInterface } from '../../../interfaces/professor.interface';
+import { useDispatch } from 'react-redux';
+import { updateProfessor } from '../../../features/professor/professorSlice';
+import { updateResponse } from '../../../features/response/responseSlice';
+import { updateProfessorAsync } from '../../../features/professor/professorThunk';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  marginButton: {
+    marginBottom: '3rem', // Add margin here
+    fontStyle: 'bold',
+  },
+}));
 
 interface ProfessorProfileProps {
   userInfo: ProfessorInterface;
@@ -22,6 +30,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
   id,
 }) => {
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   const handleSubmit = (values: any, setSubmitting: any) => {
     let updateProfessorData = {
@@ -42,18 +51,18 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
         dispatch(updateProfessor(response));
         dispatch(
           updateResponse({
-            severity: "success",
-            message: "پروفایل شما با موفقیت بروزرسانی شد..",
+            severity: 'success',
+            message: 'پروفایل شما با موفقیت بروزرسانی شد..',
             open: true,
           })
         );
       })
       .catch((error: any) => {
-        console.log("error: ", error);
+        console.log('error: ', error);
         dispatch(
           updateResponse({
-            severity: "error",
-            message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
+            severity: 'error',
+            message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
             open: true,
           })
         );
@@ -62,22 +71,24 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
   return (
     <Box
       sx={{
-        backgroundColor: "white",
+        backgroundColor: 'white',
         paddingBottom: 8,
         paddingTop: 8,
         paddingLeft: 12,
         paddingRight: 12,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         boxShadow: 3,
         borderRadius: 2,
-        height: "100vh",
+        height: '100vh',
       }}
     >
       <Grid container>
         <Grid item>
-          <Typography className={styles.infoType}>اطلاعات کاربر</Typography>
+          <Typography variant="h4" className={classes.marginButton}>
+            اطلاعات استاد
+          </Typography>
         </Grid>
       </Grid>
       <Formik
@@ -111,7 +122,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -128,7 +139,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -145,7 +156,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -162,7 +173,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -179,7 +190,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -196,7 +207,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -213,7 +224,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -230,7 +241,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -247,7 +258,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -264,7 +275,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
