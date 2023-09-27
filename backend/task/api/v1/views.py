@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from ...models import Task, RenderTask
 from .serializers import TaskSerializer, RenderTaskUploadingSerializer
 from notification.models import Notification
+import os
+from django.core.files.storage import default_storage
 
 
 class TaskCreationView(APIView):
@@ -43,15 +45,21 @@ class RenderTaskCreationView(APIView):
 
         ser_data = RenderTaskUploadingSerializer(data=request.data)
         if ser_data.is_valid():
-            rt = RenderTask.objects.create(
-                file=ser_data.validated_data["file"],
-                student=student,
-                task=task
-            )
-            Notification.objects.create(sender=student, receiver=student.professor2, code=250, title="انجام تکلیف",
-                                        body=f"دانشجو{student.username} تکلیف {task.title} را در تاریخ {rt.delivery_date} آپلود کرده است")
+            uploaded_file = ser_data.validated_data["file"]
+            file_extension = os.path.splitext(uploaded_file.name)[1]
+            new_file_name = f"{student.username}_task{file_extension}"  # Customize the naming convention as needed
+            new_file_path = os.path.join("tasks", new_file_name)  # 'avatars' is the media subdirectory
+            if RenderTask.objects.filter(student=student, task=task).exists():
+                for rt in RenderTask.objects.filter(student=student, task=task):
+                    default_storage.delete(rt.file.name)
+                    rt.delete()
 
-            return Response({"message": "تکلیف شما با موفقیت آپلود شد"},
+
+            default_storage.save(new_file_path, uploaded_file)
+            Notification.objects.create(sender=student, receiver=student.professor2, code=250, title="انجام تکلیف",
+                                        body=f"دانشجو{student.username} تکلیف {task.title} را در تاریخ {last_rt.delivery_date} آپلود کرده است")
+
+            return Response({"message": "تکلیف شما با موفقیت آپلود شد", "location":f"backend/media/{last_rt.file.name}"},
                             status=status.HTTP_201_CREATED)
         else:
             return Response({"data": ser_data.errors}, status=status.HTTP_400_BAD_REQUEST)

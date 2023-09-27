@@ -14,6 +14,6 @@ class Task(models.Model):
 class RenderTask(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    file = models.FileField()
+    file = models.FileField(upload_to='tasks/')
     delivery_date = models.DateField(default=timezone.now)
 
