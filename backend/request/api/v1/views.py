@@ -7,8 +7,13 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import status
 from notification.models import Notification
+from .serializers import NotificationSerializer
+from rest_framework import status
+from rest_framework.permissions import IsAdminUser
+
 from jalali_date import datetime2jalali
 from django.utils import timezone
+
 
 
 class ListRequest(APIView):
@@ -192,6 +197,14 @@ class CancelRequest(APIView):
         else:
             return Response({'message': 'you are not student'})
 
+class SuperUserListRequest(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        requests = Request.objects.all()
+        ser_data = NotificationSerializer(requests, many=True)
+        return Response({"data": ser_data.data}, status=status.HTTP_200_OK)
+
 class RequestForSchool(APIView):
     # permission_classes = [IsSuperuser]
     @swagger_auto_schema(
@@ -314,4 +327,5 @@ class All(APIView):
         req = Request.objects.all()
         ser_data = RequestSerializer(instance=req, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
+
 
