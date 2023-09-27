@@ -10,7 +10,7 @@ from notification.models import Notification
 from .serializers import NotificationSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
-
+from .swagger_info import swagger_parameters_request
 from jalali_date import datetime2jalali
 from django.utils import timezone
 
@@ -208,6 +208,7 @@ class SuperUserListRequest(APIView):
 class RequestForSchool(APIView):
     # permission_classes = [IsSuperuser]
     @swagger_auto_schema(
+        manual_parameters=swagger_parameters_request,
         operation_description="""This endpoint allows student  to send a request to office_manager.
 
             The request should include the office_manager id.
@@ -218,19 +219,19 @@ class RequestForSchool(APIView):
             '201': 'created',
         }
     )
-    def post(self, request, pk):
+    def post(self, request, region):
         try:
             sender = Student.objects.get(id=request.user.id)
         except Student.DoesNotExist:
             return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
         try:
-            receiver = OfficeManager.objects.get(id=pk)
+            receiver = OfficeManager.objects.get(region=region)
         except OfficeManager.DoesNotExist:
-            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'منطقه ارسالی شما در حال حاضر یا مسءولی در سیستم ندارد یا اشتباه است'}, status=status.HTTP_404_NOT_FOUND)
         if sender.school2 is not None:
             return Response({'message': 'you have school you cant send request again'})
         if Request.objects.filter(sender=sender, status='s').exists():
-            return Response({'message': 'you have request been before'})
+            return Response({'message': 'شما قبلا درخواستی فرستاده اید که هنوز تایین وضعیت نشده است لطفا شکیبا باشید'})
         if Request.objects.filter(sender=sender, receiver=receiver).exists():
             return Response({'message': 'you requested to this office manager before'})
         req = Request.objects.create(sender=sender, receiver=receiver)
@@ -251,7 +252,7 @@ class RequestForSchool(APIView):
             str_id = str(id_number)
         req.code = dt + str_id
         req.save()
-        Notification.objects.create(sender=request.user, receiver=User.objects.get(id=pk), code=301)
+        Notification.objects.create(sender=request.user, receiver=receiver, code=301)
         return Response({'message': 'request sent successfully', 'request id': req.id, 'request.code': req.code},
                         status=status.HTTP_201_CREATED)
 
@@ -321,6 +322,10 @@ class create(APIView):
             req.save()
             return Response({'message': 'create'})
         return Response({'message': 'one id not correct'})
+
+
+
+
 
 class All(APIView):
     def get(self,request):
