@@ -146,10 +146,10 @@ const Login = () => {
                 </Button>
               </Grid>
               <Grid item xs={12} className={classes.loginLink}>
-                <Link href="#">تا به حال ثبت نام نکرده اید ؟ ثبت نام کنید</Link>
+                <Link href="signup">تا به حال ثبت نام نکرده اید ؟ ثبت نام کنید</Link>
               </Grid>
               <Grid item xs={12} className={classes.loginLink}>
-                <Link href="#">رمز عبور خود را فراموش کرده اید؟</Link>
+                <Link href="resset">رمز عبور خود را فراموش کرده اید؟</Link>
               </Grid>
             </Grid>
           </Box>

@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import styles from "./officemanager.module.css";
-import { OfficeManagerInterface } from "../../../interfaces";
-import { useDispatch } from "react-redux";
-import { updateOfficeManager } from "../../../features/officemanager/officemanagerSlice";
-import { updateResponse } from "../../../features/response/responseSlice";
-import { updateOfficeManagerAsync } from "../../../features/officemanager/officemanagerThunk";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import styles from './officemanager.module.css';
+import { OfficeManagerInterface } from '../../../interfaces';
+import { useDispatch } from 'react-redux';
+import { updateOfficeManager } from '../../../features/officemanager/officemanagerSlice';
+import { updateResponse } from '../../../features/response/responseSlice';
+import { updateOfficeManagerAsync } from '../../../features/officemanager/officemanagerThunk';
+import { TimePicker } from 'zaman';
+import { DatePicker } from 'zaman';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  marginButton: {
+    marginBottom: '3rem', // Add margin here
+    fontStyle: 'bold',
+  },
+}));
 
 interface OfficeManagerProfileProps {
   userInfo: OfficeManagerInterface;
@@ -22,7 +32,8 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
   id,
 }) => {
   const dispatch = useDispatch();
-
+  const classes = useStyles();
+  const [birthDate, setBirthDate] = useState<Date>();
   const handleSubmit = (values: any, setSubmitting: any) => {
     let updateOfficeManagerData = {
       username: values.username,
@@ -31,7 +42,7 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
       email: values.email,
       first_name: values.first_name,
       last_name: values.last_name,
-      birthday_date: values.birthday_date,
+      birthday_date: birthDate,
       gender: values.gender,
       region: values.region,
       personal_code: values.personal_code,
@@ -44,18 +55,18 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
         dispatch(updateOfficeManager(response));
         dispatch(
           updateResponse({
-            severity: "success",
-            message: "پروفایل شما با موفقیت بروزرسانی شد..",
+            severity: 'success',
+            message: 'پروفایل شما با موفقیت بروزرسانی شد..',
             open: true,
           })
         );
       })
       .catch((error: any) => {
-        console.log("error: ", error);
+        console.log('error: ', error);
         dispatch(
           updateResponse({
-            severity: "error",
-            message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
+            severity: 'error',
+            message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
             open: true,
           })
         );
@@ -64,22 +75,24 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
   return (
     <Box
       sx={{
-        backgroundColor: "white",
+        backgroundColor: 'white',
         paddingBottom: 8,
         paddingTop: 8,
         paddingLeft: 12,
         paddingRight: 12,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         boxShadow: 3,
         borderRadius: 2,
-        height: "100vh",
+        height: '100vh',
       }}
     >
       <Grid container>
         <Grid item>
-          <Typography className={styles.infoType}>اطلاعات کاربر</Typography>
+          <Typography variant="h4" className={classes.marginButton}>
+            اطلاعات مسئول آموزش پرورش
+          </Typography>
         </Grid>
       </Grid>
       <Formik
@@ -114,7 +127,7 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -131,7 +144,7 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -148,7 +161,7 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -165,27 +178,14 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
               </Grid>
               <Grid item xs={6} sm={3}>
-                <Field name="birthday_date">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="تاریخ تولد"
-                      placeholder="تاریخ تولد"
-                      id="birthday_date"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
+                <Typography className={styles.infoType}>تاریخ تولد</Typography>
+                <DatePicker onChange={(e) => setBirthDate(e.value)} />
               </Grid>
               <Grid item xs={12} sm={3}>
                 <Field name="first_name">
@@ -199,7 +199,7 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -216,41 +216,7 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="password">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="گذرواژه"
-                      placeholder="گذرواژه"
-                      id="password"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="password_confirmation">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="تکرار گذرواژه"
-                      placeholder="تکرار گذرواژه"
-                      id="nationalCode"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>

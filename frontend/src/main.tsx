@@ -13,6 +13,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import ErrorPage from './pages/Error/Error';
 import List from './pages/Lists/Lists';
 import Login from './pages/Login/login';
+import RessetPassword from './pages/RessetPassword/RessetPassword';
 import ThemeProviderWrapper from './HOC/ThemeWrapper/wrapper';
 import CreateOfficeManager from './pages/createOfficeManager/CreateOfficeManager';
 import CreateSchoolManager from './pages/createSchoolManager/CreateSchoolManager';
@@ -26,6 +27,7 @@ import store from './store/store';
 import AuthenticationHOC from './HOC/authenticationHOC/authentifcationHOC';
 import Profile from './pages/profile/Profile';
 import UserInfo from './pages/UserInfo/UserInfo';
+import Requests from '../src/pages/Requests/Requests';
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/resset',
+    element: <RessetPassword />,
   },
   {
     path: '/dashboard',
@@ -80,6 +86,10 @@ const router = createBrowserRouter([
   {
     path: '/dashboard/:userType/:id',
     element: <UserInfo />,
+  },
+  {
+    path: '/dashboard/requests',
+    element: <Requests />,
   },
   {
     path: '/dashboard/createTeacher',
