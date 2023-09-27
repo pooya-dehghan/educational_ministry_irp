@@ -6,7 +6,7 @@ export interface OfficeManagerInterface {
   email: string;
   first_name: string;
   last_name: string;
-  birthday_date: Date;
+  birthday_date: Date | undefined;
   gender: string;
   // is_active: boolean;
   // created_date: Date;

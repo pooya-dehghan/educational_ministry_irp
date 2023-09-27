@@ -17,7 +17,7 @@ class IsSuperuserOrOwnStudent(BasePermission):
 class IsSuperuser(permissions.BasePermission):
     def has_permission(self, request, view):
         # Check if the user is a superuser or official manager
-        return request.user.is_admin  # or request.user.is_official manager
+        return request.user.is_authenticated and request.user.is_admin  # or request.user.is_official manager
         # we should complete this code after fixing registrations
 
 

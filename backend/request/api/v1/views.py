@@ -11,6 +11,11 @@ from .serializers import NotificationSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 
+from jalali_date import datetime2jalali
+from django.utils import timezone
+
+
+
 class ListRequest(APIView):
     permission_classes = [IsSuperuserOrOfficeManager]
 
@@ -192,7 +197,6 @@ class CancelRequest(APIView):
         else:
             return Response({'message': 'you are not student'})
 
-
 class SuperUserListRequest(APIView):
     permission_classes = [IsAdminUser]
 
@@ -200,3 +204,128 @@ class SuperUserListRequest(APIView):
         requests = Request.objects.all()
         ser_data = NotificationSerializer(requests, many=True)
         return Response({"data": ser_data.data}, status=status.HTTP_200_OK)
+
+class RequestForSchool(APIView):
+    # permission_classes = [IsSuperuser]
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows student  to send a request to office_manager.
+
+            The request should include the office_manager id.
+
+            """,
+        operation_summary="endpoint for send request to office_manager",
+        responses={
+            '201': 'created',
+        }
+    )
+    def post(self, request, pk):
+        try:
+            sender = Student.objects.get(id=request.user.id)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            receiver = OfficeManager.objects.get(id=pk)
+        except OfficeManager.DoesNotExist:
+            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        if sender.school2 is not None:
+            return Response({'message': 'you have school you cant send request again'})
+        if Request.objects.filter(sender=sender, status='s').exists():
+            return Response({'message': 'you have request been before'})
+        if Request.objects.filter(sender=sender, receiver=receiver).exists():
+            return Response({'message': 'you requested to this office manager before'})
+        req = Request.objects.create(sender=sender, receiver=receiver)
+        req.save()
+        dt = timezone.now()
+        dt = datetime2jalali(dt).strftime('%y-%m-%d')
+        dt = "14" + dt
+        dt = dt.replace('-', '')
+        id_number = req.id
+        str_id = ''
+        if id_number < 10:
+            str_id = "000" + str(id_number)
+        elif id_number < 100:
+            str_id = "00" + str(id_number)
+        elif id_number < 1000:
+            str_id = "0" + str(id_number)
+        elif id_number > 1000 or id_number == 1000:
+            str_id = str(id_number)
+        req.code = dt + str_id
+        req.save()
+        Notification.objects.create(sender=request.user, receiver=User.objects.get(id=pk), code=301)
+        return Response({'message': 'request sent successfully', 'request id': req.id, 'request.code': req.code},
+                        status=status.HTTP_201_CREATED)
+
+
+class StudentGetRequestStatus(APIView):
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows student to get status of his request.
+
+
+            The response will contain a success message including these fields:
+                - view seen - unseen
+                - status send - not send - pending - not accepted - accepted
+                when status is pending or accepted or not accepted means view is seen  
+                when status is not send means view is not seen 
+                when status is send sometime view is seen and sometime view is not seen  
+
+
+                """,
+        operation_summary="endpoint for get status of request",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
+    def get(self, request):
+        try:
+            student = Student.objects.get(id=request.user.id)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        stu_request = Request.objects.filter(sender=student).last()
+        if stu_request:
+            if stu_request.status == "s":
+                return Response({'status': "ارسال شده و در حال انتظار"},
+                                status=status.HTTP_200_OK)
+            if stu_request.status == "n":
+                return Response({'status': "ارسال نشده"}, status=status.HTTP_200_OK)
+            if stu_request.status == "na":
+                return Response({'status': "عدم تایید"}, status=status.HTTP_200_OK)
+            if stu_request.status == "a":
+                return Response({'status': "تایید"}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'you do not have any request'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class create(APIView):
+    def post(self, request,student_id, office_manager_id):
+        sender = Student.objects.filter(id=student_id).first()
+        receiver = OfficeManager.objects.filter(id=office_manager_id).first()
+        if sender and receiver:
+            req = Request.objects.create(sender=sender, receiver=receiver)
+            req.save()
+            dt = timezone.now()
+            dt = datetime2jalali(dt).strftime('%y-%m-%d')
+            dt = "14" + dt
+            dt = dt.replace('-', '')
+            id_number = req.id
+            str_id = ''
+            if id_number < 10:
+                str_id = "000" + str(id_number)
+            elif id_number < 100:
+                str_id = "00" + str(id_number)
+            elif id_number < 1000:
+                str_id = "0" + str(id_number)
+            elif id_number > 1000 or id_number == 1000:
+                str_id = str(id_number)
+            req.code = dt + str_id
+            req.save()
+            return Response({'message': 'create'})
+        return Response({'message': 'one id not correct'})
+
+class All(APIView):
+    def get(self,request):
+        req = Request.objects.all()
+        ser_data = RequestSerializer(instance=req, many=True)
+        return Response(ser_data.data, status=status.HTTP_200_OK)
+
+

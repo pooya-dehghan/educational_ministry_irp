@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Signup.module.css';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import styles from './RessetPassword.module.css';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import { makeStyles } from '@material-ui/styles';
-import { Container, Link } from '@mui/material';
+import Box from '@mui/material/Box';
+import { Container, Link, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useDispatch, useSelector } from 'react-redux';
-import { signUpAsync } from '../../features/signup/signUpThunk';
-import { signup } from '../../features/signup/signUpSlice';
-import { RootState } from '../../store/store'; // Make sure to provide the correct path
+import { useDispatch } from 'react-redux';
+import { changePasswordAsync } from '../../features/auth/authThunk';
+import { login } from '../../features/auth/authSlice';
+import { updateResponse } from '../../features/response/responseSlice';
+import { useNavigate } from 'react-router-dom';
+import * as tokenHandler from '../../utils/token/index';
 
 const useStyles = makeStyles({
   container: {
@@ -34,40 +35,52 @@ const useStyles = makeStyles({
   },
 });
 
-const Root = () => {
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.signup.isAuthenticated
-  );
-  const user = useSelector((state: RootState) => state.signup.user);
+const RessetPassword = () => {
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [password, setPassword] = useState('');
-  const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [studentNumber, setStudentNumber] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSignUp = () => {
+  const handleChangePassword = () => {
     setButtonLoading(true);
-    const signUpData = {
+    const changePasswordData = {
       username,
-      password,
-      password_confirmation,
-      student_id: studentNumber,
+      old_password: oldPassword,
+      new_password: newPassword,
+      new_password_confirm: newPasswordConfirm,
     };
-
-    (dispatch as any)(signUpAsync(signUpData))
+    (dispatch as any)(changePasswordAsync(changePasswordData))
       .unwrap()
       .then((response: any) => {
-        dispatch(signup(response.user)); // Dispatch your signup action to update the state
+        dispatch(login(response));
+        dispatch(
+          updateResponse({
+            severity: 'success',
+            message: 'شما با موفقیت رمز خود را تغییر دادید.',
+            open: true,
+          })
+        );
         setButtonLoading(false);
+        navigate('/dashboard');
       })
       .catch((error: any) => {
+        console.log('error: ', error);
+        dispatch(
+          updateResponse({
+            severity: 'error',
+            message:
+              'عملیات ناموفق لطفا از صحیح بودن اطلاعات اطمینان حاصل کنید.',
+            open: true,
+          })
+        );
         setButtonLoading(false);
       });
   };
-
   return (
     <>
       <div className={styles.container}>
@@ -96,7 +109,7 @@ const Root = () => {
           >
             <Grid container spacing={2} className={classes.container}>
               <Grid item xs={12} className={classes.loginHeader}>
-                ساخت حساب کاربری
+                تغییر رمز عبور
               </Grid>
               <Grid item xs={12} className={classes.textAreaContainer}>
                 <TextField
@@ -108,32 +121,31 @@ const Root = () => {
               </Grid>
               <Grid item xs={12} className={classes.textAreaContainer}>
                 <TextField
-                  dir="rtl"
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setOldPassword(e.target.value)}
                   id="outlined-basic"
-                  label="گذرواژه"
+                  label="گذرواژه قبلی"
                   variant="outlined"
                 />
               </Grid>
               <Grid item xs={12} className={classes.textAreaContainer}>
                 <TextField
-                  onChange={(e) => setPasswordConfirmation(e.target.value)}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   id="outlined-basic"
-                  label="تکرار گذر واژه"
+                  label="گذرواژه جدید"
                   variant="outlined"
                 />
               </Grid>
               <Grid item xs={12} className={classes.textAreaContainer}>
                 <TextField
-                  onChange={(e) => setStudentNumber(e.target.value)}
+                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
                   id="outlined-basic"
-                  label="شماره دانشجویی"
+                  label="تکرار گذرواژه جدید"
                   variant="outlined"
                 />
               </Grid>
               <Grid item xs={8} className={classes.buttonContainer}>
                 <Button
-                  onClick={() => handleSignUp()}
+                  onClick={() => handleChangePassword()}
                   variant="contained"
                   disabled={buttonLoading}
                 >
@@ -143,16 +155,18 @@ const Root = () => {
                       <Typography
                         style={{ fontSize: '13px', marginRight: '8px' }}
                       >
-                        در حال ثبت نام
+                        در حال تغییر رمز
                       </Typography>
                     </div>
                   ) : (
-                    'ثبت نام'
+                    'تغییر رمز'
                   )}
                 </Button>
               </Grid>
               <Grid item xs={12} className={classes.loginLink}>
-                <Link href="login">قبلا ثبت نام نموداه‌اید؟ وارد شوید</Link>
+                <Link href="signup">
+                  تا به حال ثبت نام نکرده اید ؟ ثبت نام کنید
+                </Link>
               </Grid>
             </Grid>
           </Box>
@@ -162,4 +176,4 @@ const Root = () => {
   );
 };
 
-export default Root;
+export default RessetPassword;

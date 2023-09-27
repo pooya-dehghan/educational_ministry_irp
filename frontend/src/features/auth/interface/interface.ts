@@ -12,6 +12,13 @@ export interface LoginResponse {
   };
 }
 
+export interface ChangePasswordRequest {
+  username: string;
+  old_password: string;
+  new_password: string;
+  new_password_confirm: string;
+}
+
 export interface VerifyRequest {
   token: string | null;
 }
