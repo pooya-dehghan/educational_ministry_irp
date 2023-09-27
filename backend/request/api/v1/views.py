@@ -15,7 +15,6 @@ from jalali_date import datetime2jalali
 from django.utils import timezone
 
 
-
 class ListRequest(APIView):
     permission_classes = [IsSuperuserOrOfficeManager]
 
@@ -197,13 +196,25 @@ class CancelRequest(APIView):
         else:
             return Response({'message': 'you are not student'})
 
+
 class SuperUserListRequest(APIView):
+
     permission_classes = [IsAdminUser]
 
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows super_user to get all request.
+                 """,
+        operation_summary="endpoint for get all request",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
     def get(self, request):
         requests = Request.objects.all()
         ser_data = NotificationSerializer(requests, many=True)
         return Response({"data": ser_data.data}, status=status.HTTP_200_OK)
+
 
 class RequestForSchool(APIView):
     # permission_classes = [IsSuperuser]
@@ -227,7 +238,8 @@ class RequestForSchool(APIView):
         try:
             receiver = OfficeManager.objects.get(region=region)
         except OfficeManager.DoesNotExist:
-            return Response({'message': 'منطقه ارسالی شما در حال حاضر یا مسءولی در سیستم ندارد یا اشتباه است'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'منطقه ارسالی شما در حال حاضر یا مسءولی در سیستم ندارد یا اشتباه است'},
+                            status=status.HTTP_404_NOT_FOUND)
         if sender.school2 is not None:
             return Response({'message': 'you have school you cant send request again'})
         if Request.objects.filter(sender=sender, status='s').exists():
@@ -295,42 +307,3 @@ class StudentGetRequestStatus(APIView):
                 return Response({'status': "تایید"}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'you do not have any request'}, status=status.HTTP_404_NOT_FOUND)
-
-
-class create(APIView):
-    def post(self, request,student_id, office_manager_id):
-        sender = Student.objects.filter(id=student_id).first()
-        receiver = OfficeManager.objects.filter(id=office_manager_id).first()
-        if sender and receiver:
-            req = Request.objects.create(sender=sender, receiver=receiver)
-            req.save()
-            dt = timezone.now()
-            dt = datetime2jalali(dt).strftime('%y-%m-%d')
-            dt = "14" + dt
-            dt = dt.replace('-', '')
-            id_number = req.id
-            str_id = ''
-            if id_number < 10:
-                str_id = "000" + str(id_number)
-            elif id_number < 100:
-                str_id = "00" + str(id_number)
-            elif id_number < 1000:
-                str_id = "0" + str(id_number)
-            elif id_number > 1000 or id_number == 1000:
-                str_id = str(id_number)
-            req.code = dt + str_id
-            req.save()
-            return Response({'message': 'create'})
-        return Response({'message': 'one id not correct'})
-
-
-
-
-
-class All(APIView):
-    def get(self,request):
-        req = Request.objects.all()
-        ser_data = RequestSerializer(instance=req, many=True)
-        return Response(ser_data.data, status=status.HTTP_200_OK)
-
-
