@@ -13,6 +13,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signUpAsync } from '../../features/signup/signUpThunk';
 import { signup } from '../../features/signup/signUpSlice';
 import { RootState } from '../../store/store'; // Make sure to provide the correct path
+import { updateResponse } from '../../features/response/responseSlice';
+import { useNavigate } from 'react-router-dom';
+import * as tokenHandler from '../../utils/token/index';
 
 const useStyles = makeStyles({
   container: {
@@ -36,6 +39,7 @@ const useStyles = makeStyles({
 
 const Root = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isAuthenticated = useSelector(
     (state: RootState) => state.signup.isAuthenticated
   );
@@ -47,14 +51,13 @@ const Root = () => {
   const [password_confirmation, setPasswordConfirmation] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
-
   const handleSignUp = () => {
     setButtonLoading(true);
     const signUpData = {
       username,
       password,
       password_confirmation,
-      student_id: studentNumber,
+      studentUniqueCode: studentNumber,
     };
 
     (dispatch as any)(signUpAsync(signUpData))
@@ -62,9 +65,28 @@ const Root = () => {
       .then((response: any) => {
         dispatch(signup(response.user)); // Dispatch your signup action to update the state
         setButtonLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'success',
+            message: 'شما با موفقیت در سامانه ثبت نام کردید.',
+            open: true,
+          })
+        );
+        tokenHandler.setToken(response.access);
+        tokenHandler.setRefreshToken(response.refresh);
+        setButtonLoading(false);
+        navigate('/dashboard');
       })
       .catch((error: any) => {
         setButtonLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'error',
+            message:
+              'عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.',
+            open: true,
+          })
+        );
       });
   };
 

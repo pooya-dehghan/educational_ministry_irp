@@ -16,6 +16,7 @@ export const RequestApi = {
       throw error;
     }
   },
+
   createRequest: async (
     createData: IRequest.CreateRequestsRequest
   ): Promise<IRequest.CreateRequestsResponse> => {
@@ -29,6 +30,7 @@ export const RequestApi = {
       throw error;
     }
   },
+
   getRequest: async (
     getData: IRequest.GetRequestsRequest
   ): Promise<IRequest.GetRequestsResponse> => {
@@ -41,24 +43,39 @@ export const RequestApi = {
       throw error;
     }
   },
+
   acceptRequest: async (
     acceptRequest: IRequest.AcceptRequestRequest
   ): Promise<IRequest.AcceptRequestResponse> => {
     try {
       const response = await axiosInstance.post(
-        `${API_BASE_URL}/request/api/v1/get/`
+        `${API_BASE_URL}/request/api/v1/accept/${acceptRequest.school_id}/${acceptRequest.request_id}/`
       );
       return response.data;
     } catch (error) {
       throw error;
     }
   },
+
   rejectRequest: async (
-    acceptRequest: IRequest.AcceptRequestRequest
-  ): Promise<IRequest.AcceptRequestResponse> => {
+    rejectRequest: IRequest.RejectRequestRequest
+  ): Promise<IRequest.RejectRequestResponse> => {
     try {
       const response = await axiosInstance.post(
-        `${API_BASE_URL}/request/api/v1/get/`
+        `${API_BASE_URL}/request/api/v1/reject/${rejectRequest.id}/`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  sendRequest: async (
+    sendData: IRequest.SendRequestRequest
+  ): Promise<IRequest.SendRequestResponse> => {
+    try {
+      const response = await axiosInstance.post(
+        `${API_BASE_URL}/request/api/v1/create/${sendData.region}/`
       );
       return response.data;
     } catch (error) {

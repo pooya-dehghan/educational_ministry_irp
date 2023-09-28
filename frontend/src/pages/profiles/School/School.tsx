@@ -12,11 +12,15 @@ import { updateSchool } from '../../../features/school/schoolSlice';
 import { updateResponse } from '../../../features/response/responseSlice';
 import { updateSchoolAsync } from '../../../features/school/schoolThunk';
 import { makeStyles } from '@mui/styles';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   marginButton: {
     marginBottom: '3rem', // Add margin here
     fontStyle: 'bold',
+  },
+  marginTop: {
+    marginTop: '2rem',
   },
 }));
 
@@ -28,8 +32,10 @@ interface SchoolProfileProps {
 const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const handleSubmit = (values: any, setSubmitting: any) => {
+    setButtonLoading(true);
     let updateSchoolData = {
       username: values.username,
       email: values.email,
@@ -42,20 +48,21 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
       capacity: values.capacity,
       stablished_year: values.stablished_year,
     };
-    (dispatch as any)(updateSchoolAsync({ id: id, ...updateSchoolData }))
+    (dispatch as any)(updateSchoolAsync({ schoolID: id, ...updateSchoolData }))
       .unwrap()
       .then((response: any) => {
+        setButtonLoading(false);
         dispatch(updateSchool(response));
         dispatch(
           updateResponse({
             severity: 'success',
-            message: 'پروفایل شما با موفقیت بروزرسانی شد..',
+            message: 'اطلاعات مدرسه با موفقیت بروزرسانی شد',
             open: true,
           })
         );
       })
       .catch((error: any) => {
-        console.log('error: ', error);
+        setButtonLoading(false);
         dispatch(
           updateResponse({
             severity: 'error',
@@ -211,13 +218,13 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                 </Field>
               </Grid>
               <Grid item xs={12} sm={3}>
-                <Field name="capacity">
+                <Field name="studentNumber">
                   {({ field, meta }: FieldProps) => (
                     <TextField
                       {...field}
                       label=" تعداد دانش آموز"
                       placeholder="تعداد دانش آموز "
-                      id="capacity"
+                      id="studentNumber"
                       autoFocus
                       variant="outlined"
                       fullWidth
@@ -261,6 +268,23 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                   )}
                 </Field>
               </Grid>
+              <Grid item xs={12} sm={3}>
+                <Field name="capacity">
+                  {({ field, meta }: FieldProps) => (
+                    <TextField
+                      {...field}
+                      label=" ظرفیت کارورز"
+                      placeholder=" ظرفیت کارورز"
+                      id="capacity"
+                      autoFocus
+                      variant="outlined"
+                      fullWidth
+                      error={meta.touched && meta.error ? true : false}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
+                    />
+                  )}
+                </Field>
+              </Grid>
             </Grid>
             <Grid container>
               <Grid item>
@@ -268,15 +292,34 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                   type="submit"
                   fullWidth
                   variant="contained"
+                  disabled={buttonLoading}
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  ویرایش
+                  {buttonLoading ? (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <CircularProgress size={24} color="inherit" />{' '}
+                      <Typography
+                        style={{ fontSize: '13px', marginRight: '8px' }}
+                      >
+                        در حال ویرایش
+                      </Typography>
+                    </div>
+                  ) : (
+                    'ویرایش'
+                  )}
                 </Button>
               </Grid>
             </Grid>
           </Form>
         )}
       </Formik>
+      <Grid container>
+        <Grid item>
+          <Typography variant="h4" className={classes.marginTop}>
+            فهرست دانشجویان کارورز
+          </Typography>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

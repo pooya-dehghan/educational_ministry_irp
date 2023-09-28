@@ -19,9 +19,20 @@ export interface GetAllRequestsRequest {}
 export interface GetAllRequestsResponse {}
 
 export interface AcceptRequestRequest {
-  
+  school_id: number;
+  request_id: number;
 }
 
-export interface AcceptRequestResponse {
+export interface AcceptRequestResponse {}
 
+export interface RejectRequestRequest {
+  id: number;
 }
+
+export interface RejectRequestResponse {}
+
+export interface SendRequestRequest {
+  region: number;
+}
+
+export interface SendRequestResponse {}
