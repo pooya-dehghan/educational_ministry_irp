@@ -134,6 +134,11 @@ class SchoolCreate(APIView):
         else:
             ser_data = SchoolSerializer(data=request.data)
             if ser_data.is_valid():
+                try:
+                    OfficeManager.objects.get(region=ser_data.validated_data["region"])
+                except OfficeManager.DoesNotExist:
+                    return Response({'message': 'office_manger with this region does not exist'},
+                                    status=status.HTTP_404_NOT_FOUND)
                 school = School.objects.create(
                     username=ser_data.validated_data["username"],
                     name=ser_data.validated_data["name"],
