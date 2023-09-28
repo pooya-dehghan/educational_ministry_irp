@@ -169,10 +169,15 @@ class SchoolList(APIView):
     @swagger_auto_schema(
         operation_description="""This endpoint allows office_manager to see a school list.
         
-
+            if you use schoollist/?capacity=1 the end point see your school with capacity greater than 0
+            if you use schoollist/ allows all school
             The response will contain a success message including these fields:
                 - name
                 - id
+                - username
+                - manager
+                - capacity
+                - city
                 of all school in region of this office_manager""",
         operation_summary="endpoint for office_manager see school list ",
         responses={
@@ -184,7 +189,10 @@ class SchoolList(APIView):
             office_manager = OfficeManager.objects.get(id=request.user.id)
         except OfficeManager.DoesNotExist:
             return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        capacity = request.query_params.get('capacity')
         school = office_manager.office_to_school
+        if capacity == '1':
+            school = school.filter(capacity__gt=0)
         ser_data = SchoolListSerializer(instance=school, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
 
