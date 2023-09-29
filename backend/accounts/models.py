@@ -24,7 +24,7 @@ class User(AbstractBaseUser):
     updated_date = models.DateTimeField(auto_now=True)
     avatar = models.ImageField(null=True, blank=True, upload_to='avatars/')
     is_admin = models.BooleanField(default=False)
-    personal_code = models.CharField(max_length=8, null=True, blank=True)
+    personal_code = models.CharField(max_length=8, null=True, blank=True, unique=True)
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["phone_number", "email"]
 
@@ -109,7 +109,7 @@ class StudentActivity(models.Model):
 
 
 class Professor(User):
-    professor_id = models.CharField(max_length=10)
+    professor_id = models.CharField(max_length=10, unique=True)
     is_science_committee = models.BooleanField(default=False)
 
     def __str__(self):
@@ -117,7 +117,7 @@ class Professor(User):
 
 
 class Student(User):
-    studentUniqueCode = models.CharField(max_length=10)
+    studentUniqueCode = models.CharField(max_length=10, unique=True)
     field = models.CharField(max_length=200, null=True, blank=True, default='computer')
     professor2 = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='professor_to_student', null=True,
                                    blank=True)

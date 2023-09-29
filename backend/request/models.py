@@ -18,7 +18,7 @@ class Request(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     body = models.CharField(max_length=200)
-    code = models.CharField(max_length=13, null=True, blank=True)
+    code = models.CharField(max_length=50, null=True, blank=True, unique=True)
 
     def save(self, *args, **kwargs):
         self.body = f'آقای {self.sender.username} با شماره دانشجویی {self.sender.studentUniqueCode} از دانشگاه تربیت دبیر شهید رجایی به اداره منطقه {self.receiver.region} درخواست داده است '
