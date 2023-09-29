@@ -38,7 +38,7 @@ class OfficeManagerSerializer(serializers.ModelSerializer):
 class SchoolListSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
-        fields = ('name', 'id')
+        fields = ('city', 'capacity', 'username', 'manager', 'id', 'name')
 
 class SchoolSerializer(serializers.ModelSerializer):  # Nested serializer for User model
 

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'report.apps.ReportConfig',
     'request.apps.RequestConfig',
     'notification.apps.NotificationConfig',
+    'task.apps.TaskConfig',
     # third part
     'drf_yasg',
     'rest_framework_simplejwt',
@@ -34,6 +35,8 @@ INSTALLED_APPS = [
     'professor.apps.ProfessorConfig',
     'corsheaders',
     'jalali_date',
+    'professorrequest.apps.ProfessorrequestConfig'
+
     #'django_rest_passwordreset',
 ]
 

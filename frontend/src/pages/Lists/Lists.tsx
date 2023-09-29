@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import ListOf from '../../components/ListOf/ListOf';
 import Grid from '@mui/material/Grid';
 import Dashboard from '../Dashboard/Dashboard';
@@ -21,7 +21,6 @@ import { useParams } from 'react-router-dom';
 
 const List = () => {
   const { userType } = useParams();
-  const location = useLocation();
   const dispatch = useDispatch();
 
   const allOfficeManagers = useSelector(
@@ -75,6 +74,7 @@ const List = () => {
       })
       .catch((error: any) => {});
   }, []);
+  
   const putRightListOnScreen = () => {
     return userType.trim() === 'officemanagers' ? (
       <Grid container spacing={2} className={styles.grid}>

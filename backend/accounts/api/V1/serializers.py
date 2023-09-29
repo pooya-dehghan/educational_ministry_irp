@@ -11,12 +11,13 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ["username", "password", "password_confirmation", "studentUniqueCode"]  # , "field", "professor2"]
+        fields = ["username", "password", "password_confirmation", "studentUniqueCode", 'professor2']  # , "field", "professor2"]
 
     def validate(self, attrs):
         password_confirmation = attrs.get("password_confirmation")
         password = attrs.get("password")
         username = attrs.get("username")
+        professor = attrs.get('professor2')
         if password != password_confirmation:
             raise serializers.ValidationError("passwords must be match")
         try:
@@ -26,7 +27,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
         if "@" in username:
             raise serializers.ValidationError("Email addresses are not allowed as usernames")
-
+        if professor is None:
+            raise serializers.ValidationError("professor 2 is required")
         return super().validate(attrs)
 
     def create(self, validated_data):

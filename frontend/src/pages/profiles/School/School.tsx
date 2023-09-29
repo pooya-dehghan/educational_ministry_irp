@@ -1,16 +1,28 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import styles from "./school.module.css";
-import { SchoolInterface } from "../../../interfaces/school.interface";
-import { useDispatch } from "react-redux";
-import { updateSchool } from "../../../features/school/schoolSlice";
-import { updateResponse } from "../../../features/response/responseSlice";
-import { updateSchoolAsync } from "../../../features/school/schoolThunk";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import styles from './school.module.css';
+import { SchoolInterface } from '../../../interfaces/school.interface';
+import { useDispatch } from 'react-redux';
+import { updateSchool } from '../../../features/school/schoolSlice';
+import { updateResponse } from '../../../features/response/responseSlice';
+import { updateSchoolAsync } from '../../../features/school/schoolThunk';
+import { makeStyles } from '@mui/styles';
+import CircularProgress from '@mui/material/CircularProgress';
+
+const useStyles = makeStyles((theme) => ({
+  marginButton: {
+    marginBottom: '3rem', // Add margin here
+    fontStyle: 'bold',
+  },
+  marginTop: {
+    marginTop: '2rem',
+  },
+}));
 
 interface SchoolProfileProps {
   userInfo: SchoolInterface;
@@ -19,8 +31,11 @@ interface SchoolProfileProps {
 
 const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
   const dispatch = useDispatch();
+  const classes = useStyles();
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const handleSubmit = (values: any, setSubmitting: any) => {
+    setButtonLoading(true);
     let updateSchoolData = {
       username: values.username,
       email: values.email,
@@ -30,28 +45,28 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
       teacher: values.teacher,
       region: values.region,
       city: values.city,
-      office_manager: values.office_manager,
       capacity: values.capacity,
       stablished_year: values.stablished_year,
     };
-    (dispatch as any)(updateSchoolAsync({ id: id, ...updateSchoolData }))
+    (dispatch as any)(updateSchoolAsync({ schoolID: id, ...updateSchoolData }))
       .unwrap()
       .then((response: any) => {
+        setButtonLoading(false);
         dispatch(updateSchool(response));
         dispatch(
           updateResponse({
-            severity: "success",
-            message: "پروفایل شما با موفقیت بروزرسانی شد..",
+            severity: 'success',
+            message: 'اطلاعات مدرسه با موفقیت بروزرسانی شد',
             open: true,
           })
         );
       })
       .catch((error: any) => {
-        console.log("error: ", error);
+        setButtonLoading(false);
         dispatch(
           updateResponse({
-            severity: "error",
-            message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
+            severity: 'error',
+            message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
             open: true,
           })
         );
@@ -60,22 +75,24 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
   return (
     <Box
       sx={{
-        backgroundColor: "white",
+        backgroundColor: 'white',
         paddingBottom: 8,
         paddingTop: 8,
         paddingLeft: 12,
         paddingRight: 12,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         boxShadow: 3,
         borderRadius: 2,
-        height: "100vh",
+        height: '100vh',
       }}
     >
       <Grid container>
         <Grid item>
-          <Typography className={styles.infoType}>اطلاعات کاربر</Typography>
+          <Typography variant="h4" className={classes.marginButton}>
+            اطلاعات مدرسه
+          </Typography>
         </Grid>
       </Grid>
       <Formik
@@ -110,7 +127,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -127,7 +144,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -144,7 +161,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -161,7 +178,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -178,7 +195,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -195,24 +212,24 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
               </Grid>
               <Grid item xs={12} sm={3}>
-                <Field name="capacity">
+                <Field name="studentNumber">
                   {({ field, meta }: FieldProps) => (
                     <TextField
                       {...field}
                       label=" تعداد دانش آموز"
                       placeholder="تعداد دانش آموز "
-                      id="capacity"
+                      id="studentNumber"
                       autoFocus
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -229,7 +246,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -246,58 +263,24 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
               </Grid>
               <Grid item xs={12} sm={3}>
-                <Field name="office_manager">
+                <Field name="capacity">
                   {({ field, meta }: FieldProps) => (
                     <TextField
                       {...field}
-                      label="مسئول اداره آموزش و پرورش"
-                      placeholder="مسئول اداره آموزش و پرورش"
-                      id="office_manager"
+                      label=" ظرفیت کارورز"
+                      placeholder=" ظرفیت کارورز"
+                      id="capacity"
                       autoFocus
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="password">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="گذرواژه"
-                      placeholder="گذرواژه"
-                      id="password"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="password_confirmation">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="تکرار گذرواژه"
-                      placeholder="تکرار گذرواژه"
-                      id="nationalCode"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -309,15 +292,34 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                   type="submit"
                   fullWidth
                   variant="contained"
+                  disabled={buttonLoading}
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  ویرایش
+                  {buttonLoading ? (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <CircularProgress size={24} color="inherit" />{' '}
+                      <Typography
+                        style={{ fontSize: '13px', marginRight: '8px' }}
+                      >
+                        در حال ویرایش
+                      </Typography>
+                    </div>
+                  ) : (
+                    'ویرایش'
+                  )}
                 </Button>
               </Grid>
             </Grid>
           </Form>
         )}
       </Formik>
+      <Grid container>
+        <Grid item>
+          <Typography variant="h4" className={classes.marginTop}>
+            فهرست دانشجویان کارورز
+          </Typography>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

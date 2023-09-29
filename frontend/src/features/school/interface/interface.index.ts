@@ -8,7 +8,9 @@ export interface CreateSchoolRequest {}
 
 export interface CreateSchoolResponse {}
 
-export interface UpdateSchoolRequest {}
+export interface UpdateSchoolRequest {
+  schoolID: number;
+}
 
 export interface UpdateSchoolResponse {}
 

@@ -3,6 +3,7 @@ import {
   LoginRequest,
   LoginResponse,
   VerifyRequest,
+  ChangePasswordRequest,
 } from './interface/interface';
 const API_BASE_URL = 'http://localhost:8000'; // Your API base URL
 
@@ -23,6 +24,17 @@ export const authApi = {
       const response = await axios.post(
         `${API_BASE_URL}/accounts/api/v1/jwt/verify/`,
         verifyData
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  changePassword: async (changePassData: ChangePasswordRequest) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/accounts/api/v1/changepassword/`,
+        changePassData
       );
       return response.data;
     } catch (error) {

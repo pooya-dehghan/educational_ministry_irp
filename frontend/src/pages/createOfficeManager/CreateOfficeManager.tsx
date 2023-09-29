@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -26,13 +26,8 @@ import { officeManagerValidationSchema } from "../../validations";
 const CreateOfficeManager: React.FC = () => {
   const dispatch = useDispatch();
   const [buttonLoading, setButtonLoading] = useState(false);
-  const handleButtonClick = () => {
-    setButtonLoading(true);
-    setTimeout(function () {
-      setButtonLoading(false);
-    }, 2000);
-  };
   const handleSubmit = (values: Values, setSubmitting: any) => {
+    setButtonLoading(true);
     let createOfficeManagerData = {
       region: values.region,
       password: values.password,
@@ -50,9 +45,9 @@ const CreateOfficeManager: React.FC = () => {
             open: true,
           })
         );
+        setButtonLoading(false);
       })
       .catch((error: any) => {
-        console.log("error: ", error);
         dispatch(
           updateResponse({
             severity: "error",
@@ -60,6 +55,7 @@ const CreateOfficeManager: React.FC = () => {
             open: true,
           })
         );
+        setButtonLoading(false);
       });
     setSubmitting(false);
   };
@@ -297,6 +293,7 @@ const CreateOfficeManager: React.FC = () => {
                       </Grid>
                     </Grid>
                     <Button
+                      onClick={() => handleSubmit()}
                       variant="contained"
                       disabled={buttonLoading}
                       type="submit"

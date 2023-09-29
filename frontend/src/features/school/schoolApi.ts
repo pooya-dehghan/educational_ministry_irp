@@ -43,8 +43,8 @@ export const schoolApi = {
     updateData: UpdateSchoolRequest
   ): Promise<UpdateSchoolResponse> => {
     try {
-      const response = await axiosInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/school/`,
+      const response = await axiosInstance.put(
+        `${API_BASE_URL}/school/api/v1/update/${updateData.schoolID}/`,
         updateData
       );
       return response.data;
@@ -73,6 +73,17 @@ export const schoolApi = {
       const response = await axiosInstance.get(
         `${API_BASE_URL}/school/api/v1/list/`,
         getData
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getAllOfRegionschools: async () => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/officemanager/api/v1/schoollist/`
       );
       return response.data;
     } catch (error) {

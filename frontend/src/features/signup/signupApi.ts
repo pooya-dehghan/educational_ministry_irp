@@ -6,6 +6,7 @@ export interface SignUpRequest {
   username: string;
   password: string;
   password_confirmation: string;
+  studentUniqueCode: string;
 }
 
 export interface SignUpResponse {

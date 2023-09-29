@@ -34,5 +34,7 @@ urlpatterns = [
     path('notification/', include('notification.urls', namespace='notification')),
     path('request/', include('request.urls', namespace='request')),
     path('attendance/', include('attendance.urls', namespace='attendance')),
+    path('task/', include('task.urls', namespace='task')),
+    path('professorrequest/', include('professorrequest.urls')),
 
 ]

@@ -19,6 +19,8 @@ class Notification(models.Model):
         ('u', 'unseen')
     )
     view = models.CharField(max_length=100, choices=seen_choices, default='u')
+    def __str__(self):
+        return f"notification{self.title} send by {self.sender.username} to {self.receiver.username}"
 
     def save(self, *args, **kwargs):
         if self.code == 301:

@@ -1,60 +1,63 @@
-import React, { useState, useEffect } from "react";
-import styles from "./Signup.module.css";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import CircularProgress from "@mui/material/CircularProgress";
-import { makeStyles } from "@material-ui/styles";
-import { Container, Link } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useDispatch, useSelector } from "react-redux";
-import { signUpAsync } from "../../features/signup/signUpThunk";
-import { signup } from "../../features/signup/signUpSlice";
-import { RootState } from "../../store/store"; // Make sure to provide the correct path
+import React, { useState, useEffect } from 'react';
+import styles from './Signup.module.css';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import { makeStyles } from '@material-ui/styles';
+import { Container, Link } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useDispatch, useSelector } from 'react-redux';
+import { signUpAsync } from '../../features/signup/signUpThunk';
+import { signup } from '../../features/signup/signUpSlice';
+import { RootState } from '../../store/store'; // Make sure to provide the correct path
+import { updateResponse } from '../../features/response/responseSlice';
+import { useNavigate } from 'react-router-dom';
+import * as tokenHandler from '../../utils/token/index';
 
 const useStyles = makeStyles({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100vw !important",
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100vw !important',
   },
   loginHeader: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   buttonContainer: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   textAreaContainer: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   loginLink: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 
 const Root = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isAuthenticated = useSelector(
     (state: RootState) => state.signup.isAuthenticated
   );
   const user = useSelector((state: RootState) => state.signup.user);
   const classes = useStyles();
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [password, setPassword] = useState("");
-  const [password_confirmation, setPasswordConfirmation] = useState("");
-  const [studentNumber, setStudentNumber] = useState("");
-  const isSmallScreen = useMediaQuery("(max-width: 600px)");
-
+  const [password, setPassword] = useState('');
+  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const [studentNumber, setStudentNumber] = useState('');
+  const isSmallScreen = useMediaQuery('(max-width: 600px)');
   const handleSignUp = () => {
     setButtonLoading(true);
     const signUpData = {
       username,
       password,
       password_confirmation,
-      student_id: studentNumber,
+      studentUniqueCode: studentNumber,
     };
 
     (dispatch as any)(signUpAsync(signUpData))
@@ -62,9 +65,28 @@ const Root = () => {
       .then((response: any) => {
         dispatch(signup(response.user)); // Dispatch your signup action to update the state
         setButtonLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'success',
+            message: 'شما با موفقیت در سامانه ثبت نام کردید.',
+            open: true,
+          })
+        );
+        tokenHandler.setToken(response.access);
+        tokenHandler.setRefreshToken(response.refresh);
+        setButtonLoading(false);
+        navigate('/dashboard');
       })
       .catch((error: any) => {
         setButtonLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'error',
+            message:
+              'عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.',
+            open: true,
+          })
+        );
       });
   };
 
@@ -74,9 +96,9 @@ const Root = () => {
         <Container
           component="main"
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Box
@@ -86,11 +108,11 @@ const Root = () => {
               px: 4,
               py: 6,
               marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: isSmallScreen ? "300px" : "500px",
-              justifyContent: "center",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              width: isSmallScreen ? '300px' : '500px',
+              justifyContent: 'center',
             }}
             className={styles.box}
           >
@@ -138,21 +160,21 @@ const Root = () => {
                   disabled={buttonLoading}
                 >
                   {buttonLoading ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <CircularProgress size={24} color="inherit" />{" "}
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <CircularProgress size={24} color="inherit" />{' '}
                       <Typography
-                        style={{ fontSize: "13px", marginRight: "8px" }}
+                        style={{ fontSize: '13px', marginRight: '8px' }}
                       >
                         در حال ثبت نام
                       </Typography>
                     </div>
                   ) : (
-                    "ثبت نام"
+                    'ثبت نام'
                   )}
                 </Button>
               </Grid>
               <Grid item xs={12} className={classes.loginLink}>
-                <Link href="#">قبلا ثبت نام نموداه‌اید؟ وارد شوید</Link>
+                <Link href="login">قبلا ثبت نام نموداه‌اید؟ وارد شوید</Link>
               </Grid>
             </Grid>
           </Box>

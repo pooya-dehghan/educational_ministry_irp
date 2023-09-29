@@ -93,13 +93,3 @@ class SeenNotification(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-class Create(APIView):
-    def post(self, request, pk):
-        sender = request.user
-        receiver = User.objects.filter(id=pk).first()
-        if sender and receiver:
-            Notification.objects.create(sender=sender, receiver=receiver, code=401)
-            return Response({'message': 'notification create'})
-        else:
-            return Response({'the pk is mistake and does not user with this id'})
-
