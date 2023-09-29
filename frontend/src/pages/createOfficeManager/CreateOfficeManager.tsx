@@ -297,7 +297,6 @@ const CreateOfficeManager: React.FC = () => {
                       </Grid>
                     </Grid>
                     <Button
-                      onClick={() => handleButtonClick()}
                       variant="contained"
                       disabled={buttonLoading}
                       type="submit"

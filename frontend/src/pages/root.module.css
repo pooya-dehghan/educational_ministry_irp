@@ -1,0 +1,27 @@
+.container {
+  /* background-image: url(https://s8.uupload.ir/files/signupbg_bdw.jpg); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100%; /* Set width to 100% */
+  min-height: 100vh; /* Use min-height to ensure container fills at least viewport height */
+  padding-bottom: 50px;
+}
+
+.header {
+  background-color: rgb(6, 194, 147);
+  width: 100%;
+  height: "auto";
+  display: "flex";
+  align-items: "center";
+  justify-content: "center";
+}
+
+.box {
+  background: rgb(63, 94, 251);
+  background: radial-gradient(
+    circle,
+    rgba(63, 94, 251, 1) 0%,
+    rgba(137, 13, 167, 1) 100%
+  );
+}
