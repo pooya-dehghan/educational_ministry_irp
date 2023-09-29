@@ -21,6 +21,12 @@ import SendIcon from '@mui/icons-material/Send';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import { getAllOfRegionSchoolsAsync } from '../../features/school/schoolThunk';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -37,15 +43,56 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const Request = () => {
+type Request = {
+  body: string;
+  code: string;
+  created: Date;
+  id: number;
+  receiver: number;
+  sender: number;
+  status: string;
+  updated: Date;
+};
+
+type School = {
+  capacity: number;
+  city: string;
+  id: number;
+  manager: string;
+  name: string;
+  username: string;
+};
+
+interface RequestProps {
+  acceptRequest: (schoolID: number, requestID: number) => void;
+  rejectRequest: (id: number) => void;
+  request: Request;
+}
+
+const Request: React.FC<RequestProps> = ({
+  acceptRequest,
+  rejectRequest,
+  request,
+}) => {
   const [expanded, setExpanded] = React.useState(false);
   const [seen, setSeen] = React.useState(false);
+  const [schoolID, setSchoolID] = React.useState<number>();
+  const [regionSchools, setRegionSchools] = React.useState([]);
+  const dispatch = useDispatch();
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
+  React.useEffect(() => {
+    (dispatch as any)(getAllOfRegionSchoolsAsync())
+      .unwrap()
+      .then((response: any) => {
+        setRegionSchools(response);
+      })
+      .catch((error: any) => {});
+  }, []);
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 600 }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -62,8 +109,7 @@ const Request = () => {
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          آقای/خانم مهدی باقری با شماره دانشجویی 389123928 از دانشگاه فرهنگیان
-          تربیت دبیر استان تهران برای منطقه 5 تهران درخواست کارورزی دارند.
+          {request.body}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -99,15 +145,37 @@ const Request = () => {
                 color="success"
                 variant="contained"
                 endIcon={<ThumbUpIcon />}
+                onClick={() => acceptRequest(schoolID, request.id)}
               >
                 موافقت
               </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id="school_id_provider">مدرسه</InputLabel>
+                <Select
+                  labelId="school_id_provider"
+                  id="demo-simple-select"
+                  value={schoolID}
+                  label="مدرسه"
+                  onChange={(value) => setSchoolID(value.target.value)}
+                >
+                  {regionSchools.length &&
+                    regionSchools.map((school: School, index) => {
+                      return (
+                        <MenuItem value={school.id}>{school.name}</MenuItem>
+                      );
+                    })}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
               <Button
                 color="error"
                 variant="contained"
                 endIcon={<ThumbDownAltIcon />}
+                onClick={() => rejectRequest(request.id)}
               >
                 مخالفت
               </Button>

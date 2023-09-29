@@ -8,7 +8,7 @@ export const NotificationApi = {
   ): Promise<IRequest.GetAllNotificationResponse> => {
     try {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}/notification/api/v1/list?unseen=1/`
+        `${API_BASE_URL}/notification/api/v1/list?unseen=1`
       );
       return response.data;
     } catch (error) {

@@ -54,3 +54,11 @@ export const deleteSchoolsAsync = createAsyncThunk(
     return response;
   }
 );
+
+export const getAllOfRegionSchoolsAsync = createAsyncThunk(
+  'school/getall',
+  async () => {
+    const response = await schoolApi.getAllOfRegionschools();
+    return response;
+  }
+);

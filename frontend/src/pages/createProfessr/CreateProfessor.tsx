@@ -37,7 +37,7 @@ const CreateProfessor: React.FC = () => {
         dispatch(
           updateResponse({
             severity: 'success',
-            message: 'مسئول مربوطه با موفقیت اضافه شد.',
+            message: 'استاد با موفقیت اضافه شد.',
             open: true,
           })
         );

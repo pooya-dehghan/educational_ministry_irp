@@ -5,6 +5,8 @@ import CustomAlert from '../../components/Alert/Alert';
 import { useDispatch } from 'react-redux';
 import { seenNotificationAsync } from '../../features/notifications/notificationThunk';
 import { updateResponse } from '../../features/response/responseSlice';
+import { Typography } from '@mui/material';
+import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 
 type Notif = {
   body: string;
@@ -55,18 +57,24 @@ const Notifications: React.FC<NotificationsProps> = ({ notifications }) => {
         width: '100%',
         height: 400,
         maxHeight: 400,
-        overflowY: 'scroll',
+        overflowY: 'auto',
         maxWidth: 360,
         bgcolor: 'background.paper',
         position: 'absolute',
         right: 0,
         bottom: 0,
+        borderRadius: '10px',
+        display: 'flex',
+        justifyContent: 'spaceBetween ',
+        alignItems: 'center',
+        flexDirection: 'column',
+
       }}
     >
-      {notifications.length &&
+      {notifications.length ? (
         notifications.map((notif, index) => {
           return (
-            <Grid item>
+            <Grid item sx={{ width: '100%' }}>
               <CustomAlert
                 alertBody={notif.body}
                 alertTitle={notif.title}
@@ -74,7 +82,17 @@ const Notifications: React.FC<NotificationsProps> = ({ notifications }) => {
               />
             </Grid>
           );
-        })}
+        })
+      ) : (
+        <Grid container>
+          <Grid item>
+            <Typography>هیچ نوتیفیکیشینی برای نمایش وجود ندارد</Typography>
+          </Grid>
+          <Grid item>
+            <NotificationImportantIcon />
+          </Grid>
+        </Grid>
+      )}
     </Box>
   );
 };
