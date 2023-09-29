@@ -36,6 +36,7 @@ import os
 from django.http import FileResponse
 from professorrequest.models import ProfessorRequest
 
+
 class DeleteProfile(APIView):
     @swagger_auto_schema(
         operation_description="""This endpoint allows to admin to delete user profile.
@@ -54,7 +55,7 @@ class DeleteProfile(APIView):
             user = User.objects.get(id=pk)
             # Code to handle when the user exists
         except User.DoesNotExist:
-            return Response({'message': 'user not exist'},status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'user not exist'}, status=status.HTTP_404_NOT_FOUND)
         user.is_active = False
         user.save()
         return Response({'message': 'user profile deleted'}, status=status.HTTP_200_OK)
@@ -68,6 +69,7 @@ class ApiUserRegistrationView(GenericAPIView):
         operation_description="""This endpoint allows users to register a new account.
 
         The request should include the user's information in the request body.
+         then user choices a professor send notification to professor and after accept by professor
 
         The response will contain a success message including these fields:
             - username
@@ -84,7 +86,7 @@ class ApiUserRegistrationView(GenericAPIView):
                 'password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'password_confirmation': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'studentUniqueCode': openapi.Schema(type=openapi.TYPE_STRING, default="3981231026"),
-                'professor2' :openapi.Schema(type=openapi.TYPE_OBJECT),
+                'professor2': openapi.Schema(type=openapi.TYPE_OBJECT),
             },
             required=['username', 'password', 'password_confirmation', 'studentUniqueCode', 'professor2'],
         ),
@@ -102,7 +104,7 @@ class ApiUserRegistrationView(GenericAPIView):
             student.set_password(serializer.validated_data['password'])
             student.save()
             professor_request = ProfessorRequest.objects.create(sender=student, receiver=professor,
-                                            body=f'{student.username} ادعا کرده است شما استاد آن هستید آیا تایید میکنید؟')
+                                                                body=f'{student.username} ادعا کرده است شما استاد آن هستید آیا تایید میکنید؟')
 
             professor_request.save()
             dt = timezone.now()
