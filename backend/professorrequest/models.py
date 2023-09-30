@@ -1,5 +1,7 @@
 from django.db import models
 from accounts.models import Student, Professor
+
+
 # Create your models here.
 
 
@@ -18,3 +20,7 @@ class ProfessorRequest(models.Model):
 
     def __str__(self) -> str:
         return f'{self.sender} sent request to {self.receiver} and id = {self.id}'
+
+    def save(self, *args, **kwargs):
+        self.body = f'آقای {self.sender.username} با شماره دانشجویی {self.sender.studentUniqueCode} از دانشگاه تربیت دبیر شهید رجایی ادعا کرده است دانشجوی شما هست  '
+        super().save(*args, **kwargs)

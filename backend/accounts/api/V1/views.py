@@ -103,8 +103,7 @@ class ApiUserRegistrationView(GenericAPIView):
                                              , studentUniqueCode=serializer.validated_data['studentUniqueCode'])
             student.set_password(serializer.validated_data['password'])
             student.save()
-            professor_request = ProfessorRequest.objects.create(sender=student, receiver=professor,
-                                                                body=f'{student.username} ادعا کرده است شما استاد آن هستید آیا تایید میکنید؟')
+            professor_request = ProfessorRequest.objects.create(sender=student, receiver=professor)
 
             professor_request.save()
             dt = timezone.now()
