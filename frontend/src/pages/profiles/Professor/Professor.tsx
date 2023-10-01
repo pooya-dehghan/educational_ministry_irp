@@ -58,7 +58,6 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
         );
       })
       .catch((error: any) => {
-        console.log('error: ', error);
         dispatch(
           updateResponse({
             severity: 'error',

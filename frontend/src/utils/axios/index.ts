@@ -34,9 +34,12 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
       const refresh = getRefreshToken();
       try {
-        const response = await axios.post('/accounts/api/v1/jwt/refresh/', {
-          refresh,
-        });
+        const response = await axios.post(
+          'http://localhost:8000/accounts/api/v1/jwt/refresh/',
+          {
+            refresh,
+          }
+        );
         console.log('interceptor');
         const newAccessToken = response.data.access;
         setToken(newAccessToken);

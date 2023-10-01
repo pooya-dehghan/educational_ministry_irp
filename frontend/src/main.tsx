@@ -39,7 +39,7 @@ import Requests from '../src/pages/Requests/Requests';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: (
       <AuthenticationHOC>
         <RootPage />
@@ -48,19 +48,19 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/signup",
+    path: '/signup',
     element: <SignUp />,
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
   },
   {
-    path: "/resset",
+    path: '/resset',
     element: <RessetPassword />,
   },
   {
-    path: "/dashboard",
+    path: '/dashboard',
     element: (
       <AuthenticationHOC>
         <Dashboard />
@@ -68,39 +68,39 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/dashboard/list/:userType",
+    path: '/dashboard/list/:userType',
     element: <List />,
   },
   {
-    path: "/dashboard/createOfficeManager",
+    path: '/dashboard/createOfficeManager',
     element: <CreateOfficeManager />,
   },
   {
-    path: "/dashboard/createSchool",
+    path: '/dashboard/createSchool',
     element: <CreateSchool />,
   },
   {
-    path: "/dashboard/createSchoolManager",
+    path: '/dashboard/createSchoolManager',
     element: <CreateSchoolManager />,
   },
   {
-    path: "/dashboard/createProfessor",
+    path: '/dashboard/createProfessor',
     element: <CreateProfessor />,
   },
   {
-    path: "dashboard/profile",
+    path: 'dashboard/profile',
     element: <Profile />,
   },
   {
-    path: "/dashboard/:userType/:id",
+    path: '/dashboard/:userType/:id',
     element: <UserInfo />,
   },
   {
-    path: "/dashboard/requests",
+    path: '/dashboard/requests',
     element: <Requests />,
   },
   {
-    path: "/dashboard/createTeacher",
+    path: '/dashboard/createTeacher',
     element: (
       <AuthenticationHOC>
         <CreateTeacher />
@@ -109,7 +109,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-const rootEl = document.getElementById("root") as HTMLElement;
+const rootEl = document.getElementById('root') as HTMLElement;
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
     <Suspense fallback={<h1>Still Loading…</h1>}>

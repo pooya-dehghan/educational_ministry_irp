@@ -86,7 +86,9 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
       gender: values.gender,
       personal_code: values.personal_code,
     };
-    (dispatch as any)(updatestudentAsync({ id: id, ...updateStudentData }))
+    (dispatch as any)(
+      updatestudentAsync({ studentID: id, ...updateStudentData })
+    )
       .unwrap()
       .then((response: any) => {
         dispatch(updatestudent(response));

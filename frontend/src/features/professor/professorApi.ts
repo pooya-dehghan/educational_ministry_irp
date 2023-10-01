@@ -41,7 +41,7 @@ export const professorApi = {
   ): Promise<UpdateProfessorResponse> => {
     try {
       const response = await axiosInstance.put(
-        `${API_BASE_URL}/professor/api/v1/update/${updateData.id}`,
+        `${API_BASE_URL}/professor/api/v1/update/${updateData.id}/`,
         updateData
       );
       return response.data;
