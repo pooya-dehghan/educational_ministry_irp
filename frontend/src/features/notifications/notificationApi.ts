@@ -6,9 +6,13 @@ export const NotificationApi = {
   getAllNotification: async (
     getData: IRequest.GetAllNotificationRequest
   ): Promise<IRequest.GetAllNotificationResponse> => {
+    let apiNotif = `${API_BASE_URL}/notification/api/v1/list?unseen=1&seen=1`;
+    if(getData.unSeen){
+      apiNotif = `${API_BASE_URL}/notification/api/v1/list?unseen=1`;
+    } 
     try {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}/notification/api/v1/list?unseen=1`
+        apiNotif
       );
       return response.data;
     } catch (error) {

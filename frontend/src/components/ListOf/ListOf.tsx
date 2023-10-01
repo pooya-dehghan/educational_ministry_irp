@@ -16,6 +16,12 @@ import { deleteSchoolsAsync } from "../../features/school/schoolThunk";
 import { deleteTeachersAsync } from "../../features/teacher/teacherThunk";
 import { deletestudentsAsync } from "../../features/student/studentThunk";
 import { useDispatch } from "react-redux";
+import OfficeManagerProfile from "../../pages/profiles/OfficeManager/OfficeManager";
+import ProfessorProfile from "../../pages/profiles/Professor/Professor";
+import SchoolProfile from "../../pages/profiles/School/School";
+import StudentProfile from "../../pages/profiles/Student/Student";
+import TeacherProfile from "../../pages/profiles/Teacher/Teacher";
+import { useNavigate } from "react-router-dom";
 
 export default function ListOf({
   type = "officemanager",
@@ -24,6 +30,26 @@ export default function ListOf({
 }) {
   const [openPermissionModal, setOpenPermissionModal] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleInfoButton = (id: number) => {
+    switch (type) {
+      case "officemanager":
+        navigate(`/dashboard/officemanager/${id}`);
+        break;
+      case "professor":
+        navigate(`/dashboard/professor/${id}`);
+        break;
+      case "school":
+        navigate(`/dashboard/school/${id}`);
+        break;
+      case "student":
+        navigate(`/dashboard/student/${id}`);
+        break;
+      case "teacher":
+        navigate(`/dashboard/teacher/${id}`);
+        break;
+    }
+  };
   const handleDeleteButton = () => {
     switch (type) {
       case "officemanager":
@@ -98,7 +124,11 @@ export default function ListOf({
           </Typography>
         </CardContent>
         <CardActions>
-          <Button variant="contained" size="small">
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => handleInfoButton(id)}
+          >
             اطلاعات
           </Button>
           <Button
