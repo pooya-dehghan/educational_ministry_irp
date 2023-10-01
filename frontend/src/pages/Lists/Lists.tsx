@@ -1,23 +1,24 @@
-import { useEffect } from 'react';
-import ListOf from '../../components/ListOf/ListOf';
-import Grid from '@mui/material/Grid';
-import Dashboard from '../Dashboard/Dashboard';
-import { useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { getAllOfficeManagersAsync } from '../../features/officemanager/officemanagerThunk';
-import { getAllSchoolsAsync } from '../../features/school/schoolThunk';
-import { getAllProfessorsAsync } from '../../features/professor/professorThunk';
-import { getAllTeachersAsync } from '../../features/teacher/teacherThunk';
-import { getAllstudentsAsync } from '../../features/student/studentThunk';
-import { getAllOfficeManagers } from '../../features/officemanager/officemanagerSlice';
-import { getAllProfessors } from '../../features/professor/professorSlice';
-import { getAllSchools } from '../../features/school/schoolSlice';
-import { getAllstudents } from '../../features/student/studentSlice';
-import { getAllTeachers } from '../../features/teacher/teacherSlice';
-import styles from './Lists.module.css';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { useParams } from 'react-router-dom';
+import { useEffect } from "react";
+import ListOf from "../../components/ListOf/ListOf";
+import Grid from "@mui/material/Grid";
+import Dashboard from "../Dashboard/Dashboard";
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getAllOfficeManagersAsync } from "../../features/officemanager/officemanagerThunk";
+import { getAllSchoolsAsync } from "../../features/school/schoolThunk";
+import { getAllProfessorsAsync } from "../../features/professor/professorThunk";
+import { getAllTeachersAsync } from "../../features/teacher/teacherThunk";
+import { getAllstudentsAsync } from "../../features/student/studentThunk";
+import { getAllNotificationsAsync } from "../../features/notifications/notificationThunk";
+import { getAllOfficeManagers } from "../../features/officemanager/officemanagerSlice";
+import { getAllProfessors } from "../../features/professor/professorSlice";
+import { getAllSchools } from "../../features/school/schoolSlice";
+import { getAllstudents } from "../../features/student/studentSlice";
+import { getAllTeachers } from "../../features/teacher/teacherSlice";
+import styles from "./Lists.module.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { useParams } from "react-router-dom";
 
 const List = () => {
   const { userType } = useParams();
@@ -74,9 +75,9 @@ const List = () => {
       })
       .catch((error: any) => {});
   }, []);
-  
+
   const putRightListOnScreen = () => {
-    return userType.trim() === 'officemanagers' ? (
+    return userType.trim() === "officemanagers" ? (
       <Grid container spacing={2} className={styles.grid}>
         {allOfficeManagers.map((office_manager: any, index) => {
           return (
@@ -88,9 +89,9 @@ const List = () => {
               />
             </Grid>
           );
-        })}{' '}
+        })}{" "}
       </Grid>
-    ) : userType.trim() === 'professors' ? (
+    ) : userType.trim() === "professors" ? (
       <Grid container spacing={2} className={styles.grid}>
         {allProfessors.map((professor: any, index) => {
           return (
@@ -102,9 +103,9 @@ const List = () => {
               />
             </Grid>
           );
-        })}{' '}
+        })}{" "}
       </Grid>
-    ) : userType.trim() === 'schools' ? (
+    ) : userType.trim() === "schools" ? (
       <Grid container spacing={2} className={styles.grid}>
         {allSchools.map((school: any, index) => {
           return (
@@ -112,9 +113,9 @@ const List = () => {
               <ListOf type="school" username={school.username} id={school.id} />
             </Grid>
           );
-        })}{' '}
+        })}{" "}
       </Grid>
-    ) : userType.trim() === 'teachers' ? (
+    ) : userType.trim() === "teachers" ? (
       <Grid container spacing={2} className={styles.grid}>
         {allTeachers.map((teacher: any, index) => {
           return (
@@ -126,9 +127,9 @@ const List = () => {
               />
             </Grid>
           );
-        })}{' '}
+        })}{" "}
       </Grid>
-    ) : userType.trim() === 'students' ? (
+    ) : userType.trim() === "students" ? (
       <Grid container spacing={2} className={styles.grid}>
         {allStudents.map((student: any, index) => {
           return (
@@ -140,7 +141,7 @@ const List = () => {
               />
             </Grid>
           );
-        })}{' '}
+        })}{" "}
       </Grid>
     ) : (
       <></>

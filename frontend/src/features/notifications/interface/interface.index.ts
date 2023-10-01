@@ -2,7 +2,9 @@ export interface GetNotificationRequest {}
 
 export interface GetNotificationResponse {}
 
-export interface GetAllNotificationRequest {}
+export interface GetAllNotificationRequest {
+  unSeen : boolean
+}
 
 export interface GetAllNotificationResponse {}
 

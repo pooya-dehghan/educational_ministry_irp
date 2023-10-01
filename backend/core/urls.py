@@ -4,7 +4,7 @@ from django.urls import re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-
+from .views import test
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -35,5 +35,7 @@ urlpatterns = [
     path('request/', include('request.urls', namespace='request')),
     path('attendance/', include('attendance.urls', namespace='attendance')),
     path('task/', include('task.urls', namespace='task')),
+    path('professorrequest/', include('professorrequest.urls')),
+    path('test/', test, name="test")
 
 ]

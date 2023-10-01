@@ -12,6 +12,8 @@ from rest_framework.views import APIView
 from ...models import User
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.tokens import default_token_generator
+from jalali_date import datetime2jalali
+from django.utils import timezone
 from django.core.mail import send_mail
 from .serializers import EmailSerializer, ChangePasswordSerializer, ChangePasswordSerializerOriginal
 from rest_framework.permissions import IsAuthenticated
@@ -32,6 +34,7 @@ from notification.serializers import NotificationSerializer
 from django.core.files.storage import default_storage
 import os
 from django.http import FileResponse
+from professorrequest.models import ProfessorRequest
 
 
 class DeleteProfile(APIView):
@@ -52,7 +55,7 @@ class DeleteProfile(APIView):
             user = User.objects.get(id=pk)
             # Code to handle when the user exists
         except User.DoesNotExist:
-            return Response({'message': 'user not exist'},status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'user not exist'}, status=status.HTTP_404_NOT_FOUND)
         user.is_active = False
         user.save()
         return Response({'message': 'user profile deleted'}, status=status.HTTP_200_OK)
@@ -66,6 +69,7 @@ class ApiUserRegistrationView(GenericAPIView):
         operation_description="""This endpoint allows users to register a new account.
 
         The request should include the user's information in the request body.
+         then user choices a professor send notification to professor and after accept by professor
 
         The response will contain a success message including these fields:
             - username
@@ -82,8 +86,9 @@ class ApiUserRegistrationView(GenericAPIView):
                 'password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'password_confirmation': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'studentUniqueCode': openapi.Schema(type=openapi.TYPE_STRING, default="3981231026"),
+                'professor2': openapi.Schema(type=openapi.TYPE_OBJECT),
             },
-            required=['username', 'password', 'password_confirmation', 'studentUniqueCode'],
+            required=['username', 'password', 'password_confirmation', 'studentUniqueCode', 'professor2'],
         ),
         responses={
             '201': 'created',
@@ -93,10 +98,31 @@ class ApiUserRegistrationView(GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
+            professor = serializer.validated_data['professor2']
             student = Student.objects.create(username=serializer.validated_data['username']
                                              , studentUniqueCode=serializer.validated_data['studentUniqueCode'])
             student.set_password(serializer.validated_data['password'])
             student.save()
+            professor_request = ProfessorRequest.objects.create(sender=student, receiver=professor)
+
+            professor_request.save()
+            dt = timezone.now()
+            dt = datetime2jalali(dt).strftime('%y-%m-%d')
+            dt = "14" + dt
+            dt = dt.replace('-', '')
+            id_number = professor_request.id
+            str_id = ''
+            if id_number < 10:
+                str_id = "000" + str(id_number)
+            elif id_number < 100:
+                str_id = "00" + str(id_number)
+            elif id_number < 1000:
+                str_id = "0" + str(id_number)
+            elif id_number > 1000 or id_number == 1000:
+                str_id = str(id_number)
+            professor_request.code = dt + str_id
+            professor_request.save()
+            Notification.objects.create(sender=student, receiver=professor, code=601)
             user = User.objects.get(pk=student.id)
             if user:
                 refresh = RefreshToken.for_user(user=user)
@@ -106,6 +132,7 @@ class ApiUserRegistrationView(GenericAPIView):
                     'id': student.id,
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
+                    'message': f'send request to {professor.username}'
 
                 }
             return Response(data=data, status=status.HTTP_201_CREATED)

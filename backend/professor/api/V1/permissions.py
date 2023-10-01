@@ -1,4 +1,5 @@
 from rest_framework.permissions import BasePermission
+from accounts.models import Professor
 
 
 class IsSuperuser(BasePermission):
@@ -14,3 +15,12 @@ class IsSuperuserOrOwnProfessor(BasePermission):
             return True
         else:
             return False
+
+
+class IsSuperuserOrProfessor(BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.is_admin:
+            return True
+        elif request.user.is_authenticated and Professor.objects.filter(id=request.user.id).exists():
+            return True
+        return False
