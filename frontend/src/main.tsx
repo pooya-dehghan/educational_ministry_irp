@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.module.css';
 import {
@@ -8,25 +8,33 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import RootPage from './pages/root';
-import SignUp from './pages/SignUp/Signup';
-import Dashboard from './pages/Dashboard/Dashboard';
-import ErrorPage from './pages/Error/Error';
-import List from './pages/Lists/Lists';
-import Login from './pages/Login/login';
-import RessetPassword from './pages/RessetPassword/RessetPassword';
-import ThemeProviderWrapper from './HOC/ThemeWrapper/wrapper';
-import CreateOfficeManager from './pages/createOfficeManager/CreateOfficeManager';
-import CreateSchoolManager from './pages/createSchoolManager/CreateSchoolManager';
-import CreateSchool from './pages/createSchool/CreateSchool';
-import CreateTeacher from './pages/createTeacher/CreateTeacher';
-import CreateProfessor from './pages/createProfessr/CreateProfessor';
-import AlertWrapper from './HOC/alertWrapper/alertWrapper';
+const SignUp = lazy(() => import('./pages/SignUp/Signup'));
+const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard'));
+const ErrorPage = lazy(() => import('./pages/Error/Error'));
+const List = lazy(() => import('./pages/Lists/Lists'));
+const Login = lazy(() => import('./pages/Login/login'));
+const RessetPassword = lazy(
+  () => import('./pages/RessetPassword/RessetPassword')
+);
+const ThemeProviderWrapper = lazy(() => import('./HOC/ThemeWrapper/wrapper'));
+const CreateOfficeManager = lazy(
+  () => import('./pages/createOfficeManager/CreateOfficeManager')
+);
+const CreateSchoolManager = lazy(
+  () => import('./pages/createSchoolManager/CreateSchoolManager')
+);
+const CreateSchool = lazy(() => import('./pages/createSchool/CreateSchool'));
+const CreateTeacher = lazy(() => import('./pages/createTeacher/CreateTeacher'));
+const CreateProfessor = lazy(
+  () => import('./pages/createProfessr/CreateProfessor')
+);
+const AlertWrapper = lazy(() => import('./HOC/alertWrapper/alertWrapper'));
 import './index.module.css';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import AuthenticationHOC from './HOC/authenticationHOC/authentifcationHOC';
-import Profile from './pages/profile/Profile';
-import UserInfo from './pages/UserInfo/UserInfo';
+const Profile = lazy(() => import('./pages/profile/Profile'));
+const UserInfo = lazy(() => import('./pages/UserInfo/UserInfo'));
 import Requests from '../src/pages/Requests/Requests';
 
 const router = createBrowserRouter([
@@ -104,12 +112,14 @@ const router = createBrowserRouter([
 const rootEl = document.getElementById('root') as HTMLElement;
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <AlertWrapper>
-        <ThemeProviderWrapper>
-          <RouterProvider router={router} />
-        </ThemeProviderWrapper>
-      </AlertWrapper>
-    </Provider>
+    <Suspense fallback={<h1>Still Loading…</h1>}>
+      <Provider store={store}>
+        <AlertWrapper>
+          <ThemeProviderWrapper>
+            <RouterProvider router={router} />
+          </ThemeProviderWrapper>
+        </AlertWrapper>
+      </Provider>
+    </Suspense>
   </React.StrictMode>
 );

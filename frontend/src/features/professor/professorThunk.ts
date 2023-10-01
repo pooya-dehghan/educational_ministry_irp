@@ -41,8 +41,8 @@ export const getProfessorAsync = createAsyncThunk(
 
 export const getAllProfessorsAsync = createAsyncThunk(
   'professor/getall',
-  async (getData: GetAllProfessorsRequest) => {
-    const response = await professorApi.getAllProfessors(getData);
+  async () => {
+    const response = await professorApi.getAllProfessors();
     return response;
   }
 );

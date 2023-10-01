@@ -14,14 +14,10 @@ import {
 const API_BASE_URL = 'http://localhost:8000'; // Your API base URL
 
 export const professorApi = {
-  getAllProfessors: async (
-    getData: GetAllProfessorsRequest
-  ): Promise<GetAllProfessorResponse> => {
+  getAllProfessors: async (): Promise<GetAllProfessorResponse> => {
     try {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}/professor/api/v1/list/`,
-        getData
-      );
+        `${API_BASE_URL}/professor/api/v1/list/`);
       return response.data;
     } catch (error) {
       throw error;
