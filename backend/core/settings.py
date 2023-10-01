@@ -169,3 +169,15 @@ CORS_ORIGIN_WHITELIST = [
 SWAGGER_SETTINGS = {
        'DEFAULT_INFO': 'core.urls.swagger_info',
    }
+
+
+# caching with redis config
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/1',  # Redis server address
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
