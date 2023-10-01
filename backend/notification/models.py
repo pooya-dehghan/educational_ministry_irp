@@ -19,6 +19,7 @@ class Notification(models.Model):
         ('u', 'unseen')
     )
     view = models.CharField(max_length=100, choices=seen_choices, default='u')
+
     def __str__(self):
         return f"notification{self.title} send by {self.sender.username} to {self.receiver.username}"
 
@@ -32,7 +33,10 @@ class Notification(models.Model):
         elif self.code == 501:
             self.title = 'تایید شدن درخواست'
             self.body = f'آقای {self.sender.username} درخواست شما را تایید کرده است '
-
+        elif self.code == 601:
+            self.title = 'درخواست به استاد توسط دانشجو'
+            self.body = f'آقای {self.sender.username} ادعا کرده است دانشجوی شما هست'
+        elif self.code == 701:
+            self.title = 'تایید شدن درخواست'
+            self.body = f'آقای {self.sender.username} درخواست شما را تایید کرد'
         super().save(*args, **kwargs)
-
-
