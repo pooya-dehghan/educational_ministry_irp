@@ -45,7 +45,7 @@ export const studentApi = {
     updateData: UpdatestudentRequest
   ): Promise<UpdatestudentResponse> => {
     try {
-      const response = await axiosInstance.update(
+      const response = await axiosInstance.put(
         `${API_BASE_URL}/student/api/v1/update/${updateData.studentID}/`,
         updateData
       );
