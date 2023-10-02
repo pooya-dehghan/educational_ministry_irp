@@ -24,7 +24,7 @@ const Requests = () => {
       .catch((error: any) => {});
   }, []);
 
-  const acceptRequest = (schoolID: number, requestID: number) => {
+  const acceptRequest = (schoolID: number | undefined, requestID: number) => {
     (dispatch as any)(
       acceptRequestAsync({ school_id: schoolID, request_id: requestID })
     )

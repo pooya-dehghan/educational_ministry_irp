@@ -11,13 +11,11 @@ interface AlertWrapperProps {
 }
 
 const AlertWrapper: React.FC<AlertWrapperProps> = ({ children }) => {
-  // const [open, setOpen] = useState(false);
   const message = useSelector((state: RootState) => state.response.message);
   const severity = useSelector((state: RootState) => state.response.severity);
   const open = useSelector((state: RootState) => state.response.open);
   const dispatch = useDispatch();
 
-  console.log('');
   const handleClose = () => {
     dispatch(
       updateResponse({

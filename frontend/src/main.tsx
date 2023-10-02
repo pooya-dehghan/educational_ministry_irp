@@ -28,7 +28,7 @@ const CreateTeacher = lazy(() => import('./pages/createTeacher/CreateTeacher'));
 const CreateProfessor = lazy(
   () => import('./pages/createProfessr/CreateProfessor')
 );
-const AlertWrapper = lazy(() => import('./HOC/alertWrapper/alertWrapper'));
+import AlertWrapper from './HOC/alertWrapper/alertWrapper';
 import './index.module.css';
 import { Provider } from 'react-redux';
 import store from './store/store';
@@ -112,14 +112,14 @@ const router = createBrowserRouter([
 const rootEl = document.getElementById('root') as HTMLElement;
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
-    <Suspense fallback={<h1>Still Loading…</h1>}>
-      <Provider store={store}>
-        <AlertWrapper>
+    <Provider store={store}>
+      <AlertWrapper>
+        <Suspense fallback={<h1>Still Loading…</h1>}>
           <ThemeProviderWrapper>
             <RouterProvider router={router} />
           </ThemeProviderWrapper>
-        </AlertWrapper>
-      </Provider>
-    </Suspense>
+        </Suspense>
+      </AlertWrapper>
+    </Provider>
   </React.StrictMode>
 );
