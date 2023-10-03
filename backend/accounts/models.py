@@ -125,6 +125,8 @@ class Student(User):
                                 blank=True)
     teacher2 = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_to_student', null=True,
                                  blank=True)
+    is_reject = models.BooleanField(default=False)
+    rejected_professors = models.CharField(max_length=10000, null=True, blank=True)
 
     def __str__(self):
         return f"{self.username} - {self.studentUniqueCode}-{self.id}"
