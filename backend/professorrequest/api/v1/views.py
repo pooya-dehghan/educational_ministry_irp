@@ -110,3 +110,39 @@ class AcceptRequest(APIView):
             return Response({'message': 'this request accepted'})
         else:
             return Response({'message': 'this student have professor before'})
+
+
+class RejectRequest(APIView):
+    permission_classes = [IsSuperuserOrOwnProfessor]
+
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows professor to reject a request of one student.
+
+             The request should include the id of request
+             this function check student have not any professor and this professor go to filled professor of student
+             """,
+        operation_summary="endpoint for accept request and assign student to one school",
+        responses={
+            '200': 'ok',
+            '400': 'bad request',
+            '404': 'not found'
+        }
+    )
+    def post(self, request, pk):
+        try:
+            req = ProfessorRequest.objects.get(id=pk)
+        except ProfessorRequest.DoesNotExist:
+            return Response({'message': 'professor_request does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        student = req.sender
+        professor = req.receiver
+        self.check_object_permissions(request, professor)
+        if student.professor2 is None:
+            student.professor2 = None
+            student.save()
+            Notification.objects.create(sender=User.objects.get(id=professor.id),
+                                        receiver=User.objects.get(id=student.id), code=701, title="رد درخواست", body=f"استاد {professor.username} درخواست دانشجو {student.username} را مبنی بر انتساب به عنوان استاد درس کارورزی رد نموده است")
+            req.status = 'na'
+            req.save()
+            return Response({'message': 'this request rejected'})
+        else:
+            return Response({'message': 'this student have professor before'})
