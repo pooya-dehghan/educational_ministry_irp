@@ -12,6 +12,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useDispatch, useSelector } from 'react-redux';
 import { signUpAsync } from '../../features/signup/signUpThunk';
 import { signup } from '../../features/signup/signUpSlice';
+import { login } from '../../features/auth/authSlice';
 import { RootState } from '../../store/store'; // Make sure to provide the correct path
 import { updateResponse } from '../../features/response/responseSlice';
 import { useNavigate } from 'react-router-dom';
@@ -45,6 +46,9 @@ const useStyles = makeStyles({
     width: '212px',
     textAlign: 'center',
     justifyContent: 'center',
+  },
+  labelContainer: {
+    width: '100%',
   },
 });
 
@@ -88,7 +92,6 @@ const Root = () => {
     (dispatch as any)(getAllProfessorsAsync())
       .unwrap()
       .then((response: any) => {
-        console.log('rrres: ', response);
         setProfessors(response);
       })
       .catch((error: any) => {});
@@ -106,7 +109,8 @@ const Root = () => {
     (dispatch as any)(signUpAsync(signUpData))
       .unwrap()
       .then((response: any) => {
-        dispatch(signup(response.user)); // Dispatch your signup action to update the state
+        dispatch(login(response));
+        dispatch(signup(response));
         setButtonLoading(false);
         dispatch(
           updateResponse({
@@ -119,8 +123,10 @@ const Root = () => {
         tokenHandler.setRefreshToken(response.refresh);
         setButtonLoading(false);
         navigate('/dashboard');
+        console.log('response: ', response);
       })
       .catch((error: any) => {
+        console.log('do i get here: ', error);
         setButtonLoading(false);
         dispatch(
           updateResponse({
@@ -198,12 +204,13 @@ const Root = () => {
               </Grid>
               <Grid item xs={12} lg={12} className={classes.textAreaContainer}>
                 <FormControl fullWidth className={styles.selectContainer}>
-                  <InputLabel
-                    className={styles.selectContainer}
+                  {/* <InputLabel
+                    className={styles.labelContainer}
                     id="professor_id_provider"
                   >
                     استاد
-                  </InputLabel>
+                  </InputLabel> */}
+                  <Typography>استاد را انتخاب کنید</Typography>
                   <Select
                     labelId="professor_id_provider"
                     id="demo-simple-select"

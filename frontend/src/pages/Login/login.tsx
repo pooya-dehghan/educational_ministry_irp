@@ -67,7 +67,6 @@ const Login = () => {
         navigate("/dashboard");
       })
       .catch((error: any) => {
-        console.log("error: ", error);
         dispatch(
           updateResponse({
             severity: "error",
