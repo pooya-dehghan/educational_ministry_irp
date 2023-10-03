@@ -21,6 +21,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import CustomBadge from '../../components/Badge/Badge';
 import Notification from '../Notifications/Notifications';
 import { getAllNotificationsAsync } from '../../features/notifications/notificationThunk';
+import { logout } from '../../features/auth/authSlice';
+import * as tokenHandler from '../../utils/token/index';
+import { updateResponse } from '../../features/response/responseSlice';
 
 interface PageWrapper {
   children?: ReactNode;
@@ -80,7 +83,17 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   };
 
   const logOutClick = () => {
-    alert('you have been loged out');
+    tokenHandler.removeToken();
+    tokenHandler.removeRefreshToken();
+    dispatch(logout());
+    dispatch(
+      updateResponse({
+        severity: 'warning',
+        message: 'شما با موفقیت از سامانه خارج شدید.',
+        open: true,
+      })
+    );
+    navigate('/login');
   };
 
   return (
@@ -104,7 +117,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
                 </IconButton>
 
                 <Typography sx={{ flexGrow: 1, textAlign: 'right' }}>
-                  ادمین کل
+                  {`کاربر گرامی : ${user.username} `}
                 </Typography>
                 {auth && (
                   <div>
