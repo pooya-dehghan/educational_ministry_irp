@@ -23,16 +23,21 @@ const style = {
   p: 4,
 };
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+interface AttendanceModalProps {
+  open: boolean;
+  handleClose: () => void;
+  studentID: number;
+}
 
-export default function AttendanceModal() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export const AttendanceModal: React.FC<AttendanceModalProps> = ({
+  open,
+  handleClose,
+  studentID,
+}) => {
   const [buttonLoading, setButtonLoading] = React.useState(false);
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -126,4 +131,4 @@ export default function AttendanceModal() {
       </Modal>
     </div>
   );
-}
+};

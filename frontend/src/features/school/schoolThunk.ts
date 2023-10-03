@@ -62,3 +62,11 @@ export const getAllOfRegionSchoolsAsync = createAsyncThunk(
     return response;
   }
 );
+
+export const getAllSchoolsStudentsAsync = createAsyncThunk(
+  'school/getall/students',
+  async () => {
+    const response = await schoolApi.getAllSchoolsStudents();
+    return response;
+  }
+);
