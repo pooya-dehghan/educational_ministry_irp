@@ -14,7 +14,6 @@ from student.api.V1.serializers import StudentSerializer
 
 
 class SchoolGet(APIView):
-    permission_classes = [IsSuperuserOrOwnOfficeManager]
     @swagger_auto_schema(
         operation_description="""This endpoint allows user to get all of information of one school.
 
