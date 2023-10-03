@@ -10,6 +10,12 @@ import Grid from '@mui/material/Grid';
 import styles from './attendance.module.css';
 import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
+import {
+  getAttendanceStudentAsync,
+  createAttendanceStudentAsync,
+} from '../../features/attendance/attendanceThunk';
+import { useDispatch } from 'react-redux';
+import { updateResponse } from '../../features/response/responseSlice';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -35,6 +41,57 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
   studentID,
 }) => {
   const [buttonLoading, setButtonLoading] = React.useState(false);
+  const [attendances, setAttendances] = React.useState([]);
+  const [date, setDate] = React.useState<Date>();
+  console.log('date: ', date);
+  console.log('studentID: ', studentID);
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    (dispatch as any)(getAttendanceStudentAsync({ id: studentID }))
+      .unwrap()
+      .then((response: any) => {
+        setAttendances(response);
+      })
+      .catch((error: any) => {});
+  }, []);
+
+  const createAttendanceSession = () => {
+    if (studentID && date) {
+      let month = date.getUTCMonth() + 1; //months from 1-12
+      let day = date.getUTCDate();
+      let year = date.getUTCFullYear();
+
+      let newdate = year + '-' + month + '-' + day;
+      console.log('newDate: ', newdate);
+      (dispatch as any)(
+        createAttendanceStudentAsync({
+          id: studentID,
+          date: newdate,
+        })
+      )
+        .unwrap()
+        .then((response: any) => {
+          setButtonLoading(false);
+          dispatch(
+            updateResponse({
+              severity: 'success',
+              message: 'با موفقیت حضور دانش آموز در تاریخ مشخص شده تعیین شد.',
+              open: true,
+            })
+          );
+        })
+        .catch((error: any) => {
+          setButtonLoading(false);
+          dispatch(
+            updateResponse({
+              severity: 'error',
+              message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
+              open: true,
+            })
+          );
+        });
+    }
+  };
 
   return (
     <div>
@@ -103,11 +160,18 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
             </Grid>
             <Grid container mt={5} justifyContent={'space-between'}>
               <Grid item>
-                <DatePicker className={styles.datePickerClass} />
+                <DatePicker
+                  onChange={(e) => {
+                    setDate(e.value);
+                  }}
+                  className={styles.datePickerClass}
+                />
               </Grid>
               <Grid item>
                 <Button
-                  onClick={() => {}}
+                  onClick={() => {
+                    createAttendanceSession();
+                  }}
                   variant="contained"
                   disabled={buttonLoading}
                 >

@@ -32,12 +32,18 @@ interface SchoolProfileProps {
   id: number;
 }
 
+interface ISelectedCard {
+  id: number | undefined;
+}
+
 const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [buttonLoading, setButtonLoading] = useState(false);
   const [students, setStudents] = useState([]);
-  const [selectedCard, setSelectedCard] = useState({ id });
+  const [selectedCard, setSelectedCard] = useState<ISelectedCard>({
+    id: undefined,
+  });
   const [openAttendanceModal, setOpenAttendanceModal] = useState(false);
   useEffect(() => {
     (dispatch as any)(getAllSchoolsStudentsAsync())
@@ -94,14 +100,16 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
 
   return (
     <>
-      <AttendanceModal
-        handleClose={() => {
-          setOpenAttendanceModal(false);
-          setSelectedCard({});
-        }}
-        open={openAttendanceModal}
-        studentID = {id}
-      />
+      {selectedCard.id ? (
+        <AttendanceModal
+          handleClose={() => {
+            setOpenAttendanceModal(false);
+            setSelectedCard({ id: 0 });
+          }}
+          open={openAttendanceModal}
+          studentID={selectedCard.id}
+        />
+      ) : null}
       <Box
         sx={{
           backgroundColor: 'white',
