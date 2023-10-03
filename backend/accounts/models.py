@@ -70,7 +70,7 @@ class Teacher(User):
 
 
 class OfficeManager(User):
-    region = models.PositiveSmallIntegerField()
+    region = models.PositiveSmallIntegerField(unique=True)
 
     def __str__(self):
         return f"{self.username} - {self.id}"

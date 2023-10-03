@@ -22,13 +22,13 @@ class FillAttendance(APIView):
         operation_summary="endpoint for fill attendance",
         responses={
             '201': 'created',
-            '400': 'bad request'
+            '400': 'bad request',
+            '404': 'not found'
         }
     )
-
     def post(self, request, pk):
         student = Student.objects.filter(id=pk).first()
-        self.check_object_permissions(request,student)
+        self.check_object_permissions(request, student)
         if student:
             ser_data = DateSerializer(data=request.data)
             if ser_data.is_valid():
@@ -41,3 +41,25 @@ class FillAttendance(APIView):
                 return Response({'message': 'Invalid data'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'message': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class GetAttendance(APIView):
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters,
+        operation_description="""This endpoint allows to get get attendance of one student
+                        should input student_id
+                        """,
+        operation_summary="endpoint for get attendance",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+        }
+    )
+    def get(self, request, pk):
+        try:
+            student = Student.objects.get(id=pk)
+        except Student.DoesNotExist:
+            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        attendance = Attendance.objects.filter(student=student)
+        ser_data = DateSerializer(instance=attendance, many=True)
+        return Response(ser_data.data, status=status.HTTP_200_OK)
