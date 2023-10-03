@@ -21,6 +21,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import CustomBadge from '../../components/Badge/Badge';
 import Notification from '../Notifications/Notifications';
 import { getAllNotificationsAsync } from '../../features/notifications/notificationThunk';
+import { logout } from '../../features/auth/authSlice';
+import * as tokenHandler from '../../utils/token/index';
+import { updateResponse } from '../../features/response/responseSlice';
 
 interface PageWrapper {
   children?: ReactNode;
@@ -46,14 +49,19 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    (dispatch as any)(getAllNotificationsAsync())
+    let unSeen = true;
+    (dispatch as any)(getAllNotificationsAsync({ unSeen }))
       .unwrap()
       .then((response: any) => {
         setNotifications(response);
       })
       .catch((error: any) => {});
   }, []);
-
+  const removeNotifById = (id: number) => {
+    setNotifications((prevState) =>
+      prevState.filter((notif: any) => notif.id !== id)
+    );
+  };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAuth(event.target.checked);
   };
@@ -67,7 +75,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   };
 
   const accountClick = () => {
-    navigate('/dashboard');
+    navigate(`/dashboard/${user.usertype}/${user.id}`);
   };
 
   const profileClick = () => {
@@ -75,7 +83,17 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   };
 
   const logOutClick = () => {
-    alert('you have been loged out');
+    tokenHandler.removeToken();
+    tokenHandler.removeRefreshToken();
+    dispatch(logout());
+    dispatch(
+      updateResponse({
+        severity: 'warning',
+        message: 'شما با موفقیت از سامانه خارج شدید.',
+        open: true,
+      })
+    );
+    navigate('/login');
   };
 
   return (
@@ -99,7 +117,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
                 </IconButton>
 
                 <Typography sx={{ flexGrow: 1, textAlign: 'right' }}>
-                  ادمین کل
+                  {`کاربر گرامی : ${user.username} `}
                 </Typography>
                 {auth && (
                   <div>
@@ -155,7 +173,14 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
           <Grid container direction={'column'}>
             <Grid item>{children}</Grid>
           </Grid>
-          <Grid>{notificationOpen && <Notification notifications = {notifications} />}</Grid>
+          <Grid>
+            {notificationOpen && (
+              <Notification
+                removeNotifById={removeNotifById}
+                notifications={notifications}
+              />
+            )}
+          </Grid>
         </Grid>
       </Box>
     </>

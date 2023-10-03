@@ -64,7 +64,7 @@ type School = {
 };
 
 interface RequestProps {
-  acceptRequest: (schoolID: number, requestID: number) => void;
+  acceptRequest: (schoolID: number | undefined, requestID: number) => void;
   rejectRequest: (id: number) => void;
   request: Request;
 }
@@ -76,10 +76,10 @@ const Request: React.FC<RequestProps> = ({
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [seen, setSeen] = React.useState(false);
-  const [schoolID, setSchoolID] = React.useState<number>();
+  const [schoolID, setSchoolID] = React.useState<number | undefined>();
   const [regionSchools, setRegionSchools] = React.useState([]);
   const dispatch = useDispatch();
-
+  console.log('request: ', request);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -160,12 +160,15 @@ const Request: React.FC<RequestProps> = ({
                   label="مدرسه"
                   onChange={(value) => setSchoolID(value.target.value)}
                 >
-                  {regionSchools.length &&
+                  {regionSchools.length >= 1 ? (
                     regionSchools.map((school: School, index) => {
                       return (
                         <MenuItem value={school.id}>{school.name}</MenuItem>
                       );
-                    })}
+                    })
+                  ) : (
+                    <MenuItem>مدرسه ای وارد نشده</MenuItem>
+                  )}
                 </Select>
               </FormControl>
             </Grid>

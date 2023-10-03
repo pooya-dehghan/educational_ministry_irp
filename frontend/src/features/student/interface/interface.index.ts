@@ -12,7 +12,9 @@ export interface CreatestudentRequest {}
 
 export interface CreatestudentResponse {}
 
-export interface UpdatestudentRequest {}
+export interface UpdatestudentRequest {
+  studentID: number;
+}
 
 export interface UpdatestudentResponse {}
 

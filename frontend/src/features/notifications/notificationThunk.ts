@@ -1,12 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { NotificationApi } from './notificationApi';
-
-import { SeenNotificationRequest } from './interface/interface.index';
+import { SeenNotificationRequest, GetAllNotificationRequest } from './interface/interface.index';
 
 export const getAllNotificationsAsync = createAsyncThunk(
   'notification/create',
-  async () => {
-    const response = await NotificationApi.getAllNotification({});
+  async (notifData : GetAllNotificationRequest) => {
+    const response = await NotificationApi.getAllNotification(notifData);
     //method
     return response;
   }

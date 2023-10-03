@@ -15,3 +15,9 @@
     rgba(147, 253, 45, 0.5) 100%
   );
 }
+
+.selectContainer {
+  width: 212px;
+  justify-content: center;
+  align-items: center;
+}

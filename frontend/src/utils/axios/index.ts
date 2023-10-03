@@ -32,17 +32,23 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-
       const refresh = getRefreshToken();
       try {
-        const response = await instance.post('/accounts/api/v1/jwt/refresh/', {
-          refresh,
-        });
+        const response = await axios.post(
+          'http://localhost:8000/accounts/api/v1/jwt/refresh/',
+          {
+            refresh,
+          }
+        );
+        console.log('interceptor');
         const newAccessToken = response.data.access;
         setToken(newAccessToken);
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         return instance(originalRequest);
-      } catch (refreshError) {}
+      } catch (refreshError: any) {
+        console.log('refreshError: ', refreshError);
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

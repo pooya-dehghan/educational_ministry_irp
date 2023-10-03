@@ -19,7 +19,7 @@ export const studentApi = {
   ): Promise<GetstudentResponse> => {
     try {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}/student/api/v1/get/${getData.studentID}`
+        `${API_BASE_URL}/student/api/v1/get/${getData.studentID}/`
       );
       return response.data;
     } catch (error) {
@@ -32,7 +32,7 @@ export const studentApi = {
   ): Promise<CreatestudentResponse> => {
     try {
       const response = await axiosInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/student/`,
+        `${API_BASE_URL}/student/api/v1/create/`,
         createData
       );
       return response.data;
@@ -45,8 +45,8 @@ export const studentApi = {
     updateData: UpdatestudentRequest
   ): Promise<UpdatestudentResponse> => {
     try {
-      const response = await axiosInstance.post(
-        `${API_BASE_URL}/accounts/api/v1/student/`,
+      const response = await axiosInstance.put(
+        `${API_BASE_URL}/student/api/v1/update/${updateData.studentID}/`,
         updateData
       );
       return response.data;
@@ -60,7 +60,7 @@ export const studentApi = {
   ): Promise<DeletestudentResponse> => {
     try {
       const response = await axiosInstance.post(
-        `${API_BASE_URL}/students/api/v1/delete/${deleteData.id}`,
+        `${API_BASE_URL}/student/api/v1/delete/${deleteData.id}/`,
         deleteData
       );
       return response.data;

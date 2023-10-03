@@ -221,6 +221,25 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                   )}
                 </Field>
               </Grid>
+              <Grid item xs={12} sm={3}>
+                <Field name="region">
+                  {({ field, meta }: FieldProps) => (
+                    <TextField
+                      {...field}
+                      label="منطقه"
+                      aria-readonly
+                      disabled
+                      placeholder="منطقه"
+                      id="region"
+                      autoFocus
+                      variant="outlined"
+                      fullWidth
+                      error={meta.touched && meta.error ? true : false}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
+                    />
+                  )}
+                </Field>
+              </Grid>
             </Grid>
             <Grid container>
               <Grid item>

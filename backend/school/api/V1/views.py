@@ -10,6 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters, swagger_parameters_update, swagger_parameters_set_capacity
 from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg import openapi
+from student.api.V1.serializers import StudentSerializer
 
 
 class SchoolGet(APIView):
@@ -252,4 +253,24 @@ class SchoolDelete(APIView):
             return Response({'message': 'fuck your bullshit request this school does not exists'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+class StudentList(APIView):
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows school manager to get list of student in his school.
+
+                     """,
+        operation_summary="endpoint for school get student list",
+        responses={
+            '200': 'ok',
+            '404': 'not found',
+        }
+    )
+    def get(self, request):
+        try:
+            school = School.objects.get(id=request.user.id)
+        except School.DoesNotExist:
+            return Response({'message': 'you are not school manager'},status=status.HTTP_404_NOT_FOUND)
+        students = school.school_to_student
+        ser_data = StudentSerializer(instance=students, many=True)
+        return Response(ser_data.data, status=status.HTTP_200_OK)
 

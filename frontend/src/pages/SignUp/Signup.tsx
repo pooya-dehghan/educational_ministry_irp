@@ -12,11 +12,16 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useDispatch, useSelector } from 'react-redux';
 import { signUpAsync } from '../../features/signup/signUpThunk';
 import { signup } from '../../features/signup/signUpSlice';
+import { login } from '../../features/auth/authSlice';
 import { RootState } from '../../store/store'; // Make sure to provide the correct path
 import { updateResponse } from '../../features/response/responseSlice';
 import { useNavigate } from 'react-router-dom';
 import * as tokenHandler from '../../utils/token/index';
-
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import { getAllProfessorsAsync } from '../../features/professor/professorThunk';
 const useStyles = makeStyles({
   container: {
     justifyContent: 'center',
@@ -31,11 +36,41 @@ const useStyles = makeStyles({
   },
   textAreaContainer: {
     textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loginLink: {
     textAlign: 'center',
   },
+  selectContainer: {
+    width: '212px',
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
+  labelContainer: {
+    width: '100%',
+  },
 });
+
+type Professor = {
+  id: number;
+  username: string;
+  national_code: string;
+  phone_number: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  birthday_date: Date;
+  gender: string;
+  is_active: boolean;
+  created_date: Date;
+  updated_date: Date;
+  avatar: string;
+  is_admin: boolean;
+  personal_code: string;
+  professor_id: string;
+  is_science_committee: boolean;
+};
 
 const Root = () => {
   const dispatch = useDispatch();
@@ -50,7 +85,17 @@ const Root = () => {
   const [password, setPassword] = useState('');
   const [password_confirmation, setPasswordConfirmation] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
+  const [professors, setProfessors] = useState([]);
+  const [professor_id, setProfessor_id] = useState('0');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
+  useEffect(() => {
+    (dispatch as any)(getAllProfessorsAsync())
+      .unwrap()
+      .then((response: any) => {
+        setProfessors(response);
+      })
+      .catch((error: any) => {});
+  }, []);
   const handleSignUp = () => {
     setButtonLoading(true);
     const signUpData = {
@@ -58,12 +103,14 @@ const Root = () => {
       password,
       password_confirmation,
       studentUniqueCode: studentNumber,
+      professor2: professor_id,
     };
 
     (dispatch as any)(signUpAsync(signUpData))
       .unwrap()
       .then((response: any) => {
-        dispatch(signup(response.user)); // Dispatch your signup action to update the state
+        dispatch(login(response));
+        dispatch(signup(response));
         setButtonLoading(false);
         dispatch(
           updateResponse({
@@ -76,8 +123,10 @@ const Root = () => {
         tokenHandler.setRefreshToken(response.refresh);
         setButtonLoading(false);
         navigate('/dashboard');
+        console.log('response: ', response);
       })
       .catch((error: any) => {
+        console.log('do i get here: ', error);
         setButtonLoading(false);
         dispatch(
           updateResponse({
@@ -152,6 +201,37 @@ const Root = () => {
                   label="شماره دانشجویی"
                   variant="outlined"
                 />
+              </Grid>
+              <Grid item xs={12} lg={12} className={classes.textAreaContainer}>
+                <FormControl fullWidth className={styles.selectContainer}>
+                  {/* <InputLabel
+                    className={styles.labelContainer}
+                    id="professor_id_provider"
+                  >
+                    استاد
+                  </InputLabel> */}
+                  <Typography>استاد را انتخاب کنید</Typography>
+                  <Select
+                    labelId="professor_id_provider"
+                    id="demo-simple-select"
+                    value={professor_id}
+                    label="استاد"
+                    onChange={(value) => setProfessor_id(value.target.value)}
+                    className={classes.selectContainer}
+                  >
+                    {professors.length >= 1 ? (
+                      professors.map((professor: Professor) => {
+                        return (
+                          <MenuItem value={professor.id}>
+                            {professor.username}
+                          </MenuItem>
+                        );
+                      })
+                    ) : (
+                      <MenuItem>در حال گرفتن لیست</MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={8} className={classes.buttonContainer}>
                 <Button
