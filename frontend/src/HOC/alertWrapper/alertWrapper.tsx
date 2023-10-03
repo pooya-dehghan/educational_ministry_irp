@@ -25,6 +25,7 @@ const AlertWrapper: React.FC<AlertWrapperProps> = ({ children }) => {
       })
     );
   };
+  
   return (
     <>
       <CustomizedSnackbars

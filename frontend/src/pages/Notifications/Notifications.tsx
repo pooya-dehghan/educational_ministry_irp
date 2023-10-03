@@ -22,15 +22,20 @@ type Notif = {
 
 interface NotificationsProps {
   notifications: Notif[];
+  removeNotifById: (id: number) => void;
 }
 
-const Notifications: React.FC<NotificationsProps> = ({ notifications }) => {
+const Notifications: React.FC<NotificationsProps> = ({
+  notifications,
+  removeNotifById,
+}) => {
   const dispatch = useDispatch();
 
   const seenNotificationHandler = (id: number) => {
     (dispatch as any)(seenNotificationAsync({ id: id }))
       .unwrap()
       .then((response: any) => {
+        removeNotifById(id);
         dispatch(
           updateResponse({
             severity: 'success',
@@ -68,7 +73,6 @@ const Notifications: React.FC<NotificationsProps> = ({ notifications }) => {
         justifyContent: 'spaceBetween ',
         alignItems: 'center',
         flexDirection: 'column',
-
       }}
     >
       {notifications.length ? (
