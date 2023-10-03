@@ -42,12 +42,10 @@ class SchoolGet(APIView):
     def get(self, request, pk):
         if School.objects.filter(id=pk).exists():
             school = School.objects.get(id=pk)
-            office_manager = school.office_manager
-            self.check_object_permissions(request, office_manager)
             ser_data = SchoolSerializerAll(instance=school)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'this school does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'این مدرسه وجود ندارد'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class SchoolList(APIView):
