@@ -90,4 +90,15 @@ export const schoolApi = {
       throw error;
     }
   },
+
+  getAllSchoolsStudents: async () => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/school/api/v1/studentlist/`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };

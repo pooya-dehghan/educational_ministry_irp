@@ -1,82 +1,80 @@
-import { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import Image from "../../../public/images/avatarerp.jpg";
-import styles from "./ListOf.module.css";
-import { CardHeader, Divider } from "@mui/material";
-import PermissionModal from "../PermissionModal/PermissionModal";
-import { deleteOfficeManagersAsync } from "../../features/officemanager/officemanagerThunk";
-import { deleteProfessorsAsync } from "../../features/professor/professorThunk";
-import { deleteSchoolsAsync } from "../../features/school/schoolThunk";
-import { deleteTeachersAsync } from "../../features/teacher/teacherThunk";
-import { deletestudentsAsync } from "../../features/student/studentThunk";
-import { useDispatch } from "react-redux";
-import OfficeManagerProfile from "../../pages/profiles/OfficeManager/OfficeManager";
-import ProfessorProfile from "../../pages/profiles/Professor/Professor";
-import SchoolProfile from "../../pages/profiles/School/School";
-import StudentProfile from "../../pages/profiles/Student/Student";
-import TeacherProfile from "../../pages/profiles/Teacher/Teacher";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import Image from '../../../public/images/avatarerp.jpg';
+import styles from './ListOf.module.css';
+import { CardHeader, Divider } from '@mui/material';
+import PermissionModal from '../PermissionModal/PermissionModal';
+import { deleteOfficeManagersAsync } from '../../features/officemanager/officemanagerThunk';
+import { deleteProfessorsAsync } from '../../features/professor/professorThunk';
+import { deleteSchoolsAsync } from '../../features/school/schoolThunk';
+import { deleteTeachersAsync } from '../../features/teacher/teacherThunk';
+import { deletestudentsAsync } from '../../features/student/studentThunk';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function ListOf({
-  type = "officemanager",
-  username = "نام کاربری",
+  type = 'officemanager',
+  username = 'نام کاربری',
   id = 0,
+  buttonHide = false,
+  selected = false,
+  onClick = (payload: any) => {},
 }) {
   const [openPermissionModal, setOpenPermissionModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleInfoButton = (id: number) => {
     switch (type) {
-      case "officemanager":
+      case 'officemanager':
         navigate(`/dashboard/officemanager/${id}`);
         break;
-      case "professor":
+      case 'professor':
         navigate(`/dashboard/professor/${id}`);
         break;
-      case "school":
+      case 'school':
         navigate(`/dashboard/school/${id}`);
         break;
-      case "student":
+      case 'student':
         navigate(`/dashboard/student/${id}`);
         break;
-      case "teacher":
+      case 'teacher':
         navigate(`/dashboard/teacher/${id}`);
         break;
     }
   };
   const handleDeleteButton = () => {
     switch (type) {
-      case "officemanager":
+      case 'officemanager':
         (dispatch as any)(deleteOfficeManagersAsync({ id }))
           .unwrap()
           .then((response: any) => {})
           .catch((error: any) => {});
         break;
-      case "professor":
+      case 'professor':
         (dispatch as any)(deleteProfessorsAsync({ id }))
           .unwrap()
           .then((response: any) => {})
           .catch((error: any) => {});
         break;
-      case "school":
+      case 'school':
         (dispatch as any)(deleteSchoolsAsync({ id }))
           .unwrap()
           .then((response: any) => {})
           .catch((error: any) => {});
         break;
-      case "student":
+      case 'student':
         (dispatch as any)(deletestudentsAsync({ id }))
           .unwrap()
           .then((response: any) => {})
           .catch((error: any) => {});
         break;
-      case "teacher":
+      case 'teacher':
         (dispatch as any)(deleteTeachersAsync({ id }))
           .unwrap()
           .then((response: any) => {})
@@ -93,16 +91,18 @@ export default function ListOf({
   return (
     <>
       <Card
+        onClick={() => onClick({ id: id })}
         sx={{ minWidth: 275 }}
         className={`${styles.card} ${
-          type === "officemanager" ? styles.cardOfficeManager : ""
+          type === 'officemanager' ? styles.cardOfficeManager : ''
         }
-      ${type === "school" ? styles.cardSchool : ""}${
-          type === "universities" ? styles.carUniversity : ""
-        }${type === "professor" ? styles.cardProfessor : ""}
-      ${type === "teacher" ? styles.cardTeacher : ""}
-      ${type === "student" ? styles.cardStudent : ""}
-      ${type === "schoolmanager" ? styles.cardSchoolManager : ""}
+      ${type === 'school' ? styles.cardSchool : ''}${
+          type === 'universities' ? styles.carUniversity : ''
+        }${type === 'professor' ? styles.cardProfessor : ''}
+      ${type === 'teacher' ? styles.cardTeacher : ''}
+      ${type === 'student' ? styles.cardStudent : ''}
+      ${type === 'schoolmanager' ? styles.cardSchoolManager : ''}
+      ${selected ? styles.slectedCard : ''}
       `}
       >
         <CardHeader
@@ -111,7 +111,7 @@ export default function ListOf({
               className={styles.avatar}
               alt="Remy Sharp"
               src={Image}
-              sx={{ margin: "10px" }}
+              sx={{ margin: '10px' }}
             />
           }
           title={username}
@@ -123,23 +123,25 @@ export default function ListOf({
             مدیر مدرسه امام خمینی تهران
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => handleInfoButton(id)}
-          >
-            اطلاعات
-          </Button>
-          <Button
-            onClick={handleOpenPermissionModel}
-            variant="contained"
-            color="error"
-            size="small"
-          >
-            حذف
-          </Button>
-        </CardActions>
+        {!buttonHide ? (
+          <CardActions>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => handleInfoButton(id)}
+            >
+              اطلاعات
+            </Button>
+            <Button
+              onClick={handleOpenPermissionModel}
+              variant="contained"
+              color="error"
+              size="small"
+            >
+              حذف
+            </Button>
+          </CardActions>
+        ) : null}
       </Card>
       <PermissionModal
         open={openPermissionModal}
