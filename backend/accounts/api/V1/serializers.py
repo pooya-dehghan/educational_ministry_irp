@@ -33,7 +33,7 @@ class UserRegisterSerializer(serializers.Serializer):
             'blank': 'نمی‌تواند خالی باشد.',
             'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
         })
-    professor2 = serializers.ModelSerializer(instance=Professor, error_messages={
+    professor = serializers.ModelSerializer(instance=Professor, error_messages={
         'required': 'فیلد الزامی است.',
         'blank': 'نمی‌تواند خالی باشد.',
     })
