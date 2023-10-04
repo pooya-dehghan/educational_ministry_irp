@@ -23,6 +23,7 @@ import Notification from '../Notifications/Notifications';
 import { getAllNotificationsAsync } from '../../features/notifications/notificationThunk';
 import { logout } from '../../features/auth/authSlice';
 import * as tokenHandler from '../../utils/token/index';
+import * as userInfoLocalStorage from '../../utils/storageUser/index';
 import { updateResponse } from '../../features/response/responseSlice';
 
 interface PageWrapper {
@@ -35,6 +36,11 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
   const [notifications, setNotifications] = useState([]);
+  const [userInfo, setUserInfo] = useState({
+    username: 'وارد نشده است',
+    id: 0,
+    type: 'وارد نشده است',
+  });
   const navigate = useNavigate();
 
   const user = useSelector((state: RootState) => state.auth.user);
@@ -57,6 +63,9 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
       })
       .catch((error: any) => {});
   }, []);
+  useEffect(() => {
+    setUserInfo(userInfoLocalStorage.getUserInfo());
+  }, []);
   const removeNotifById = (id: number) => {
     setNotifications((prevState) =>
       prevState.filter((notif: any) => notif.id !== id)
@@ -75,7 +84,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   };
 
   const accountClick = () => {
-    navigate(`/dashboard/${user.usertype}/${user.id}`);
+    navigate(`/dashboard/${userInfo.type}/${userInfo.id}`);
   };
 
   const profileClick = () => {
@@ -85,6 +94,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   const logOutClick = () => {
     tokenHandler.removeToken();
     tokenHandler.removeRefreshToken();
+    userInfoLocalStorage.removeUserInfo();
     dispatch(logout());
     dispatch(
       updateResponse({
@@ -95,7 +105,6 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
     );
     navigate('/login');
   };
-
   return (
     <>
       <Box component={'div'} className={styles.container}>
@@ -117,7 +126,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
                 </IconButton>
 
                 <Typography sx={{ flexGrow: 1, textAlign: 'right' }}>
-                  {`کاربر گرامی : ${user.username} `}
+                  {`کاربر گرامی : ${userInfo.username} `}
                 </Typography>
                 {auth && (
                   <div>
