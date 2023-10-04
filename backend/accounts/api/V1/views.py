@@ -204,17 +204,17 @@ class UserLoginAPIView(APIView):
             return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
         if user and check_password(password, user.password) and user.is_active:
             if School.objects.filter(id=user.id).exists():
-                type = "school manager"
+                type = "schools"
             elif user.is_admin:
                 type = "superuser"
             elif Teacher.objects.filter(pk=user.pk).exists():
-                type = "teacher"
+                type = "teachers"
             elif Student.objects.filter(pk=user.pk).exists():
-                type = "student"
+                type = "students"
             elif OfficeManager.objects.filter(pk=user.pk).exists():
-                type = "office manager"
+                type = "officemanagers"
             elif Professor.objects.filter(pk=user.pk).exists():
-                type = "professor"
+                type = "professors"
             else:
                 type = "anonymous"
             refresh = RefreshToken.for_user(user=user)
