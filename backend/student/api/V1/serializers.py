@@ -13,6 +13,13 @@ class StudentSerializerForCreate(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+        username = serializers.CharField(
+            error_messages={
+                'required': 'فیلد الزامی است.',
+                'blank': 'نمی‌تواند خالی باشد.',
+                'max_length': 'حداکثر طول مجاز {max_length} کاراکتر است.',
+            }
+        )
 
     def validate(self, attrs):
         password_confirmation = attrs.get("password_confirmation")
