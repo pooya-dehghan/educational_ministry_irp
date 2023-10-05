@@ -98,7 +98,7 @@ class ApiUserRegistrationView(GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
-            professor = serializer.validated_data['professor2']
+            professor = Professor.objects.get(id=serializer.validated_data['professor2'])
             student = Student.objects.create(username=serializer.validated_data['username']
                                              , studentUniqueCode=serializer.validated_data['studentUniqueCode'])
             student.set_password(serializer.validated_data['password'])
