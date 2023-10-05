@@ -37,5 +37,4 @@ urlpatterns = [
     path('task/', include('task.urls', namespace='task')),
     path('professorrequest/', include('professorrequest.urls')),
     path('test/', test, name="test")
-
 ]

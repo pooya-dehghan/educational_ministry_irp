@@ -76,3 +76,7 @@
     rgba(2, 78, 16, 1) 46%
   ) !important;
 }
+
+.slectedCard {
+  border: 3px solid blue;
+}

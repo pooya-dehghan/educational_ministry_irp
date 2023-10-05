@@ -102,6 +102,8 @@ class AcceptRequest(APIView):
         self.check_object_permissions(request, professor)
         if student.professor2 is None:
             student.professor2 = professor
+            if student.is_reject is True:
+                student.is_reject = False
             student.save()
             Notification.objects.create(sender=User.objects.get(id=professor.id),
                                         receiver=User.objects.get(id=student.id), code=701)
@@ -138,6 +140,12 @@ class RejectRequest(APIView):
         self.check_object_permissions(request, professor)
         if student.professor2 is None:
             student.professor2 = None
+            student.is_reject = True
+            if student.rejected_professors is None:
+                student.rejected_professors = str(professor.username)
+            else:
+                first_username = str(student.rejected_professors)
+                student.rejected_professors = first_username + " " + str(professor.username)
             student.save()
             Notification.objects.create(sender=User.objects.get(id=professor.id),
                                         receiver=User.objects.get(id=student.id), code=701, title="رد درخواست", body=f"استاد {professor.username} درخواست دانشجو {student.username} را مبنی بر انتساب به عنوان استاد درس کارورزی رد نموده است")
@@ -146,3 +154,6 @@ class RejectRequest(APIView):
             return Response({'message': 'this request rejected'})
         else:
             return Response({'message': 'this student have professor before'})
+
+
+

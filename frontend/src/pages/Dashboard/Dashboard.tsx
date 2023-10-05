@@ -23,9 +23,10 @@ import Notification from "../Notifications/Notifications";
 import { getAllNotificationsAsync } from "../../features/notifications/notificationThunk";
 import { logout } from "../../features/auth/authSlice";
 import * as tokenHandler from "../../utils/token/index";
+import * as userInfoLocalStorage from "../../utils/storageUser/index";
 import { updateResponse } from "../../features/response/responseSlice";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 interface PageWrapper {
   children?: ReactNode;
@@ -42,6 +43,11 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
   const [notifications, setNotifications] = useState([]);
+  const [userInfo, setUserInfo] = useState({
+    username: "وارد نشده است",
+    id: 0,
+    type: "وارد نشده است",
+  });
   const navigate = useNavigate();
   const [imgNum, setImgNum] = useState(0);
 
@@ -65,6 +71,9 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
       })
       .catch((error: any) => {});
   }, []);
+  useEffect(() => {
+    setUserInfo(userInfoLocalStorage.getUserInfo());
+  }, []);
   const removeNotifById = (id: number) => {
     setNotifications((prevState) =>
       prevState.filter((notif: any) => notif.id !== id)
@@ -83,7 +92,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   };
 
   const accountClick = () => {
-    navigate(`/dashboard/${user.usertype}/${user.id}`);
+    navigate(`/dashboard/${userInfo.type}/${userInfo.id}`);
   };
 
   const profileClick = () => {
@@ -93,6 +102,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   const logOutClick = () => {
     tokenHandler.removeToken();
     tokenHandler.removeRefreshToken();
+    userInfoLocalStorage.removeUserInfo();
     dispatch(logout());
     dispatch(
       updateResponse({
@@ -135,7 +145,6 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
       setImgNum(3);
     } else setImgNum(imgNum - 1);
   };
-
   return (
     <>
       <Box component={"div"} className={styles.container}>
@@ -157,7 +166,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
                 </IconButton>
 
                 <Typography sx={{ flexGrow: 1, textAlign: "right" }}>
-                  {`کاربر گرامی : ${user.username} `}
+                  {`کاربر گرامی : ${userInfo.username} `}
                 </Typography>
                 {auth && (
                   <div>

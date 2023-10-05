@@ -13,7 +13,9 @@ import { updateResponse } from "../../../features/response/responseSlice";
 import { updateSchoolAsync } from "../../../features/school/schoolThunk";
 import { makeStyles } from "@mui/styles";
 import CircularProgress from "@mui/material/CircularProgress";
-import AttendanceModal from "../../../components/Attendance/attendance";
+import { AttendanceModal } from "../../../components/Attendance/attendance";
+import { getAllSchoolsStudentsAsync } from "../../../features/school/schoolThunk";
+import ListOf from "../../../components/ListOf/ListOf";
 
 const useStyles = makeStyles((theme) => ({
   marginButton: {
@@ -30,10 +32,27 @@ interface SchoolProfileProps {
   id: number;
 }
 
+interface ISelectedCard {
+  id: number | undefined;
+}
+
 const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [students, setStudents] = useState([]);
+  const [selectedCard, setSelectedCard] = useState<ISelectedCard>({
+    id: undefined,
+  });
+  const [openAttendanceModal, setOpenAttendanceModal] = useState(false);
+  useEffect(() => {
+    (dispatch as any)(getAllSchoolsStudentsAsync())
+      .unwrap()
+      .then((response: any) => {
+        setStudents(response);
+      })
+      .catch((error: any) => {});
+  }, []);
 
   const handleSubmit = (values: any, setSubmitting: any) => {
     setButtonLoading(true);
@@ -73,9 +92,24 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
         );
       });
   };
+
+  const selectStudent = (payload: any) => {
+    setSelectedCard(payload);
+    setOpenAttendanceModal(true);
+  };
+
   return (
     <>
-      <AttendanceModal />
+      {selectedCard.id ? (
+        <AttendanceModal
+          handleClose={() => {
+            setOpenAttendanceModal(false);
+            setSelectedCard({ id: 0 });
+          }}
+          open={openAttendanceModal}
+          studentID={selectedCard.id}
+        />
+      ) : null}
       <Box
         sx={{
           backgroundColor: "white",
@@ -344,6 +378,26 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
             <Typography variant="h4" className={classes.marginTop}>
               فهرست دانشجویان کارورز
             </Typography>
+          </Grid>
+          <Grid container spacing={2} className={styles.grid}>
+            {students.length >= 1 ? (
+              students.map((student: any, index) => {
+                return (
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <ListOf
+                      type="student"
+                      username={student.username}
+                      id={student.id}
+                      buttonHide={true}
+                      onClick={(payload: any) => selectStudent(payload)}
+                      selected={selectedCard.id === student.id}
+                    />
+                  </Grid>
+                );
+              })
+            ) : (
+              <Grid>دانشجویی وجود ندارد</Grid>
+            )}
           </Grid>
         </Grid>
       </Box>

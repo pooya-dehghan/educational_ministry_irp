@@ -3,15 +3,40 @@ from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from accounts.models import Professor
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
 
-class UserRegisterSerializer(serializers.ModelSerializer):
-    password_confirmation = serializers.CharField(max_length=255, write_only=True)
+class UserRegisterSerializer(serializers.Serializer):
+    # password_confirmation = serializers.CharField(max_length=255, write_only=True)
 
-    class Meta:
-        model = Student
-        fields = ["username", "password", "password_confirmation", "studentUniqueCode", 'professor2']  # , "field", "professor2"]
+    # class Meta:
+    #     model = Student
+    #     fields = ["username", "password", "password_confirmation", "studentUniqueCode", 'professor2']  # , "field", "professor2"]
+    username = serializers.CharField(error_messages={
+            'required': 'فیلد الزامی است.',
+            'blank': 'نمی‌تواند خالی باشد.',
+            'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
+        })
+    password = serializers.CharField(error_messages={
+            'required': 'فیلد الزامی است.',
+            'blank': 'نمی‌تواند خالی باشد.',
+            'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
+        })
+    password_confirmation = serializers.CharField( error_messages= {
+            'required': 'فیلد الزامی است.',
+            'blank': 'نمی‌تواند خالی باشد.',
+            'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
+        })
+    studentUniqueCode =  serializers.CharField( error_messages={
+            'required': 'فیلد الزامی است.',
+            'blank': 'نمی‌تواند خالی باشد.',
+            'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
+        })
+    professor = serializers.ModelSerializer(instance=Professor, error_messages={
+        'required': 'فیلد الزامی است.',
+        'blank': 'نمی‌تواند خالی باشد.',
+    })
 
     def validate(self, attrs):
         password_confirmation = attrs.get("password_confirmation")
