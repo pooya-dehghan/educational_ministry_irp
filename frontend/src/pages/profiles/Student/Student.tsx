@@ -1,38 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
-import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import styles from './student.module.css';
-import { StudentInterface } from '../../../interfaces/student.interface';
-import { useDispatch } from 'react-redux';
-import { updatestudent } from '../../../features/student/studentSlice';
-import { updateResponse } from '../../../features/response/responseSlice';
-import { updatestudentAsync } from '../../../features/student/studentThunk';
-import { sendRequestAsync } from '../../../features/requests/requestThunk';
-import { makeStyles } from '@mui/styles';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import CircularProgress from '@mui/material/CircularProgress';
-import InputLabel from '@mui/material/InputLabel';
-import {} from '../../../features/requests/requestThunk';
-import FormControl from '@mui/material/FormControl';
+import React, { useState, useEffect } from "react";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
+import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import styles from "./student.module.css";
+import { StudentInterface } from "../../../interfaces/student.interface";
+import { useDispatch } from "react-redux";
+import { updatestudent } from "../../../features/student/studentSlice";
+import { updateResponse } from "../../../features/response/responseSlice";
+import { updatestudentAsync } from "../../../features/student/studentThunk";
+import { sendRequestAsync } from "../../../features/requests/requestThunk";
+import { makeStyles } from "@mui/styles";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import CircularProgress from "@mui/material/CircularProgress";
+import InputLabel from "@mui/material/InputLabel";
+import {} from "../../../features/requests/requestThunk";
+import FormControl from "@mui/material/FormControl";
 
 const useStyles = makeStyles((theme) => ({
   marginButton: {
-    marginBottom: '3rem', // Add margin here
-    fontStyle: 'bold',
+    marginBottom: "3rem", // Add margin here
+    fontStyle: "bold",
   },
   marginTop: {
-    marginTop: '2rem',
+    marginTop: "2rem",
   },
   selectRegion: {
-    width: '30%',
+    width: "30%",
   },
   buttonSendRequest: {
-    width: '30%',
+    width: "30%",
   },
 }));
 
@@ -55,8 +55,8 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         .then((response: any) => {
           dispatch(
             updateResponse({
-              severity: 'success',
-              message: 'درخواست کارورزی شما با موفقیت ارسال شد.',
+              severity: "success",
+              message: "درخواست کارورزی شما با موفقیت ارسال شد.",
               open: true,
             })
           );
@@ -65,8 +65,8 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         .catch((error: any) => {
           dispatch(
             updateResponse({
-              severity: 'error',
-              message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
+              severity: "error",
+              message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
               open: true,
             })
           );
@@ -94,8 +94,8 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         dispatch(updatestudent(response));
         dispatch(
           updateResponse({
-            severity: 'success',
-            message: 'پروفایل شما با موفقیت بروزرسانی شد..',
+            severity: "success",
+            message: "پروفایل شما با موفقیت بروزرسانی شد..",
             open: true,
           })
         );
@@ -103,8 +103,8 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
       .catch((error: any) => {
         dispatch(
           updateResponse({
-            severity: 'error',
-            message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
+            severity: "error",
+            message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
             open: true,
           })
         );
@@ -113,17 +113,20 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
   return (
     <Box
       sx={{
-        backgroundColor: 'white',
+        backgroundColor: "white",
         paddingBottom: 8,
         paddingTop: 8,
         paddingLeft: 12,
         paddingRight: 12,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         boxShadow: 3,
         borderRadius: 2,
-        height: '100vh',
+        height: "100vh",
+        "@media (max-width: 768px)": {
+          height: "auto",
+        },
       }}
     >
       <Grid container>
@@ -164,7 +167,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
+                      helperText={meta.touched && meta.error ? meta.error : ""}
                     />
                   )}
                 </Field>
@@ -181,7 +184,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
+                      helperText={meta.touched && meta.error ? meta.error : ""}
                     />
                   )}
                 </Field>
@@ -198,7 +201,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
+                      helperText={meta.touched && meta.error ? meta.error : ""}
                     />
                   )}
                 </Field>
@@ -215,7 +218,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
+                      helperText={meta.touched && meta.error ? meta.error : ""}
                     />
                   )}
                 </Field>
@@ -232,7 +235,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
+                      helperText={meta.touched && meta.error ? meta.error : ""}
                     />
                   )}
                 </Field>
@@ -249,7 +252,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
+                      helperText={meta.touched && meta.error ? meta.error : ""}
                     />
                   )}
                 </Field>
@@ -266,7 +269,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
+                      helperText={meta.touched && meta.error ? meta.error : ""}
                     />
                   )}
                 </Field>
@@ -351,14 +354,14 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
             sx={{ mt: 3, mb: 2 }}
           >
             {buttonLoading ? (
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <CircularProgress size={24} color="inherit" />{' '}
-                <Typography style={{ fontSize: '13px', marginRight: '8px' }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <CircularProgress size={24} color="inherit" />{" "}
+                <Typography style={{ fontSize: "13px", marginRight: "8px" }}>
                   در حال ارسال
                 </Typography>
               </div>
             ) : (
-              'ثبت'
+              "ثبت"
             )}
           </Button>
         </Grid>
