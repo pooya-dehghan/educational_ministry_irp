@@ -46,7 +46,6 @@ instance.interceptors.response.use(
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         return instance(originalRequest);
       } catch (refreshError: any) {
-        console.log('refreshError: ', refreshError);
         window.location.href = '/login';
       }
     }

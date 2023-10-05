@@ -19,6 +19,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import InputLabel from '@mui/material/InputLabel';
 import {} from '../../../features/requests/requestThunk';
 import FormControl from '@mui/material/FormControl';
+import UploadFileButton from '../../../components/UploadFile/UploadFile';
 
 const useStyles = makeStyles((theme) => ({
   marginButton: {
@@ -287,6 +288,16 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
           </Form>
         )}
       </Formik>
+      <Grid container>
+        <Grid item>
+          <Typography variant="h4" className={classes.marginTop}>
+            بارگذاری تصویر پروفایل
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container mt={5}>
+        <UploadFileButton />
+      </Grid>
       <Grid container>
         <Grid item>
           <Typography variant="h4" className={classes.marginTop}>
