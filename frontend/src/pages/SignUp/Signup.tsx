@@ -104,7 +104,7 @@ const Root = () => {
       password,
       password_confirmation,
       studentUniqueCode: studentNumber,
-      professor: professor_id,
+      professor2: professor_id,
     };
 
     (dispatch as any)(signUpAsync(signUpData))
