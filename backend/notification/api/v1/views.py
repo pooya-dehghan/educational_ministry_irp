@@ -16,7 +16,7 @@ class NotificationListView(APIView):
         try:
             user = User.objects.get(id=request.user.id)
         except User.DoesNotExist:
-            return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین شخصی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
         seen_param = request.query_params.get('seen')
         unseen_param = request.query_params.get('unseen')
         print(seen_param)
@@ -56,7 +56,7 @@ class NotificationGet(APIView):
         try:
             user = User.objects.get(id=request.user.id)
         except User.DoesNotExist:
-            return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین شخصی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
         notification = Notification.objects.filter(receiver=user, id=pk)
         ser_data = NotificationSerializer(notification, many=True)
         if notification.count() > 0:
@@ -75,21 +75,20 @@ class SeenNotification(APIView):
         operation_summary="endpoint for seen notification",
         responses={
             '200': 'ok',
-            '400': 'bad request'
+            '404': 'not found'
         }
     )
     def post(self, request, pk):
         try:
             user = User.objects.get(id=request.user.id)
         except User.DoesNotExist:
-            return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین شخصی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
         notification = Notification.objects.filter(receiver=user, id=pk).first()
         if notification:
             notification.view = 's'
             notification.save()
-            return Response({'message': 'notification seen'})
+            return Response({'پیغام': 'نوتیفیکیشن سین شد'}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'you not have this notification by this id'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({'پیغام': 'همچین نوتیفیکیشنی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
 
 
