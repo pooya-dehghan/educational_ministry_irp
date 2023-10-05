@@ -104,7 +104,7 @@ const Root = () => {
       password,
       password_confirmation,
       studentUniqueCode: studentNumber,
-      professor2: professor_id,
+      professor: professor_id,
     };
 
     (dispatch as any)(signUpAsync(signUpData))
@@ -122,7 +122,7 @@ const Root = () => {
         );
         tokenHandler.setToken(response.access);
         tokenHandler.setRefreshToken(response.refresh);
-        userInfoLocalStorage.setUserInfo(response)
+        userInfoLocalStorage.setUserInfo(response);
         setButtonLoading(false);
         navigate('/dashboard');
       })
