@@ -128,7 +128,7 @@ class ApiUserRegistrationView(GenericAPIView):
                 refresh = RefreshToken.for_user(user=user)
                 data = {
                     "username": serializer.validated_data["username"],
-                    'type': 'student',
+                    'type': 'students',
                     'id': student.id,
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
@@ -204,17 +204,17 @@ class UserLoginAPIView(APIView):
             return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
         if user and check_password(password, user.password) and user.is_active:
             if School.objects.filter(id=user.id).exists():
-                type = "schools"
+                type = "school"
             elif user.is_admin:
                 type = "superuser"
             elif Teacher.objects.filter(pk=user.pk).exists():
-                type = "teachers"
+                type = "teacher"
             elif Student.objects.filter(pk=user.pk).exists():
-                type = "students"
+                type = "student"
             elif OfficeManager.objects.filter(pk=user.pk).exists():
-                type = "officemanagers"
+                type = "officemanager"
             elif Professor.objects.filter(pk=user.pk).exists():
-                type = "professors"
+                type = "professor"
             else:
                 type = "anonymous"
             refresh = RefreshToken.for_user(user=user)
@@ -470,7 +470,11 @@ class UploadAvatarView(APIView):
             return Response({"message": "کاربر شناسایی نشده(نا معتبر)"}, status=status.HTTP_404_NOT_FOUND)
         ser_data = UserProfileAvatarSerializer(data=request.data)
         if ser_data.is_valid():
-            uploaded_avatar = ser_data.validated_data["avatar"]
+            try:
+                uploaded_avatar = ser_data.validated_data["avatar"]
+            except:
+                return Response({"message": "متاسفانه فایل آپلود شده شما نا معتبر است"},
+                            status=status.HTTP_400_BAD_REQUEST)
             file_extension = os.path.splitext(uploaded_avatar.name)[1]
             new_file_name = f"{user.username}_avatar{file_extension}"  # Customize the naming convention as needed
             new_file_path = os.path.join("avatars", new_file_name)  # 'avatars' is the media subdirectory
