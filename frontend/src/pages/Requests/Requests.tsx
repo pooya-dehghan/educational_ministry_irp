@@ -14,7 +14,7 @@ import { updateResponse } from '../../features/response/responseSlice';
 const Requests = () => {
   const [requests, setRequests] = useState([]);
   const dispatch = useDispatch();
-  //changes required
+
   useEffect(() => {
     (dispatch as any)(getAllRequestsAsync())
       .unwrap()
