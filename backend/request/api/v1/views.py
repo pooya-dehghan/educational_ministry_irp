@@ -249,6 +249,8 @@ class RequestForSchool(APIView):
         req = Request.objects.create(sender=sender, receiver=receiver)
         req.save()
         dt = timezone.now()
+        req_date = datetime2jalali(dt).strftime('%y-%m-%d')
+        req_date = "14" + req_date
         dt = datetime2jalali(dt).strftime('%y-%m-%d')
         dt = "14" + dt
         dt = dt.replace('-', '')
@@ -265,7 +267,7 @@ class RequestForSchool(APIView):
         req.code = dt + str_id
         req.save()
         Notification.objects.create(sender=request.user, receiver=receiver, code=301)
-        return Response({'message': 'request sent successfully', 'request id': req.id, 'request.code': req.code},
+        return Response({'message': 'request sent successfully', 'request id': req.id, 'request.code': req.code, 'date':req_date},
                         status=status.HTTP_201_CREATED)
 
 
