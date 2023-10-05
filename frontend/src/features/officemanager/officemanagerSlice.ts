@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   officeManagerinfo: {
     username: '',
+    firstname:'',
+    lastname:'',
     avatar: '',
     status: '',
   },
@@ -24,7 +26,7 @@ const officeManagerSlice = createSlice({
       state.officeManagerinfo = action.payload;
     },
     deleteOfficeManager: (state, action) => {
-      state.officeManagerinfo = { username: '', avatar: '', status: '' };
+      state.officeManagerinfo = { username: '', avatar: '', status: '' ,firstname:'', lastname:'', };
     },
   },
 });

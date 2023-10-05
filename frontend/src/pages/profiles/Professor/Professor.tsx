@@ -80,11 +80,9 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
         alignItems: "center",
         boxShadow: 3,
         borderRadius: 2,
-        height: "100vh",
-        "@media (max-width: 768px)": {
-          height: "auto",
-        },
+        height: "auto",
       }}
+      className={styles.container}
     >
       <Grid container>
         <Grid item>
@@ -163,7 +161,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                   )}
                 </Field>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={12} sm={3}>
                 <Field name="email">
                   {({ field, meta }: FieldProps) => (
                     <TextField
@@ -180,7 +178,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                   )}
                 </Field>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={12} sm={3}>
                 <Field name="birthday_date">
                   {({ field, meta }: FieldProps) => (
                     <TextField
@@ -222,23 +220,6 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       label="نام خانوادگی"
                       placeholder="نام خانوادگی"
                       id="last_name"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="email">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="ایمیل"
-                      placeholder="ایمیل"
-                      id="email"
                       autoFocus
                       variant="outlined"
                       fullWidth

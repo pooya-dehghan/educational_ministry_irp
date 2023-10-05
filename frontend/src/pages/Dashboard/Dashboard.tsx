@@ -5,6 +5,7 @@ import { useState, useEffect, ReactNode } from "react";
 import styles from "./Dashboard.module.css";
 import SideBar from "../../components/SideBar/SideBar";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { dashboardAsync } from "../../features/dashboard/dashboardThunk";
 import { RootState } from "../../store/store";
 import IconButton from "@mui/material/IconButton";
@@ -40,6 +41,7 @@ interface ImageData {
 const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [auth, setAuth] = useState(true);
+  const location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
   const [notifications, setNotifications] = useState([]);
@@ -145,6 +147,8 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
       setImgNum(3);
     } else setImgNum(imgNum - 1);
   };
+
+  const isDashboardPage = location.pathname === "/dashboard";
   return (
     <>
       <Box component={"div"} className={styles.container}>
@@ -231,108 +235,114 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
             )}
           </Grid>
         </Grid>
-        <Grid
-          container
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Box
-            sx={{
-              display: "flex",
-              backgroundColor: "white",
-              width: "1000px",
-              height: "450px",
-              marginTop: "50px",
-              boxShadow: "5px 5px 10px",
-              "@media (max-width:1000px)": {
-                width: "90%",
-              },
-              "@media (max-width: 550px)": {
-                flexDirection: "column",
-                justifyContent: "center",
-                width: "90%", // Full width on mobile
-                height: "auto", // Auto height on mobile
-              },
-            }}
+        {isDashboardPage && (
+          <Grid
+            container
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
           >
-            <Grid
-              container
-              item
-              xs={12}
-              sm={6}
+            <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                backgroundColor: "black",
+                backgroundColor: "white",
+                width: "1000px",
+                height: "450px",
+                marginTop: "50px",
+                boxShadow: "5px 5px 10px",
+                "@media (max-width:1000px)": {
+                  width: "90%",
+                },
+                "@media (max-width: 550px)": {
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  width: "90%", // Full width on mobile
+                  height: "auto", // Auto height on mobile
+                },
               }}
             >
-              <img
-                style={{ height: "410px", width: "500px", maxWidth: "100%" }}
-                src={imageDataSet[imgNum].imageUrl}
-              />
-
-              <div style={{ display: "flex" }}>
-                <IconButton sx={{ color: "white" }} onClick={nextIconClick}>
-                  <ArrowForwardIosIcon />
-                </IconButton>
-                <IconButton sx={{ color: "white" }} onClick={backIconClick}>
-                  <ArrowBackIosIcon />
-                </IconButton>
-              </div>
-            </Grid>
-            <Grid
-              container
-              item
-              xs={12}
-              sm={6}
-              sx={{ backgroundColor: "rgb(150,237,237)" }}
-            >
-              <Grid item margin="30px" marginBottom="0px">
-                <h3 style={{ textAlign: "center" }}>
-                  کاربر گرامی، به سامانه مدیریت کارورزی دانشگاه شهید رجایی خوش
-                  آمدید
-                </h3>
-              </Grid>
               <Grid
+                container
                 item
                 xs={12}
+                sm={6}
                 sx={{
                   display: "flex",
-                  justifyContent: "center",
+                  flexDirection: "column",
                   alignItems: "center",
+                  backgroundColor: "black",
                 }}
               >
-                <Divider
-                  sx={{
-                    backgroundColor: "black",
-                    width: "90%",
-                  }}
+                <img
+                  style={{ height: "410px", width: "500px", maxWidth: "100%" }}
+                  src={imageDataSet[imgNum].imageUrl}
                 />
+
+                <div style={{ display: "flex" }}>
+                  <IconButton sx={{ color: "white" }} onClick={nextIconClick}>
+                    <ArrowForwardIosIcon />
+                  </IconButton>
+                  <IconButton sx={{ color: "white" }} onClick={backIconClick}>
+                    <ArrowBackIosIcon />
+                  </IconButton>
+                </div>
               </Grid>
-              <Grid display="flex" alignItems="center" justifyContent="center">
-                <Box
+              <Grid
+                container
+                item
+                xs={12}
+                sm={6}
+                sx={{ backgroundColor: "rgb(150,237,237)" }}
+              >
+                <Grid item margin="30px" marginBottom="0px">
+                  <h3 style={{ textAlign: "center" }}>
+                    کاربر گرامی، به سامانه مدیریت کارورزی دانشگاه شهید رجایی خوش
+                    آمدید
+                  </h3>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
                   sx={{
-                    width: "80%",
-                    height: "auto",
-                    borderRadius: "10px",
-                    border: "1px solid black",
-                    padding: "10px",
-                    margin: "30px",
-                    textAlign: "center",
-                    backgroundColor: "red",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  <Typography color="white">
-                    در بخش داشبور می توانید با انتخاب گزینه مناسب، کار خود را
-                    انجام دهید.
-                  </Typography>
-                </Box>
+                  <Divider
+                    sx={{
+                      backgroundColor: "black",
+                      width: "90%",
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Box
+                    sx={{
+                      width: "80%",
+                      height: "auto",
+                      borderRadius: "10px",
+                      border: "1px solid black",
+                      padding: "10px",
+                      margin: "30px",
+                      textAlign: "center",
+                      backgroundColor: "red",
+                    }}
+                  >
+                    <Typography color="white">
+                      در بخش داشبور می توانید با انتخاب گزینه مناسب، کار خود را
+                      انجام دهید.
+                    </Typography>
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
-        </Grid>
+            </Box>
+          </Grid>
+        )}
       </Box>
     </>
   );

@@ -78,11 +78,9 @@ const TeacherProfile: React.FC<TeacherProfileProps> = ({ userInfo, id }) => {
         alignItems: "center",
         boxShadow: 3,
         borderRadius: 2,
-        height: "100vh",
-        "@media (max-width: 768px)": {
-          height: "auto",
-        },
+        height: "auto",
       }}
+      className={styles.container}
     >
       <Grid container>
         <Grid item>

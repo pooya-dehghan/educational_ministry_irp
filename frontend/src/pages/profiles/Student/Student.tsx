@@ -123,11 +123,9 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         alignItems: "center",
         boxShadow: 3,
         borderRadius: 2,
-        height: "100vh",
-        "@media (max-width: 768px)": {
-          height: "auto",
-        },
+        height: "auto",
       }}
+      className={styles.container}
     >
       <Grid container>
         <Grid item>
@@ -206,7 +204,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                   )}
                 </Field>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={12} sm={3}>
                 <Field name="email">
                   {({ field, meta }: FieldProps) => (
                     <TextField
@@ -223,7 +221,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                   )}
                 </Field>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={12} sm={3}>
                 <Field name="birthday_date">
                   {({ field, meta }: FieldProps) => (
                     <TextField
@@ -303,6 +301,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
             variant="body1"
             gutterBottom
             className={classes.marginTop}
+            textAlign="justify"
           >
             کاربر گرامی با انتخاب ناحیه مورد نظر خود درخواست شروع کارورزی خود را
             برای مسئول آموزش و پرورش ناحیه ارسال کنید پس از ارسال این درخواست

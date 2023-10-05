@@ -85,11 +85,9 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
         alignItems: "center",
         boxShadow: 3,
         borderRadius: 2,
-        height: "100vh",
-        "@media (max-width: 768px)": {
-          height: "auto",
-        },
+        height: "auto",
       }}
+      className={styles.container}
     >
       <Grid container>
         <Grid item>
@@ -169,7 +167,7 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                   )}
                 </Field>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={12} sm={3}>
                 <Field name="email">
                   {({ field, meta }: FieldProps) => (
                     <TextField
