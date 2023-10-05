@@ -125,7 +125,7 @@ const Root = () => {
               variant="contained"
               color="error"
               sx={{ marginBottom: "30px", width: "120px" }}
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/login")}
             >
               ورود
             </Button>

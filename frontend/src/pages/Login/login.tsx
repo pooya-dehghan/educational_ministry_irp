@@ -1,46 +1,47 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import styles from "./login.module.css";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import { makeStyles } from "@material-ui/styles";
-import Box from "@mui/material/Box";
-import { Container, Link, Typography } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useDispatch } from "react-redux";
-import { loginAsync } from "../../features/auth/authThunk";
-import { login } from "../../features/auth/authSlice";
-import { updateResponse } from "../../features/response/responseSlice";
-import { useNavigate } from "react-router-dom";
-import * as tokenHandler from "../../utils/token/index";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import styles from './login.module.css';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import { makeStyles } from '@material-ui/styles';
+import Box from '@mui/material/Box';
+import { Container, Link, Typography } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useDispatch } from 'react-redux';
+import { loginAsync } from '../../features/auth/authThunk';
+import { login } from '../../features/auth/authSlice';
+import { updateResponse } from '../../features/response/responseSlice';
+import { useNavigate } from 'react-router-dom';
+import * as tokenHandler from '../../utils/token/index';
+import * as userInfoLocalStorage from '../../utils/storageUser/index';
 
 const useStyles = makeStyles({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100vw !important",
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100vw !important',
   },
   loginHeader: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   buttonContainer: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   textAreaContainer: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   loginLink: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 
 const Login = () => {
   const classes = useStyles();
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [password, setPassword] = useState("");
-  const isSmallScreen = useMediaQuery("(max-width: 600px)");
+  const [password, setPassword] = useState('');
+  const isSmallScreen = useMediaQuery('(max-width: 600px)');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -56,22 +57,23 @@ const Login = () => {
         dispatch(login(response));
         dispatch(
           updateResponse({
-            severity: "success",
-            message: "شما با موفقیت وارد سامانه جامع شدید.",
+            severity: 'success',
+            message: 'شما با موفقیت وارد سامانه جامع شدید.',
             open: true,
           })
         );
         tokenHandler.setToken(response.access);
         tokenHandler.setRefreshToken(response.refresh);
+        userInfoLocalStorage.setUserInfo(response);
         setButtonLoading(false);
-        navigate("/dashboard");
+        navigate('/dashboard');
       })
       .catch((error: any) => {
         dispatch(
           updateResponse({
-            severity: "error",
+            severity: 'error',
             message:
-              "عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.",
+              'عملیات ناموفق لطفا نام کاربری و رمز عبور صحیح را وارد نمایید.',
             open: true,
           })
         );
@@ -84,9 +86,9 @@ const Login = () => {
         <Container
           component="main"
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Box
@@ -96,11 +98,11 @@ const Login = () => {
               px: 4,
               py: 6,
               marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: isSmallScreen ? "300px" : "500px",
-              justifyContent: "center",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              width: isSmallScreen ? '300px' : '500px',
+              justifyContent: 'center',
             }}
             className={styles.box}
           >
@@ -131,21 +133,23 @@ const Login = () => {
                   disabled={buttonLoading}
                 >
                   {buttonLoading ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <CircularProgress size={24} color="inherit" />{" "}
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <CircularProgress size={24} color="inherit" />{' '}
                       <Typography
-                        style={{ fontSize: "13px", marginRight: "8px" }}
+                        style={{ fontSize: '13px', marginRight: '8px' }}
                       >
                         در حال ورود
                       </Typography>
                     </div>
                   ) : (
-                    "ورود"
+                    'ورود'
                   )}
                 </Button>
               </Grid>
               <Grid item xs={12} className={classes.loginLink}>
-                <Link href="signup">تا به حال ثبت نام نکرده اید ؟ ثبت نام کنید</Link>
+                <Link href="signup">
+                  تا به حال ثبت نام نکرده اید ؟ ثبت نام کنید
+                </Link>
               </Grid>
               <Grid item xs={12} className={classes.loginLink}>
                 <Link href="resset">رمز عبور خود را فراموش کرده اید؟</Link>

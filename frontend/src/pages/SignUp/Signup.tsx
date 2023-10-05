@@ -22,6 +22,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { getAllProfessorsAsync } from '../../features/professor/professorThunk';
+import * as userInfoLocalStorage from '../../utils/storageUser/index';
 const useStyles = makeStyles({
   container: {
     justifyContent: 'center',
@@ -121,12 +122,11 @@ const Root = () => {
         );
         tokenHandler.setToken(response.access);
         tokenHandler.setRefreshToken(response.refresh);
+        userInfoLocalStorage.setUserInfo(response)
         setButtonLoading(false);
         navigate('/dashboard');
-        console.log('response: ', response);
       })
       .catch((error: any) => {
-        console.log('do i get here: ', error);
         setButtonLoading(false);
         dispatch(
           updateResponse({

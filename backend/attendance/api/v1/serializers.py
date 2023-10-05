@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from attendance.models import Attendance
 
 
-class DateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Attendance
-        fields = ('date',)
+class DateSerializer(serializers.Serializer):
+
+    date = serializers.DateField(error_messages={
+            'required': 'فیلد الزامی است.',
+            'blank': 'نمی‌تواند خالی باشد.',
+        })
