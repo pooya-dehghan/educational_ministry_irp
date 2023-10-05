@@ -22,12 +22,12 @@ class UserRegisterSerializer(serializers.Serializer):
             'required': 'فیلد الزامی است.',
             'blank': 'نمی‌تواند خالی باشد.',
             'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
-        })
+        },write_only=True)
     password_confirmation = serializers.CharField( error_messages= {
             'required': 'فیلد الزامی است.',
             'blank': 'نمی‌تواند خالی باشد.',
             'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
-        })
+        },write_only=True)
     studentUniqueCode =  serializers.CharField( error_messages={
             'required': 'فیلد الزامی است.',
             'blank': 'نمی‌تواند خالی باشد.',

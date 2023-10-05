@@ -40,7 +40,7 @@ class OfficeManagerGet(APIView):
             ser_data = OfficeManagerSerializer(instance=office_manager)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'this office manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین مسیول اداره ای وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class OfficeManagerList(APIView):
@@ -134,7 +134,7 @@ class OfficeManagerUpdate(APIView):
         try:
             office_manager = OfficeManager.objects.get(pk=pk)
         except OfficeManager.DoesNotExist:
-            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین مسیول اداره ای وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, office_manager)
         ser_data = OfficeManagerSerializer(instance=office_manager, data=request.data, partial=True)
         if ser_data.is_valid():
@@ -160,9 +160,9 @@ class OfficeManagerDelete(APIView):
         try:
             office_manager = OfficeManager.objects.get(pk=pk)
         except OfficeManager.DoesNotExist:
-            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین مسیول اداره ای وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
         office_manager.delete()
-        return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
+        return Response({'پیغام': 'با موفقیت حذف شد'}, status=status.HTTP_200_OK)
 
 
 class SchoolList(APIView):
@@ -188,7 +188,7 @@ class SchoolList(APIView):
         try:
             office_manager = OfficeManager.objects.get(id=request.user.id)
         except OfficeManager.DoesNotExist:
-            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین مسیول اداره ای وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
         capacity = request.query_params.get('capacity')
         school = office_manager.office_to_school
         if capacity == '1':

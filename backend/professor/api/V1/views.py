@@ -35,7 +35,7 @@ class ProfessorGet(APIView):
             ser_data = ProfessorSerializer(instance=professor)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'this professor does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین استادی ای وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ProfessorList(APIView):
@@ -128,7 +128,7 @@ class ProfessorUpdate(APIView):
         try:
             professor = Professor.objects.get(pk=pk)
         except Professor.DoesNotExist:
-            return Response({'message': 'professor does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین استادی ای وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, professor)
         ser_data = ProfessorSerializer(instance=professor, data=request.data, partial=True)
         if ser_data.is_valid():
@@ -154,6 +154,6 @@ class ProfessorDelete(APIView):
         try:
             professor = Professor.objects.get(pk=pk)
         except Professor.DoesNotExist:
-            return Response({'message': 'professor does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'پیغام': 'همچین استادی ای وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
         professor.delete()
-        return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
+        return Response({'پیغام': 'با موفقیت حذف شد'}, status=status.HTTP_200_OK)
