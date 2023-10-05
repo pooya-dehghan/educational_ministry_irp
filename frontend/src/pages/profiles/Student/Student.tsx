@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import styles from "./student.module.css";
-import { StudentInterface } from "../../../interfaces/student.interface";
-import { useDispatch } from "react-redux";
-import { updatestudent } from "../../../features/student/studentSlice";
-import { updateResponse } from "../../../features/response/responseSlice";
-import { updatestudentAsync } from "../../../features/student/studentThunk";
-import { sendRequestAsync } from "../../../features/requests/requestThunk";
-import { makeStyles } from "@mui/styles";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import CircularProgress from "@mui/material/CircularProgress";
-import InputLabel from "@mui/material/InputLabel";
-import {} from "../../../features/requests/requestThunk";
-import FormControl from "@mui/material/FormControl";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import styles from './student.module.css';
+import { StudentInterface } from '../../../interfaces/student.interface';
+import { useDispatch } from 'react-redux';
+import { updatestudent } from '../../../features/student/studentSlice';
+import { updateResponse } from '../../../features/response/responseSlice';
+import { updatestudentAsync } from '../../../features/student/studentThunk';
+import { sendRequestAsync } from '../../../features/requests/requestThunk';
+import { makeStyles } from '@mui/styles';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import CircularProgress from '@mui/material/CircularProgress';
+import InputLabel from '@mui/material/InputLabel';
+import {} from '../../../features/requests/requestThunk';
+import FormControl from '@mui/material/FormControl';
+import UploadFileButton from '../../../components/UploadFile/UploadFile';
 
 const useStyles = makeStyles((theme) => ({
   marginButton: {
@@ -288,6 +289,16 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
           </Form>
         )}
       </Formik>
+      <Grid container>
+        <Grid item>
+          <Typography variant="h4" className={classes.marginTop}>
+            بارگذاری تصویر پروفایل
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container mt={5}>
+        <UploadFileButton />
+      </Grid>
       <Grid container>
         <Grid item>
           <Typography variant="h4" className={classes.marginTop}>

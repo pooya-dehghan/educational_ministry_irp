@@ -47,26 +47,28 @@ const SideBar: React.FC<propsTypes> = ({ open, handleDrawerToggle }) => {
           <OpenInFullIcon />
         </IconButton>
         <Divider />
-        {appropriateListReturned(userInfo.type).map((list, index) => {
-          return (
-            <ListItem
-              key={index}
-              component={Link}
-              to={`${basePath}${list.to}`}
-              disablePadding
-            >
-              <ListItemButton>
-                <ListItemText
-                  className={styles.listItemText}
-                  primary={list.list}
-                />
-                <ListItemIcon style={{ justifyContent: 'right' }}>
-                  {list.icon}
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
+        {appropriateListReturned(userInfo.type, userInfo.id).map(
+          (list, index) => {
+            return (
+              <ListItem
+                key={index}
+                component={Link}
+                to={`${basePath}${list.to}`}
+                disablePadding
+              >
+                <ListItemButton>
+                  <ListItemText
+                    className={styles.listItemText}
+                    primary={list.list}
+                  />
+                  <ListItemIcon style={{ justifyContent: 'right' }}>
+                    {list.icon}
+                  </ListItemIcon>
+                </ListItemButton>
+              </ListItem>
+            );
+          }
+        )}
       </Drawer>
     </Box>
   );

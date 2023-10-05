@@ -203,10 +203,6 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
                         <AccountCircle />
                         حساب کاربری
                       </MenuItem>
-                      <MenuItem onClick={profileClick}>
-                        <SettingsIcon />
-                        تنظیمات
-                      </MenuItem>
                       <MenuItem onClick={logOutClick}>
                         <LogoutIcon />
                         خروج از حساب کاربری
