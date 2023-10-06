@@ -15,7 +15,7 @@ class TaskCreationView(APIView):
         try:
             professor = Professor.objects.get(id=request.user.id)
         except ObjectDoesNotExist:
-            return Response({"message": "invalid professor"})
+            return Response({"message": "همچین استادی وجود ندارد", 'Success': False})
 
         ser_data = TaskSerializer(data=request.data)
         if ser_data.is_valid():
@@ -29,10 +29,11 @@ class TaskCreationView(APIView):
             for student in students:
                 Notification.objects.create(sender=request.user, receiver=student, code=300, title=task.title,
                                             body=f"استاد {professor.username} تکیف جدیدی به نام {task.title}ایجاد نموده است و تا تاریخ {task.deadline}فرصت دارید تا آن را انجام دهید.")
-            return Response({"message": "تکلیف شما با موفقیت ساخته شد و برای دانش آموزان اطلاعیه ارسال شد"},
-                            status=status.HTTP_201_CREATED)
+            return Response(
+                {"message": "تکلیف شما با موفقیت ساخته شد و برای دانش آموزان اطلاعیه ارسال شد", 'Success': True},
+                status=status.HTTP_201_CREATED)
         else:
-            return Response({"data": ser_data.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": ser_data.errors, 'Success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RenderTaskCreationView(APIView):
@@ -41,7 +42,8 @@ class RenderTaskCreationView(APIView):
         try:
             student = Student.objects.get(id=request.user.id)
         except ObjectDoesNotExist:
-            return Response({"data": "invalid student"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "همچین دانشجویی وجود ندارد", 'Success': False},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         ser_data = RenderTaskUploadingSerializer(data=request.data)
         if ser_data.is_valid():
@@ -54,12 +56,13 @@ class RenderTaskCreationView(APIView):
                     default_storage.delete(rt.file.name)
                     rt.delete()
 
-
             default_storage.save(new_file_path, uploaded_file)
             Notification.objects.create(sender=student, receiver=student.professor2, code=250, title="انجام تکلیف",
                                         body=f"دانشجو{student.username} تکلیف {task.title} را در تاریخ {last_rt.delivery_date} آپلود کرده است")
 
-            return Response({"message": "تکلیف شما با موفقیت آپلود شد", "location":f"backend/media/{last_rt.file.name}"},
-                            status=status.HTTP_201_CREATED)
+            return Response(
+                {"message": "تکلیف شما با موفقیت آپلود شد", "location": f"backend/media/{last_rt.file.name}",
+                 'Success': True},
+                status=status.HTTP_201_CREATED)
         else:
-            return Response({"data": ser_data.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": ser_data.errors, 'Success': False}, status=status.HTTP_400_BAD_REQUEST)

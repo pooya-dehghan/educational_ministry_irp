@@ -16,7 +16,7 @@ class NotificationListView(APIView):
         try:
             user = User.objects.get(id=request.user.id)
         except User.DoesNotExist:
-            return Response({'پیغام': 'همچین شخصی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین شخصی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         seen_param = request.query_params.get('seen')
         unseen_param = request.query_params.get('unseen')
         print(seen_param)
@@ -56,13 +56,13 @@ class NotificationGet(APIView):
         try:
             user = User.objects.get(id=request.user.id)
         except User.DoesNotExist:
-            return Response({'پیغام': 'همچین شخصی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین شخصی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         notification = Notification.objects.filter(receiver=user, id=pk)
         ser_data = NotificationSerializer(notification, many=True)
         if notification.count() > 0:
             return Response(data=ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({"message": " شما همجین  درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": " شما همجین  درخواستی در سیستم ندارید", 'Success': False}, status=status.HTTP_404_NOT_FOUND)
 
 
 class SeenNotification(APIView):
@@ -82,13 +82,13 @@ class SeenNotification(APIView):
         try:
             user = User.objects.get(id=request.user.id)
         except User.DoesNotExist:
-            return Response({'پیغام': 'همچین شخصی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین شخصی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         notification = Notification.objects.filter(receiver=user, id=pk).first()
         if notification:
             notification.view = 's'
             notification.save()
-            return Response({'پیغام': 'نوتیفیکیشن سین شد'}, status=status.HTTP_200_OK)
+            return Response({'message':'نوتیفیکیشن سین شد', 'Success': True}, status=status.HTTP_200_OK)
         else:
-            return Response({'پیغام': 'همچین نوتیفیکیشنی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین نوتیفیکیشنی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
 
 

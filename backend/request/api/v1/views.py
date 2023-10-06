@@ -38,13 +38,15 @@ class ListRequest(APIView):
         try:
             office_manager = OfficeManager.objects.get(id=request.user.id)
         except OfficeManager.DoesNotExist:
-            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
-        req = Request.objects.filter(receiver=office_manager)
+            return Response({'message': 'همچین مسیول اداره ای وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
+        req = Request.objects.filter(receiver=office_manager).order_by('-status')
         ser_data = RequestSerializer(req, many=True)
         if req:
             return Response(data=ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید", 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
 
 
 class GetRequest(APIView):
@@ -70,13 +72,15 @@ class GetRequest(APIView):
         try:
             office_manager = OfficeManager.objects.get(id=request.user.id)
         except OfficeManager.DoesNotExist:
-            return Response({'message': 'office_manager does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین مسیول اداره ای وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
         req = Request.objects.filter(receiver=office_manager, id=id)
         ser_data = RequestSerializer(req, many=True)
         if req:
             return Response(data=ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید", 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
 
 
 class RejectRequest(APIView):
@@ -96,20 +100,20 @@ class RejectRequest(APIView):
         }
     )
     def post(self, request, pk):
-
-        req = Request.objects.filter(id=pk).first()
-        if req:
-            office_manager = req.receiver
-            student = req.sender
-            self.check_object_permissions(request, office_manager)
-            if req.status != 'a':
-                req.status = 'na'
-                req.save()
-                Notification.objects.create(code=401, sender=request.user, receiver=User.objects.get(id=student.id))
-                return Response({'message': 'request is rejected successfully'}, status=status.HTTP_200_OK)
-            return Response({'message': 'this request accept before'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'message': 'not exist request by this id'})
+        try:
+            req = Request.objects.get(id=pk)
+        except Request.DoesNotExist:
+            return Response({'message': 'همچین درخواستی ای وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
+        office_manager = req.receiver
+        student = req.sender
+        self.check_object_permissions(request, office_manager)
+        if req.status != 'a':
+            req.status = 'na'
+            req.save()
+            Notification.objects.create(code=401, sender=request.user, receiver=User.objects.get(id=student.id))
+            return Response({'message': 'درخواست رد شد', 'Success': True}, status=status.HTTP_200_OK)
+        return Response({'message': 'این درخواست قبلا تایید شده', 'Success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AcceptRequest(APIView):
@@ -135,36 +139,45 @@ class AcceptRequest(APIView):
         try:
             req = Request.objects.get(id=request_id)
         except Request.DoesNotExist:
-            return Response({'message': 'request does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین درخواستی ای وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
         office_manager = req.receiver
         student = req.sender
         self.check_object_permissions(request, office_manager)
         try:
             school = School.objects.get(pk=school_id)
         except School.DoesNotExist:
-            return Response({'message': 'school does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین مدرسه ای وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
         if school.office_manager == office_manager:
             if req.status != 'na':
-                if student.school2 is None and school.capacity > 0:
-                    req.status = 'a'
-                    req.save()
-                    student.school2 = school
-                    student.save()
-                    capacity = school.capacity
-                    capacity -= 1
-                    school.capacity = capacity
-                    school.save()
-                    Notification.objects.create(code=501, sender=request.user, receiver=User.objects.get(id=student.id))
-                    return Response({'message': 'this request accept and student assign to one school and sent a '
-                                                'notification to student'},
-                                    status=status.HTTP_200_OK)
+                if student.school2 is None:
+                    if school.capacity > 0:
+                        req.status = 'a'
+                        req.save()
+                        student.school2 = school
+                        student.save()
+                        capacity = school.capacity
+                        capacity -= 1
+                        school.capacity = capacity
+                        school.save()
+                        Notification.objects.create(code=501, sender=request.user,
+                                                    receiver=User.objects.get(id=student.id))
+                        return Response({
+                            'message': f'این درخواست با موفقیت پذیرفته شد و دانشجوی{student.username} به مدرسه {school.name} معرفی شد',
+                            'Success': True},
+                            status=status.HTTP_200_OK)
+                    else:
+                        return Response({'message': 'این مدرسه ظرفیت کافی ندارد', 'Success': False})
                 else:
-                    return Response({'message': 'this school not assign to this student'},
+                    return Response({'message': 'این دانش آموز قبلا مدرسه داشته است اشتباهی به شما درخواست داده است',
+                                     'Success': False},
                                     status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({'message': 'this request reject before'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message': 'این درخواست قبلا رد شده است', 'Success': False},
+                                status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'message': 'this school not in this office_manager region'},
+            return Response({'message': 'این مدرسه در منطقه شما نیست ', 'Success': False},
                             status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -190,15 +203,14 @@ class CancelRequest(APIView):
                                                            receiver=User.objects.get(id=req.receiver.id)).last()
                 req.delete()
                 notification.delete()
-                return Response({'message': 'request and notification deleted'})
+                return Response({'message': 'ریکویست و نوتیفیکیشن دلیت شدند', 'Success': True})
             else:
-                return Response({'message': 'you have not request for canceling'})
+                return Response({'message': 'شما درخواستی برای کنسل کردن ندارید', 'Success': False})
         else:
-            return Response({'message': 'you are not student'})
+            return Response({'message': 'شما دانش آموز نیستید', 'Success': False})
 
 
 class SuperUserListRequest(APIView):
-
     permission_classes = [IsAdminUser]
 
     @swagger_auto_schema(
@@ -234,18 +246,22 @@ class RequestForSchool(APIView):
         try:
             sender = Student.objects.get(id=request.user.id)
         except Student.DoesNotExist:
-            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین دانش آموزی وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
         try:
             receiver = OfficeManager.objects.get(region=region)
         except OfficeManager.DoesNotExist:
-            return Response({'message': 'منطقه ارسالی شما در حال حاضر یا مسءولی در سیستم ندارد یا اشتباه است'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {'message': 'منطقه ارسالی شما در حال حاضر یا مسءولی در سیستم ندارد یا اشتباه است', 'Success': False},
+                status=status.HTTP_404_NOT_FOUND)
         if sender.school2 is not None:
-            return Response({'message': 'you have school you cant send request again'})
+            return Response({'message': 'شما مدرسه دارید پس نمیتوانید دوباره درخواست دهید', 'Success': False})
         if Request.objects.filter(sender=sender, status='s').exists():
-            return Response({'message': 'شما قبلا درخواستی فرستاده اید که هنوز تایین وضعیت نشده است لطفا شکیبا باشید'})
+            return Response({'message': 'شما قبلا درخواستی فرستاده اید که هنوز تایین وضعیت نشده است لطفا شکیبا باشید',
+                             'Success': False})
         if Request.objects.filter(sender=sender, receiver=receiver).exists():
-            return Response({'message': 'you requested to this office manager before'})
+            return Response(
+                {'message': 'شما قبلا به این اداره درخواست داده اید نمیتواتید دوباره درخواست دهید ', 'Success': False})
         req = Request.objects.create(sender=sender, receiver=receiver)
         req.save()
         dt = timezone.now()
@@ -267,8 +283,10 @@ class RequestForSchool(APIView):
         req.code = dt + str_id
         req.save()
         Notification.objects.create(sender=request.user, receiver=receiver, code=301)
-        return Response({'message': 'request sent successfully', 'request id': req.id, 'request.code': req.code, 'date':req_date},
-                        status=status.HTTP_201_CREATED)
+        return Response(
+            {'message': 'درخواست با موفقیت ارسال شد', 'request_id': req.id, 'request.code': req.code, 'date': req_date,
+             'Success': True},
+            status=status.HTTP_201_CREATED)
 
 
 class StudentGetRequestStatus(APIView):
@@ -295,17 +313,17 @@ class StudentGetRequestStatus(APIView):
         try:
             student = Student.objects.get(id=request.user.id)
         except Student.DoesNotExist:
-            return Response({'message': 'student does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'شما دانشجو نیستید', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         stu_request = Request.objects.filter(sender=student).last()
         if stu_request:
             if stu_request.status == "s":
-                return Response({'status': "ارسال شده و در حال انتظار"},
+                return Response({'message': "ارسال شده و در حال انتظار", 'Success': True},
                                 status=status.HTTP_200_OK)
             if stu_request.status == "n":
-                return Response({'status': "ارسال نشده"}, status=status.HTTP_200_OK)
+                return Response({'message': "ارسال نشده", 'Success': False}, status=status.HTTP_200_OK)
             if stu_request.status == "na":
-                return Response({'status': "عدم تایید"}, status=status.HTTP_200_OK)
+                return Response({'message': "عدم تایید", 'Success': False}, status=status.HTTP_200_OK)
             if stu_request.status == "a":
-                return Response({'status': "تایید"}, status=status.HTTP_200_OK)
+                return Response({'message': "تایید", 'Success': True}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'you do not have any request'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'شما هیج درخواستی ندارید', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
