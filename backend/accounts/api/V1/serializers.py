@@ -10,9 +10,14 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
+    password_confirmation = serializers.CharField(max_length=100, write_only=True)
+    professor2 = serializers.IntegerField()
     class Meta:
         model = Student
-        fields = ("username",)
+        fields = ("username", "password", 'password_confirmation', 'studentUniqueCode', 'professor2')
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
     def validate(self, attrs):
         password_confirmation = attrs.get("password_confirmation")

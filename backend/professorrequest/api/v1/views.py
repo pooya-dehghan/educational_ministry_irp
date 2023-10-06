@@ -34,13 +34,14 @@ class ListRequest(APIView):
         try:
             professor = Professor.objects.get(id=request.user.id)
         except Professor.DoesNotExist:
-            return Response({'message': 'professor does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین استادی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         req = ProfessorRequest.objects.filter(receiver=professor)
         ser_data = ProfessorRequestSerializer(req, many=True)
         if req:
             return Response(data=ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید", 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
 
 
 class GetRequest(APIView):
@@ -67,13 +68,14 @@ class GetRequest(APIView):
         try:
             professor = Professor.objects.get(id=request.user.id)
         except Professor.DoesNotExist:
-            return Response({'message': 'professor does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین استادی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         req = ProfessorRequest.objects.filter(receiver=professor, id=id)
         ser_data = ProfessorRequestSerializer(req, many=True)
         if req:
             return Response(data=ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید", 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
 
 
 class AcceptRequest(APIView):
@@ -96,7 +98,8 @@ class AcceptRequest(APIView):
         try:
             req = ProfessorRequest.objects.get(id=pk)
         except ProfessorRequest.DoesNotExist:
-            return Response({'message': 'professor_request does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین درخواستی وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
         student = req.sender
         professor = req.receiver
         self.check_object_permissions(request, professor)
@@ -109,9 +112,9 @@ class AcceptRequest(APIView):
                                         receiver=User.objects.get(id=student.id), code=701)
             req.status = 'a'
             req.save()
-            return Response({'message': 'this request accepted'})
+            return Response({'message': 'درخواست پذیرفته شد', 'Success': True})
         else:
-            return Response({'message': 'this student have professor before'})
+            return Response({'message': 'این دانشجو استاد دارد و اشتباها به شما درخواست دادخ بود ', 'Success': False})
 
 
 class RejectRequest(APIView):
@@ -134,7 +137,8 @@ class RejectRequest(APIView):
         try:
             req = ProfessorRequest.objects.get(id=pk)
         except ProfessorRequest.DoesNotExist:
-            return Response({'message': 'professor_request does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین درخواستی وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
         student = req.sender
         professor = req.receiver
         self.check_object_permissions(request, professor)
@@ -148,12 +152,11 @@ class RejectRequest(APIView):
                 student.rejected_professors = first_username + " " + str(professor.username)
             student.save()
             Notification.objects.create(sender=User.objects.get(id=professor.id),
-                                        receiver=User.objects.get(id=student.id), code=701, title="رد درخواست", body=f"استاد {professor.username} درخواست دانشجو {student.username} را مبنی بر انتساب به عنوان استاد درس کارورزی رد نموده است")
+                                        receiver=User.objects.get(id=student.id), code=701, title="رد درخواست",
+                                        body=f"استاد {professor.username} درخواست دانشجو {student.username} را مبنی بر انتساب به عنوان استاد درس کارورزی رد نموده است")
             req.status = 'na'
             req.save()
-            return Response({'message': 'this request rejected'})
+            return Response({'message': 'درخواست رد شد', 'Success': True})
         else:
-            return Response({'message': 'this student have professor before'})
-
-
-
+            return Response(
+                {'message': 'این دانشجو قبلا استاد داشته است و اشتباها به شما درخواست داده است', 'Success': False})

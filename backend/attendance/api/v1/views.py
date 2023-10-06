@@ -31,31 +31,21 @@ class FillAttendance(APIView):
         try:
             student = Student.objects.get(id=pk)
         except Student.DoesNotExist:
-            return Response({'پیغام': 'همچین دانشحویی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین دانشحویی وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, student)
-
 
         ser_data = DateSerializer(data=request.data)
         if ser_data.is_valid():
             date = ser_data.validated_data['date']
+
+            #date = datetime2jalali(date).strftime('%y-%m-%d')
+
             if Attendance.objects.filter(student=student, date=date).exists():
-                return Response({'پیغام': 'قبلا این تاریخ را پر کرده اید'})
+                return Response({'message': 'شما قبلا این تاریخ را برای این دانشحو پر کرده اید', 'Success': False})
             Attendance.objects.create(student=student, date=date)
-            return Response({'پیغام': f'پیغام در تاریخ {date} برای دانشجو {student.username} پر شد'})
-
-        if student:
-            ser_data = DateSerializer(data=request.data)
-            if ser_data.is_valid():
-                date = ser_data.validated_data['date']
-                date = datetime2jalali(date).strftime('%y-%m-%d')
-                print(date)
-                if Attendance.objects.filter(student=student, date=date).exists():
-                    return Response({'message': 'you filled before'})
-                Attendance.objects.create(student=student, date=date)
-                return Response({'message': f'attendance set in time {date} for student {student.username}'})
-            else:
-                return Response({'message': 'Invalid data'}, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response(
+                {'message': f'حضور دانشجو{student.username} در تاریخ {date}با موفقید ثبت شد ', 'Success': True})
         else:
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -76,7 +66,8 @@ class GetAttendance(APIView):
         try:
             student = Student.objects.get(id=pk)
         except Student.DoesNotExist:
-            return Response({'پیغام': 'همچین دانشحویی وجود ندارد'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین دانشحویی وجود ندارد', 'Success': False},
+                            status=status.HTTP_404_NOT_FOUND)
         attendance = Attendance.objects.filter(student=student)
         ser_data = DateSerializer(instance=attendance, many=True)
         # date = datetime2jalali(ser_data.data[0]['date']).strftime('%y-%m-%d')
