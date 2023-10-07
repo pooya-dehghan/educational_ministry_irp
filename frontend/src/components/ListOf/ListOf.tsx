@@ -17,6 +17,11 @@ import { deleteTeachersAsync } from '../../features/teacher/teacherThunk';
 import { deletestudentsAsync } from '../../features/student/studentThunk';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { deleteTeacherById } from '../../features/teacher/teacherSlice';
+import { deleteProfessorById } from '../../features/professor/professorSlice';
+import { deleteSchoolById } from '../../features/school/schoolSlice';
+import { deleteOfficeManagerById } from '../../features/officemanager/officemanagerSlice';
+import { deleteStudentById } from '../../features/student/studentSlice';
 
 export default function ListOf({
   type = 'officemanager',
@@ -57,41 +62,61 @@ export default function ListOf({
         (dispatch as any)(deleteOfficeManagersAsync({ id }))
           .unwrap()
           .then((response: any) => {
+            dispatch(deleteOfficeManagerById(id));
             setButtonLoading(false);
+            setOpenPermissionModal(false);
           })
-          .catch((error: any) => {});
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'professor':
         (dispatch as any)(deleteProfessorsAsync({ id }))
           .unwrap()
           .then((response: any) => {
+            dispatch(deleteProfessorById(id));
             setButtonLoading(false);
+            setOpenPermissionModal(false);
           })
-          .catch((error: any) => {});
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'school':
         (dispatch as any)(deleteSchoolsAsync({ id }))
           .unwrap()
           .then((response: any) => {
+            dispatch(deleteSchoolById(id));
             setButtonLoading(false);
+            setOpenPermissionModal(false);
           })
-          .catch((error: any) => {});
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'student':
         (dispatch as any)(deletestudentsAsync({ id }))
           .unwrap()
           .then((response: any) => {
+            dispatch(deleteStudentById(id));
             setButtonLoading(false);
+            setOpenPermissionModal(false);
           })
-          .catch((error: any) => {});
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'teacher':
         (dispatch as any)(deleteTeachersAsync({ id }))
           .unwrap()
           .then((response: any) => {
+            dispatch(deleteTeacherById(id));
             setButtonLoading(false);
+            setOpenPermissionModal(false);
           })
-          .catch((error: any) => {});
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       default:
         break;

@@ -19,6 +19,11 @@ const studentSlice = createSlice({
     getAllstudents: (state, action) => {
       state.allstudents = action.payload;
     },
+    deleteStudentById: (state, action) => {
+      state.allstudents = state.allstudents.filter(
+        (student: any) => student.id != action.payload
+      );
+    },
     updatestudent: (state, action) => {
       state.studentinfo = action.payload;
     },
@@ -33,6 +38,7 @@ export const {
   getAllstudents,
   updatestudent,
   deletestudent,
+  deleteStudentById,
 } = studentSlice.actions;
 
 export default studentSlice.reducer;
