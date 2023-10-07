@@ -83,7 +83,6 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
       email: values.email,
       first_name: values.first_name,
       last_name: values.last_name,
-      birthday_date: values.birthday_date,
       gender: values.gender,
       personal_code: values.personal_code,
     };
@@ -143,7 +142,6 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
           email: userInfo.email,
           first_name: userInfo.first_name,
           last_name: userInfo.last_name,
-          birthday_date: userInfo.birthday_date,
           gender: userInfo.gender,
           personal_code: userInfo.personal_code,
         }}
@@ -213,23 +211,6 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       label="ایمیل"
                       placeholder="ایمیل"
                       id="email"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="birthday_date">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="تاریخ تولد"
-                      placeholder="تاریخ تولد"
-                      id="birthday_date"
                       autoFocus
                       variant="outlined"
                       fullWidth

@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import styles from "./professor.module.css";
-import { ProfessorInterface } from "../../../interfaces/professor.interface";
-import { useDispatch } from "react-redux";
-import { updateProfessor } from "../../../features/professor/professorSlice";
-import { updateResponse } from "../../../features/response/responseSlice";
-import { updateProfessorAsync } from "../../../features/professor/professorThunk";
-import { makeStyles } from "@mui/styles";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import styles from './professor.module.css';
+import { ProfessorInterface } from '../../../interfaces/professor.interface';
+import { useDispatch } from 'react-redux';
+import { updateProfessor } from '../../../features/professor/professorSlice';
+import { updateResponse } from '../../../features/response/responseSlice';
+import { updateProfessorAsync } from '../../../features/professor/professorThunk';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
   marginButton: {
-    marginBottom: "3rem", // Add margin here
-    fontStyle: "bold",
+    marginBottom: '3rem', // Add margin here
+    fontStyle: 'bold',
   },
 }));
 
@@ -40,7 +40,6 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
       email: values.email,
       first_name: values.first_name,
       last_name: values.last_name,
-      birthday_date: values.birthday_date,
       gender: values.gender,
       personal_code: values.personal_code,
       professor_id: values.professor_id,
@@ -51,8 +50,8 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
         dispatch(updateProfessor(response));
         dispatch(
           updateResponse({
-            severity: "success",
-            message: "پروفایل شما با موفقیت بروزرسانی شد..",
+            severity: 'success',
+            message: 'پروفایل شما با موفقیت بروزرسانی شد..',
             open: true,
           })
         );
@@ -60,8 +59,8 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
       .catch((error: any) => {
         dispatch(
           updateResponse({
-            severity: "error",
-            message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
+            severity: 'error',
+            message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
             open: true,
           })
         );
@@ -70,17 +69,17 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
   return (
     <Box
       sx={{
-        backgroundColor: "white",
+        backgroundColor: 'white',
         paddingBottom: 8,
         paddingTop: 8,
         paddingLeft: 12,
         paddingRight: 12,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         boxShadow: 3,
         borderRadius: 2,
-        height: "auto",
+        height: 'auto',
       }}
       className={styles.container}
     >
@@ -99,7 +98,6 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
           email: userInfo.email,
           first_name: userInfo.first_name,
           last_name: userInfo.last_name,
-          birthday_date: userInfo.birthday_date,
           gender: userInfo.gender,
           personal_code: userInfo.personal_code,
         }}
@@ -122,7 +120,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -139,7 +137,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -156,7 +154,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -173,24 +171,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="birthday_date">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="تاریخ تولد"
-                      placeholder="تاریخ تولد"
-                      id="birthday_date"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -207,7 +188,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -224,41 +205,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="password">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="گذرواژه"
-                      placeholder="گذرواژه"
-                      id="password"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="password_confirmation">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="تکرار گذرواژه"
-                      placeholder="تکرار گذرواژه"
-                      id="nationalCode"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
