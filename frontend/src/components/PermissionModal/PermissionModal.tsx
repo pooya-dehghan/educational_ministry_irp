@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import classes from './PermissionModal.module.css';
+import CircularProgress from '@mui/material/CircularProgress';
+
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -20,6 +22,7 @@ const PermissionModal = ({
   open = false,
   handleClose = () => {},
   onClickDelete = () => {},
+  buttonLoading = false,
 }) => {
   return (
     <Grid>
@@ -45,8 +48,18 @@ const PermissionModal = ({
               variant="contained"
               color="error"
               size="small"
+              disabled={buttonLoading}
             >
-              انجام
+              {buttonLoading ? (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <CircularProgress size={24} color="inherit" />{' '}
+                  <Typography style={{ fontSize: '13px', marginRight: '8px' }}>
+                    در حال حذف
+                  </Typography>
+                </div>
+              ) : (
+                'انجام'
+              )}
             </Button>
           </Grid>
         </Box>
