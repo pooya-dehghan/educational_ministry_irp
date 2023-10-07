@@ -19,6 +19,11 @@ const teacherSlice = createSlice({
     getAllTeachers: (state, action) => {
       state.allteachers = action.payload;
     },
+    deleteTeacherById: (state, action) => {
+      state.allteachers = state.allteachers.filter(
+        (teacher: any) => teacher.id != action.payload
+      );
+    },
     updateTeacher: (state, action) => {
       state.teacherinfo = action.payload;
     },
@@ -33,6 +38,7 @@ export const {
   getAllTeachers,
   updateTeacher,
   deleteTeacher,
+  deleteTeacherById,
 } = teacherSlice.actions;
 
 export default teacherSlice.reducer;
