@@ -22,7 +22,7 @@ import { professorValidationSchema } from '../../validations/create-professor-va
 const CreateProfessor: React.FC = () => {
   const dispatch = useDispatch();
   const [buttonLoading, setButtonLoading] = useState(false);
-  const handleSubmit = (values: Values, setSubmitting: any) => {
+  const handleSubmit = (values: Values, setSubmitting: any, resetForm: any) => {
     setButtonLoading(true);
     let createProfessorData = {
       professor_id: values.professor_id,
@@ -41,6 +41,7 @@ const CreateProfessor: React.FC = () => {
             open: true,
           })
         );
+        resetForm();
         setButtonLoading(false);
       })
       .catch((error: any) => {
@@ -99,8 +100,11 @@ const CreateProfessor: React.FC = () => {
                   username: '',
                 }}
                 validationSchema={professorValidationSchema} // Add validation schema
-                onSubmit={(values: Values, { setSubmitting }: any) => {
-                  handleSubmit(values, setSubmitting);
+                onSubmit={(
+                  values: Values,
+                  { setSubmitting, resetForm }: any
+                ) => {
+                  handleSubmit(values, setSubmitting, resetForm);
                 }}
               >
                 {({ handleSubmit, errors, touched }) => (

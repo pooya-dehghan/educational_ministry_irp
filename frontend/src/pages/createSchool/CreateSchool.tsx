@@ -27,7 +27,11 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 const CreateSchool: React.FC = () => {
   const dispatch = useDispatch();
   const [buttonLoading, setButtonLoading] = useState(false);
-  const handleFormSubmit = (values: Values, setSubmitting: any) => {
+  const handleFormSubmit = (
+    values: Values,
+    setSubmitting: any,
+    resetForm: any
+  ) => {
     setButtonLoading(true);
     let createSchoolData = {
       name: values.name,
@@ -50,6 +54,7 @@ const CreateSchool: React.FC = () => {
             open: true,
           })
         );
+        resetForm();
         setButtonLoading(false);
       })
       .catch((error: any) => {
@@ -107,8 +112,11 @@ const CreateSchool: React.FC = () => {
                   city: '',
                 }}
                 validationSchema={schoolValidationSchema}
-                onSubmit={(values: Values, { setSubmitting }: any) => {
-                  handleFormSubmit(values, setSubmitting);
+                onSubmit={(
+                  values: Values,
+                  { setSubmitting, resetForm }: any
+                ) => {
+                  handleFormSubmit(values, setSubmitting, resetForm);
                 }}
               >
                 {({ handleSubmit }) => (
