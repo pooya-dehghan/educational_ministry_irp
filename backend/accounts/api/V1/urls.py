@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import ApiUserRegistrationView, CustomTokenObtainPairView, UserLoginAPIView, UserLogoutAPIView \
     , ForgetPassword, ResetPassword, DashBordList, DeleteProfile, ProfileView, UploadAvatarView \
-    , ForgetPassword, ResetPassword, DashBordList, DeleteProfile, ProfileView, ChangePassword
+    , ForgetPassword, ResetPassword, DashBordList, DeleteProfile, ProfileView, ChangePassword, EntityList
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -27,6 +27,6 @@ urlpatterns = [
     path('profile/<int:id>/', ProfileView.as_view(), name='profile'),
     path('avatar/upload/', UploadAvatarView.as_view(), name='avatar_upload'),
     path('changepassword/', ChangePassword.as_view()),
-
+    path ('entitylist/',EntityList.as_view()),
 
 ]

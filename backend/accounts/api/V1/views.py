@@ -474,7 +474,7 @@ class UploadAvatarView(APIView):
                 uploaded_avatar = ser_data.validated_data["avatar"]
             except:
                 return Response({"message": "متاسفانه فایل آپلود شده شما نا معتبر است"},
-                            status=status.HTTP_400_BAD_REQUEST)
+                                status=status.HTTP_400_BAD_REQUEST)
             file_extension = os.path.splitext(uploaded_avatar.name)[1]
             new_file_name = f"{user.username}_avatar{file_extension}"  # Customize the naming convention as needed
             new_file_path = os.path.join("avatars", new_file_name)  # 'avatars' is the media subdirectory
@@ -540,3 +540,66 @@ class ChangePassword(APIView):
                 return Response({'message': 'username or old_password the mistake'}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EntityList(APIView):
+
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows users to get entity list
+        if you admin show all student all office_manager all professor all teacher and all school
+        if you professor show your student
+        if you school_manager show your student and your teacher
+        if you office_manager show your student and your school
+        if you teacher show your student
+        """,
+        operation_summary="endpoint for entity list",
+        responses={
+            '200': 'ok',
+            '404': 'not found'
+
+        }
+    )
+    def get(self, request):
+        if request.user.is_admin:
+            professor = Professor.objects.all()
+            teacher = Teacher.objects.all()
+            office_manager = OfficeManager.objects.all()
+            school = School.objects.all()
+            student = Student.objects.all()
+            ser_date_office_manager = OfficeManagerSerializer(instance=office_manager, many=True).data
+            ser_data_professor = ProfessorSerializer(instance=professor, many=True).data
+            ser_data_teacher = TeacherSerializer(instance=teacher, many=True).data
+            ser_data_school = SchoolSerializerAll(instance=school, many=True).data
+            ser_data_student = StudentSerializer(instance=student, many=True).data
+            return Response({'school': ser_data_school, 'student': ser_data_student, 'teacher': ser_data_teacher,
+                             'professor': ser_data_professor, 'office_manager': ser_date_office_manager,
+                             'type': 'superuser', 'Success': True})
+        elif Professor.objects.filter(id=request.user.id).exists():
+            student = Student.objects.filter(professor2__id=request.user.id)
+            ser_data_student = StudentSerializer(instance=student, many=True).data
+            return Response({'student': ser_data_student, 'type': 'professor', 'Success': True})
+        elif School.objects.filter(id=request.user.id).exists():
+            school = School.objects.get(id=request.user.id)
+            student = school.school_to_student
+            teacher = school.teacher
+            ser_data_student = StudentSerializer(instance=student, many=True).data
+            ser_data_teacher = TeacherSerializer(instance=teacher, many=True).data
+
+            return Response(
+                {'student': ser_data_student, 'teacher': ser_data_teacher, 'type': 'school_manager', 'Success': True})
+        elif OfficeManager.objects.filter(id=request.user.id).exists():
+            office_manager = OfficeManager.objects.get(id=request.user.id)
+            school = office_manager.office_to_school
+            student = Student.objects.filter(school2__office_manager=office_manager)
+            ser_data_student = StudentSerializer(instance=student, many=True).data
+            ser_data_school = SchoolSerializerAll(instance=school, many=True).data
+            return Response(
+                {'school': ser_data_school, 'student': ser_data_student, 'type': 'office_manager', 'Success': True})
+        elif Teacher.objects.filter(id=request.user.id).exists():
+            student = Student.objects.filter(teacher2__id=request.user.id)
+            ser_data_student = StudentSerializer(instance=student, many=True).data
+            return Response({'student': ser_data_student, 'type': 'teacher', 'Success': True})
+        elif Student.objects.filter(id=request.user.id).exists():
+            return Response({'type': 'student', 'Success': True})
+        else:
+            return Response({'type': 'invalid_user', 'Success': False})
