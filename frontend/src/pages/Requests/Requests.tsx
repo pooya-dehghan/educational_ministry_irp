@@ -66,8 +66,8 @@ const Requests = () => {
       .then((response: any) => {
         dispatch(
           updateResponse({
-            severity: 'success',
-            message: 'درخواست دانشجو با موفقیت قبول شد.',
+            severity: 'warning',
+            message: 'درخواست دانشجو رد شد شد.',
             open: true,
           })
         );
