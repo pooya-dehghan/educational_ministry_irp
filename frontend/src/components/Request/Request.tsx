@@ -28,6 +28,7 @@ import FormControl from '@mui/material/FormControl';
 import { getAllOfRegionSchoolsAsync } from '../../features/school/schoolThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -231,7 +232,7 @@ const Request: React.FC<RequestProps> = ({
             <Grid item xs={12} sm={12} lg={6} mt={2}>
               <Button
                 variant="contained"
-                endIcon={<ThumbDownAltIcon />}
+                endIcon={<SettingsBackupRestoreIcon />}
                 disabled={loadingWithdrawRequest}
                 onClick={() =>
                   rejectRequest(request.id, setLoadingWithdrawRequest)
