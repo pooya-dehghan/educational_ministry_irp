@@ -24,7 +24,12 @@ const Requests = () => {
       .catch((error: any) => {});
   }, []);
 
-  const acceptRequest = (schoolID: number | undefined, requestID: number) => {
+  const acceptRequest = (
+    schoolID: number | undefined,
+    requestID: number,
+    setLoadingAcceptRequest: (value: boolean) => void
+  ) => {
+    setLoadingAcceptRequest(true);
     (dispatch as any)(
       acceptRequestAsync({ school_id: schoolID, request_id: requestID })
     )
@@ -37,6 +42,7 @@ const Requests = () => {
             open: true,
           })
         );
+        setLoadingAcceptRequest(false);
       })
       .catch((error: any) => {
         dispatch(
@@ -46,10 +52,15 @@ const Requests = () => {
             open: true,
           })
         );
+        setLoadingAcceptRequest(false);
       });
   };
 
-  const rejectRequest = (id: number) => {
+  const rejectRequest = (
+    id: number,
+    setLoadingRejectRequest: (value: boolean) => void
+  ) => {
+    setLoadingRejectRequest(true);
     (dispatch as any)(rejectRequestAsync({ id }))
       .unwrap()
       .then((response: any) => {
@@ -60,6 +71,7 @@ const Requests = () => {
             open: true,
           })
         );
+        setLoadingRejectRequest(false);
       })
       .catch((error: any) => {
         dispatch(
@@ -69,6 +81,7 @@ const Requests = () => {
             open: true,
           })
         );
+        setLoadingRejectRequest(false);
       });
   };
 
@@ -79,6 +92,7 @@ const Requests = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          margin: 1,
         }}
         component={'div'}
       >
@@ -88,10 +102,20 @@ const Requests = () => {
               return (
                 <Grid item xs={12} md={6} sm={6} lg={6}>
                   <Request
-                    acceptRequest={(schoolID, requestID) =>
-                      acceptRequest(schoolID, requestID)
+                    acceptRequest={(
+                      schoolID,
+                      requestID,
+                      setLoadingAcceptRequest
+                    ) =>
+                      acceptRequest(
+                        schoolID,
+                        requestID,
+                        setLoadingAcceptRequest
+                      )
                     }
-                    rejectRequest={(id) => rejectRequest(id)}
+                    rejectRequest={(id, setLoadingRejectRequest) =>
+                      rejectRequest(id, setLoadingRejectRequest)
+                    }
                     request={req}
                   />
                 </Grid>
