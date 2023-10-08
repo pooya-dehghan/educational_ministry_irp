@@ -7,6 +7,7 @@ import { seenNotificationAsync } from '../../features/notifications/notification
 import { updateResponse } from '../../features/response/responseSlice';
 import { Typography } from '@mui/material';
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
+import Divider from '@mui/material/Divider';
 
 type Notif = {
   body: string;
@@ -31,7 +32,8 @@ const Notifications: React.FC<NotificationsProps> = ({
 }) => {
   const dispatch = useDispatch();
 
-  const seenNotificationHandler = (id: number) => {
+  const seenNotificationHandler = (id: number, setButtonLoading: any) => {
+    setButtonLoading(true);
     (dispatch as any)(seenNotificationAsync({ id: id }))
       .unwrap()
       .then((response: any) => {
@@ -43,6 +45,7 @@ const Notifications: React.FC<NotificationsProps> = ({
             open: true,
           })
         );
+        setButtonLoading(false);
       })
       .catch((error: any) => {
         console.log('error: ', error);
@@ -53,6 +56,7 @@ const Notifications: React.FC<NotificationsProps> = ({
             open: true,
           })
         );
+        setButtonLoading(false);
       });
   };
 
@@ -78,13 +82,18 @@ const Notifications: React.FC<NotificationsProps> = ({
       {notifications.length ? (
         notifications.map((notif, index) => {
           return (
-            <Grid item sx={{ width: '100%' }}>
-              <CustomAlert
-                alertBody={notif.body}
-                alertTitle={notif.title}
-                seenClickHandler={() => seenNotificationHandler(notif.id)}
-              />
-            </Grid>
+            <>
+              <Grid item sx={{ width: '100%' }}>
+                <CustomAlert
+                  alertBody={notif.body}
+                  alertTitle={notif.title}
+                  seenClickHandler={(setButtonLoading: any) =>
+                    seenNotificationHandler(notif.id, setButtonLoading)
+                  }
+                />
+                <Divider />
+              </Grid>
+            </>
           );
         })
       ) : (
