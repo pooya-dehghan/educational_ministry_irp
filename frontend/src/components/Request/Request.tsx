@@ -74,12 +74,17 @@ interface RequestProps {
     id: number,
     setLoadingRejectRequest: (value: boolean) => void
   ) => void;
+  withDrawRequest: (
+    id: number,
+    setLoadingWithdrawRequest: (value: boolean) => void
+  ) => void;
   request: Request;
 }
 
 const Request: React.FC<RequestProps> = ({
   acceptRequest,
   rejectRequest,
+  withDrawRequest,
   request,
 }) => {
   const [expanded, setExpanded] = React.useState(false);
@@ -89,6 +94,8 @@ const Request: React.FC<RequestProps> = ({
   const [loadingRejectRequest, setLoadingRejectRequest] =
     React.useState<boolean>();
   const [loadingAcceptRequest, setLoadingAcceptRequest] =
+    React.useState<boolean>();
+  const [loadingWithdrawRequest, setLoadingWithdrawRequest] =
     React.useState<boolean>();
   const dispatch = useDispatch();
   const handleExpandClick = () => {
@@ -220,6 +227,29 @@ const Request: React.FC<RequestProps> = ({
                   )}
                 </Select>
               </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={12} lg={6} mt={2}>
+              <Button
+                variant="contained"
+                endIcon={<ThumbDownAltIcon />}
+                disabled={loadingWithdrawRequest}
+                onClick={() =>
+                  rejectRequest(request.id, setLoadingWithdrawRequest)
+                }
+              >
+                {loadingWithdrawRequest ? (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <CircularProgress size={24} color="inherit" />{' '}
+                    <Typography
+                      style={{ fontSize: '13px', marginRight: '8px' }}
+                    >
+                      ارسال درخواست
+                    </Typography>
+                  </div>
+                ) : (
+                  'تعلیق'
+                )}
+              </Button>
             </Grid>
           </Grid>
         </CardContent>

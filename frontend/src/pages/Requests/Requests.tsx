@@ -84,7 +84,34 @@ const Requests = () => {
         setLoadingRejectRequest(false);
       });
   };
-
+  const withDrawRequest = (
+    id: number,
+    setLoadingWithDrawRequest: (value: boolean) => void
+  ) => {
+    setLoadingWithDrawRequest(true);
+    (dispatch as any)(rejectRequestAsync({ id }))
+      .unwrap()
+      .then((response: any) => {
+        dispatch(
+          updateResponse({
+            severity: 'info',
+            message: 'درخواست دانشجو با موفقیت به حالت اولیه برگردانده شد.',
+            open: true,
+          })
+        );
+        setLoadingWithDrawRequest(false);
+      })
+      .catch((error: any) => {
+        dispatch(
+          updateResponse({
+            severity: 'error',
+            message: 'عملیات ناموفق..',
+            open: true,
+          })
+        );
+        setLoadingWithDrawRequest(false);
+      });
+  };
   return (
     <Dashboard>
       <Box
@@ -115,6 +142,9 @@ const Requests = () => {
                     }
                     rejectRequest={(id, setLoadingRejectRequest) =>
                       rejectRequest(id, setLoadingRejectRequest)
+                    }
+                    withDrawRequest={(id, setLoadingWithdrawRequest) =>
+                      withDrawRequest(id, setLoadingWithdrawRequest)
                     }
                     request={req}
                   />
