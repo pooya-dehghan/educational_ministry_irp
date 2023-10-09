@@ -71,3 +71,11 @@ swagger_parameters_update = [
         type=openapi.TYPE_STRING
     ),
 ]
+
+swagger_parameters_pending = [
+    openapi.Parameter(
+        name='request_id',
+        in_=openapi.IN_PATH,
+        description='Example PATH parameter',
+        type=openapi.TYPE_STRING
+    ),]
