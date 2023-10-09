@@ -12,6 +12,11 @@ import { updateProfessor } from '../../../features/professor/professorSlice';
 import { updateResponse } from '../../../features/response/responseSlice';
 import { updateProfessorAsync } from '../../../features/professor/professorThunk';
 import { makeStyles } from '@mui/styles';
+import { getAllProfessorRequestsAsync } from '../../../features/professorRequest/professorRequestThunk';
+import ListOf from '../../../components/ListOf/ListOf';
+import ProfessorRequestModal from '../../../components/ProfessorRequestModal/ProfessorRequestModal';
+import { acceptProfessorRequestAsync } from '../../../features/professorRequest/professorRequestThunk';
+import { rejectProfessorRequestAsync } from '../../../features/professorRequest/professorRequestThunk';
 
 const useStyles = makeStyles((theme) => ({
   marginButton: {
@@ -25,12 +30,31 @@ interface ProfessorProfileProps {
   id: number;
 }
 
+interface ISelectedCard {
+  id: number | undefined;
+}
+
 const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
   userInfo,
   id,
 }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [buttonAcceptLoading, setButtonAcceptLoading] = useState(false);
+  const [buttonRejectLoading, setButtonRejectLoading] = useState(false);
+  const [students, setStudents] = useState([]);
+  const [selectedCard, setSelectedCard] = useState<ISelectedCard>({
+    id: undefined,
+  });
+  const [openRequestModal, setOpenRequestModal] = useState(false);
+  useEffect(() => {
+    (dispatch as any)(getAllProfessorRequestsAsync())
+      .unwrap()
+      .then((response: any) => {
+        setStudents(response);
+      })
+      .catch((error: any) => {});
+  }, []);
 
   const handleSubmit = (values: any, setSubmitting: any) => {
     let updateProfessorData = {
@@ -66,167 +90,276 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
         );
       });
   };
+
+  const selectStudent = (payload: any) => {
+    setSelectedCard(payload);
+    setOpenRequestModal(true);
+  };
+
+  const RejectStudentRequest = () => {
+    setButtonRejectLoading(true);
+    if (!selectedCard.id) return;
+    (dispatch as any)(rejectProfessorRequestAsync({ id: selectedCard.id }))
+      .unwrap()
+      .then((response: any) => {
+        setButtonRejectLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'success',
+            message: 'لغو اخذ دانشجو با موفقیت انجام شد',
+            open: true,
+          })
+        );
+        setButtonRejectLoading(false);
+      })
+      .catch((error: any) => {
+        setButtonRejectLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'error',
+            message: 'عملیات با موفقیت انجام نشد.',
+            open: true,
+          })
+        );
+      });
+  };
+
+  const AcceptStudentRequest = () => {
+    setButtonAcceptLoading(true);
+    if (!selectedCard.id) return;
+    (dispatch as any)(acceptProfessorRequestAsync({ id: selectedCard.id }))
+      .unwrap()
+      .then((response: any) => {
+        setButtonAcceptLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'success',
+            message: 'درخواست اخذ با موفقیت انجام شد.',
+            open: true,
+          })
+        );
+        setButtonAcceptLoading(false);
+      })
+      .catch((error: any) => {
+        setButtonAcceptLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'error',
+            message: 'عملیات با موفقیت انجام نشد.',
+            open: true,
+          })
+        );
+      });
+  };
+
   return (
-    <Box
-      sx={{
-        backgroundColor: 'white',
-        paddingBottom: 8,
-        paddingTop: 8,
-        paddingLeft: 12,
-        paddingRight: 12,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        boxShadow: 3,
-        borderRadius: 2,
-        height: 'auto',
-      }}
-      className={styles.container}
-    >
-      <Grid container>
-        <Grid item>
-          <Typography variant="h6" className={classes.marginButton}>
-            اطلاعات استاد
-          </Typography>
-        </Grid>
-      </Grid>
-      <Formik
-        initialValues={{
-          username: userInfo.username,
-          national_code: userInfo.national_code,
-          phone_number: userInfo.phone_number,
-          email: userInfo.email,
-          first_name: userInfo.first_name,
-          last_name: userInfo.last_name,
-          gender: userInfo.gender,
-          personal_code: userInfo.personal_code,
+    <>
+      <ProfessorRequestModal
+        onClickAccept={AcceptStudentRequest}
+        onClickReject={RejectStudentRequest}
+        buttonAcceptLoading={buttonAcceptLoading}
+        buttonRejectLoading={buttonRejectLoading}
+        open={openRequestModal}
+        handleClose={() => setOpenRequestModal(false)}
+      />
+      <Box
+        sx={{
+          backgroundColor: 'white',
+          paddingBottom: 8,
+          paddingTop: 8,
+          paddingLeft: 12,
+          paddingRight: 12,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          boxShadow: 3,
+          borderRadius: 2,
+          height: 'auto',
         }}
-        onSubmit={(values: any, { setSubmitting }: any) => {
-          handleSubmit(values, setSubmitting);
-        }}
+        className={styles.container}
       >
-        {({ handleSubmit, errors, touched }) => (
-          <Form onSubmit={handleSubmit}>
-            <Grid container spacing={2} dir="rtl">
-              <Grid item xs={12} sm={3}>
-                <Field name="username">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="نام کاربری"
-                      placeholder="نام کاربری"
-                      id="username"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
+        <Grid container>
+          <Grid item>
+            <Typography variant="h6" className={classes.marginButton}>
+              اطلاعات استاد
+            </Typography>
+          </Grid>
+        </Grid>
+        <Formik
+          initialValues={{
+            username: userInfo.username,
+            national_code: userInfo.national_code,
+            phone_number: userInfo.phone_number,
+            email: userInfo.email,
+            first_name: userInfo.first_name,
+            last_name: userInfo.last_name,
+            gender: userInfo.gender,
+            personal_code: userInfo.personal_code,
+          }}
+          onSubmit={(values: any, { setSubmitting }: any) => {
+            handleSubmit(values, setSubmitting);
+          }}
+        >
+          {({ handleSubmit, errors, touched }) => (
+            <Form onSubmit={handleSubmit}>
+              <Grid container spacing={2} dir="rtl">
+                <Grid item xs={12} sm={3}>
+                  <Field name="username">
+                    {({ field, meta }: FieldProps) => (
+                      <TextField
+                        {...field}
+                        label="نام کاربری"
+                        placeholder="نام کاربری"
+                        id="username"
+                        autoFocus
+                        variant="outlined"
+                        fullWidth
+                        error={meta.touched && meta.error ? true : false}
+                        helperText={
+                          meta.touched && meta.error ? meta.error : ''
+                        }
+                      />
+                    )}
+                  </Field>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <Field name="national_code">
+                    {({ field, meta }: FieldProps) => (
+                      <TextField
+                        {...field}
+                        label="کد ملی"
+                        placeholder="کد ملی"
+                        id="national_code"
+                        autoFocus
+                        variant="outlined"
+                        fullWidth
+                        error={meta.touched && meta.error ? true : false}
+                        helperText={
+                          meta.touched && meta.error ? meta.error : ''
+                        }
+                      />
+                    )}
+                  </Field>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <Field name="phone_number">
+                    {({ field, meta }: FieldProps) => (
+                      <TextField
+                        {...field}
+                        label="شماره همراه"
+                        placeholder="شماره همراه"
+                        id="phone_number"
+                        autoFocus
+                        variant="outlined"
+                        fullWidth
+                        error={meta.touched && meta.error ? true : false}
+                        helperText={
+                          meta.touched && meta.error ? meta.error : ''
+                        }
+                      />
+                    )}
+                  </Field>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <Field name="email">
+                    {({ field, meta }: FieldProps) => (
+                      <TextField
+                        {...field}
+                        label="ایمیل"
+                        placeholder="ایمیل"
+                        id="email"
+                        autoFocus
+                        variant="outlined"
+                        fullWidth
+                        error={meta.touched && meta.error ? true : false}
+                        helperText={
+                          meta.touched && meta.error ? meta.error : ''
+                        }
+                      />
+                    )}
+                  </Field>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <Field name="first_name">
+                    {({ field, meta }: FieldProps) => (
+                      <TextField
+                        {...field}
+                        label="نام"
+                        placeholder="نام"
+                        id="first_name"
+                        autoFocus
+                        variant="outlined"
+                        fullWidth
+                        error={meta.touched && meta.error ? true : false}
+                        helperText={
+                          meta.touched && meta.error ? meta.error : ''
+                        }
+                      />
+                    )}
+                  </Field>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <Field name="last_name">
+                    {({ field, meta }: FieldProps) => (
+                      <TextField
+                        {...field}
+                        label="نام خانوادگی"
+                        placeholder="نام خانوادگی"
+                        id="last_name"
+                        autoFocus
+                        variant="outlined"
+                        fullWidth
+                        error={meta.touched && meta.error ? true : false}
+                        helperText={
+                          meta.touched && meta.error ? meta.error : ''
+                        }
+                      />
+                    )}
+                  </Field>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    ویرایش
+                  </Button>
+                </Grid>
+              </Grid>
+            </Form>
+          )}
+        </Formik>
+        <Grid container>
+          <Grid item>
+            <Typography variant="h4">فهرست دانشجویان کارورز</Typography>
+          </Grid>
+          <Grid container spacing={2} className={styles.grid}>
+            {students.length >= 1 ? (
+              students.map((student: any, index) => {
+                return (
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <ListOf
+                      type="student"
+                      username={student.username}
+                      id={student.id}
+                      buttonHide={true}
+                      onClick={(payload: any) => selectStudent(payload)}
+                      selected={selectedCard.id === student.id}
                     />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="national_code">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="کد ملی"
-                      placeholder="کد ملی"
-                      id="national_code"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="phone_number">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="شماره همراه"
-                      placeholder="شماره همراه"
-                      id="phone_number"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="email">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="ایمیل"
-                      placeholder="ایمیل"
-                      id="email"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="first_name">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="نام"
-                      placeholder="نام"
-                      id="first_name"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Field name="last_name">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="نام خانوادگی"
-                      placeholder="نام خانوادگی"
-                      id="last_name"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ''}
-                    />
-                  )}
-                </Field>
-              </Grid>
-            </Grid>
-            <Grid container>
-              <Grid item>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  ویرایش
-                </Button>
-              </Grid>
-            </Grid>
-          </Form>
-        )}
-      </Formik>
-    </Box>
+                  </Grid>
+                );
+              })
+            ) : (
+              <Grid sx={{ margin: '30px' }}>دانشجویی وجود ندارد</Grid>
+            )}
+          </Grid>
+        </Grid>
+      </Box>
+    </>
   );
 };
 
