@@ -468,7 +468,8 @@ class UploadAvatarView(APIView):
             user = User.objects.get(id=request.user.id)
         except:
             return Response({"message": "کاربر شناسایی نشده(نا معتبر)"}, status=status.HTTP_404_NOT_FOUND)
-        ser_data = UserProfileAvatarSerializer(data=request.data)
+        ser_data = UserProfileAvatarSerializer(request.data, request.FILES)
+        print(ser_data)
         if ser_data.is_valid():
             try:
                 uploaded_avatar = ser_data.validated_data["avatar"]
@@ -487,7 +488,7 @@ class UploadAvatarView(APIView):
             print(file_extension)
             user.save()
             return Response(
-                {"message": "آواتار شما با موفقیت آپلود شد", 'location': f'backend/media/{user.avatar.name}'},
+                {"message": "آواتار شما با موفقیت آپلود شد", 'location': f'{user.avatar.path}'},
                 status=status.HTTP_200_OK)
 
         else:
