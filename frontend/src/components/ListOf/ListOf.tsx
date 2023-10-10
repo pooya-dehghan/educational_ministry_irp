@@ -129,7 +129,7 @@ export default function ListOf({
   return (
     <>
       <Card
-        onClick={() => onClick({ id: id })}
+        onClick={() => onClick({ id: id, name: username })}
         sx={{ minWidth: 275 }}
         className={`${styles.card} ${
           type === 'officemanager' ? styles.cardOfficeManager : ''
@@ -148,7 +148,7 @@ export default function ListOf({
             <Avatar
               className={styles.avatar}
               alt="Remy Sharp"
-              src={image ? image : Image}
+              src={image ? 'http://localhost:8000' + image : Image}
               sx={{ margin: '10px' }}
             />
           }

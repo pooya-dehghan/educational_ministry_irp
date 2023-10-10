@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { Formik, Form, Field, FormikHelpers, FieldProps } from "formik";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import styles from "./school.module.css";
-import { SchoolInterface } from "../../../interfaces/school.interface";
-import { useDispatch } from "react-redux";
-import { updateSchool } from "../../../features/school/schoolSlice";
-import { updateResponse } from "../../../features/response/responseSlice";
-import { updateSchoolAsync } from "../../../features/school/schoolThunk";
-import { makeStyles } from "@mui/styles";
-import CircularProgress from "@mui/material/CircularProgress";
-import { AttendanceModal } from "../../../components/Attendance/attendance";
-import { getAllSchoolsStudentsAsync } from "../../../features/school/schoolThunk";
-import ListOf from "../../../components/ListOf/ListOf";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+import { Formik, Form, Field, FormikHelpers, FieldProps } from 'formik';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import styles from './school.module.css';
+import { SchoolInterface } from '../../../interfaces/school.interface';
+import { useDispatch } from 'react-redux';
+import { updateSchool } from '../../../features/school/schoolSlice';
+import { updateResponse } from '../../../features/response/responseSlice';
+import { updateSchoolAsync } from '../../../features/school/schoolThunk';
+import { makeStyles } from '@mui/styles';
+import CircularProgress from '@mui/material/CircularProgress';
+import { AttendanceModal } from '../../../components/Attendance/attendance';
+import { getAllSchoolsStudentsAsync } from '../../../features/school/schoolThunk';
+import ListOf from '../../../components/ListOf/ListOf';
 
 const useStyles = makeStyles((theme) => ({
   marginButton: {
-    marginBottom: "3rem", // Add margin here
-    fontStyle: "bold",
+    marginBottom: '3rem', // Add margin here
+    fontStyle: 'bold',
   },
   marginTop: {
-    marginTop: "2rem",
+    marginTop: '2rem',
   },
 }));
 
@@ -75,8 +75,8 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
         dispatch(updateSchool(response));
         dispatch(
           updateResponse({
-            severity: "success",
-            message: "اطلاعات مدرسه با موفقیت بروزرسانی شد",
+            severity: 'success',
+            message: 'اطلاعات مدرسه با موفقیت بروزرسانی شد',
             open: true,
           })
         );
@@ -85,8 +85,8 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
         setButtonLoading(false);
         dispatch(
           updateResponse({
-            severity: "error",
-            message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
+            severity: 'error',
+            message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
             open: true,
           })
         );
@@ -108,21 +108,22 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
           }}
           open={openAttendanceModal}
           studentID={selectedCard.id}
+          username={selectedCard.name}
         />
       ) : null}
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: 'white',
           paddingBottom: 8,
           paddingTop: 8,
           paddingLeft: 12,
           paddingRight: 12,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
           boxShadow: 3,
           borderRadius: 2,
-          height: "auto",
+          height: 'auto',
         }}
         className={styles.container}
       >
@@ -166,7 +167,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -185,7 +186,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -204,7 +205,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -223,7 +224,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -242,7 +243,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -261,7 +262,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -280,7 +281,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -299,7 +300,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -318,7 +319,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -337,7 +338,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                         fullWidth
                         error={meta.touched && meta.error ? true : false}
                         helperText={
-                          meta.touched && meta.error ? meta.error : ""
+                          meta.touched && meta.error ? meta.error : ''
                         }
                       />
                     )}
@@ -354,16 +355,16 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                     sx={{ mt: 3, mb: 2 }}
                   >
                     {buttonLoading ? (
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <CircularProgress size={24} color="inherit" />{" "}
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <CircularProgress size={24} color="inherit" />{' '}
                         <Typography
-                          style={{ fontSize: "13px", marginRight: "8px" }}
+                          style={{ fontSize: '13px', marginRight: '8px' }}
                         >
                           در حال ویرایش
                         </Typography>
                       </div>
                     ) : (
-                      "ویرایش"
+                      'ویرایش'
                     )}
                   </Button>
                 </Grid>
@@ -394,7 +395,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
                 );
               })
             ) : (
-              <Grid sx={{ margin: "30px" }}>دانشجویی وجود ندارد</Grid>
+              <Grid sx={{ margin: '30px' }}>دانشجویی وجود ندارد</Grid>
             )}
           </Grid>
         </Grid>

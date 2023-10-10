@@ -33,18 +33,18 @@ interface AttendanceModalProps {
   open: boolean;
   handleClose: () => void;
   studentID: number;
+  username: string;
 }
 
 export const AttendanceModal: React.FC<AttendanceModalProps> = ({
   open,
   handleClose,
   studentID,
+  username,
 }) => {
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const [attendances, setAttendances] = React.useState([]);
   const [date, setDate] = React.useState<Date>();
-  console.log('date: ', date);
-  console.log('studentID: ', studentID);
   const dispatch = useDispatch();
   React.useEffect(() => {
     (dispatch as any)(getAttendanceStudentAsync({ id: studentID }))
@@ -62,7 +62,6 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
       let year = date.getUTCFullYear();
 
       let newdate = year + '-' + month + '-' + day;
-      console.log('newDate: ', newdate);
       (dispatch as any)(
         createAttendanceStudentAsync({
           id: studentID,
@@ -116,48 +115,27 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
               component="h2"
               mb={5}
             >
-              لیست حضور غیاب دانشجو : پویا دهقان
+              {`لیست حضور غیاب دانشجو : ${username}`}
             </Typography>
-            <Grid container justifyContent={'space-between'}>
-              <Grid item>
-                <Typography id="transition-modal-description" sx={{ mt: 1 }}>
-                  8 مهر 1401
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Checkbox {...label} defaultChecked color="success" />
-              </Grid>
-            </Grid>
-            <Grid container justifyContent={'space-between'}>
-              <Grid item>
-                <Typography id="transition-modal-description" sx={{ mt: 1 }}>
-                  9 مهر 1401
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Checkbox {...label} defaultChecked color="success" />
-              </Grid>
-            </Grid>
-            <Grid container justifyContent={'space-between'}>
-              <Grid item>
-                <Typography id="transition-modal-description" sx={{ mt: 1 }}>
-                  11 مهر 1401
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Checkbox {...label} defaultChecked color="success" />
-              </Grid>
-            </Grid>
-            <Grid container justifyContent={'space-between'}>
-              <Grid item>
-                <Typography id="transition-modal-description" sx={{ mt: 1 }}>
-                  15 مهر 1401
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Checkbox {...label} readOnly defaultChecked color="success" />
-              </Grid>
-            </Grid>
+            {attendances.length > 0
+              ? attendances.map((attendance, index) => {
+                  return (
+                    <Grid container justifyContent={'space-between'}>
+                      <Grid item>
+                        <Typography
+                          id="transition-modal-description"
+                          sx={{ mt: 1 }}
+                        >
+                          {}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Checkbox {...label} defaultChecked color="success" />
+                      </Grid>
+                    </Grid>
+                  );
+                })
+              : null}
             <Grid container mt={5} justifyContent={'space-between'}>
               <Grid item>
                 <DatePicker
