@@ -28,6 +28,7 @@ export default function ListOf({
   username = 'نام کاربری',
   id = 0,
   buttonHide = false,
+  image = '',
   selected = false,
   onClick = (payload: any) => {},
 }) {
@@ -147,7 +148,7 @@ export default function ListOf({
             <Avatar
               className={styles.avatar}
               alt="Remy Sharp"
-              src={Image}
+              src={image ? image : Image}
               sx={{ margin: '10px' }}
             />
           }
