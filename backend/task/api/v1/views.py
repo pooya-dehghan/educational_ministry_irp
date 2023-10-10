@@ -8,9 +8,37 @@ from .serializers import TaskSerializer, RenderTaskUploadingSerializer
 from notification.models import Notification
 import os
 from django.core.files.storage import default_storage
+from drf_yasg.utils import swagger_auto_schema
+from .swagger_info import swagger_parameters_task, swagger_parameters_upload_task
+from drf_yasg import openapi
 
 
 class TaskCreationView(APIView):
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_task,
+        operation_description="""This endpoint allows users to change his password.
+
+        The request should include the username and old_password new_password and new_password_confirm
+
+        """,
+        operation_summary="endpoint for create task",
+        request_body=openapi.Schema(
+            'user',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'title': openapi.Schema(type=openapi.TYPE_STRING, default="ali"),
+                'description': openapi.Schema(type=openapi.TYPE_STRING, default="6789"),
+                'deadline': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
+            },
+            required=['title', 'description', 'deadline'],
+        ),
+        responses={
+            '200': 'ok',
+            '400': 'bad request',
+            '404': 'not found'
+
+        }
+    )
     def post(self, request):
         try:
             professor = Professor.objects.get(id=request.user.id)
@@ -37,6 +65,27 @@ class TaskCreationView(APIView):
 
 
 class RenderTaskCreationView(APIView):
+    @swagger_auto_schema(
+        manual_parameters=swagger_parameters_upload_task,
+        operation_description="""This endpoint allows students to upload his/her tasks
+        """,
+        operation_summary="endpoint for upload task",
+        request_body=openapi.Schema(
+            'user',
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'file': openapi.Schema(type=openapi.TYPE_STRING, default="gozaresh.docx"),
+            },
+            required=['file'],
+        ),
+        responses={
+            '200': 'ok',
+            '400': 'bad request',
+            '404': 'not found'
+
+        }
+    )
+    
     def post(self, request, task_id):
         task = Task.objects.get(id=task_id)
         try:

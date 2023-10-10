@@ -8,8 +8,8 @@ from attendance.models import Attendance
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters
 from jalali_date import datetime2jalali
-
-
+from core.settings import persian_months
+from datetime import datetime
 class FillAttendance(APIView):
     permission_classes = [IsSuperuserOrSchoolManager]
 
@@ -70,5 +70,18 @@ class GetAttendance(APIView):
                             status=status.HTTP_404_NOT_FOUND)
         attendance = Attendance.objects.filter(student=student)
         ser_data = DateSerializer(instance=attendance, many=True)
+        list_of_date = []
+        for data in ser_data.data[:]:
+            datetime_object = datetime.strptime(data["date"], '%Y-%m-%d')
+            jalali_date = datetime2jalali(datetime_object).strftime('%y-%m-%d')
+            
+            # #print(jalali_date)
+            # print(jalali_date)
+            year,month,date = jalali_date.split('-')
+            print(year, month, date)
+            month = persian_months[int(month)-1]
+            print(year, month, date)
+            year="14"+year
+            list_of_date.append([year,date,month])
         # date = datetime2jalali(ser_data.data[0]['date']).strftime('%y-%m-%d')
-        return Response(ser_data.data, status=status.HTTP_200_OK)
+        return Response({'data':list_of_date, 'success':True}, status=status.HTTP_200_OK)
