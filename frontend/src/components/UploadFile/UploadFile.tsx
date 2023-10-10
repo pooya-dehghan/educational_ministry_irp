@@ -41,7 +41,7 @@ const UploadFileButton = () => {
             dispatch(
               updateResponse({
                 severity: 'success',
-                message: 'مدرسه با موفقیت اضافه شد.',
+                message: 'فایل با موفقیت اپلود شد.',
                 open: true,
               })
             );
