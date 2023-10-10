@@ -11,7 +11,7 @@ from django.core.files.storage import default_storage
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters_task, swagger_parameters_upload_task
 from drf_yasg import openapi
-
+from notification.models import Notification
 
 class TaskCreationView(APIView):
     @swagger_auto_schema(
