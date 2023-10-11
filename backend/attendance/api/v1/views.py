@@ -74,14 +74,10 @@ class GetAttendance(APIView):
         for data in ser_data.data[:]:
             datetime_object = datetime.strptime(data["date"], '%Y-%m-%d')
             jalali_date = datetime2jalali(datetime_object).strftime('%y-%m-%d')
-            
-            # #print(jalali_date)
-            # print(jalali_date)
             year,month,date = jalali_date.split('-')
-            print(year, month, date)
+            year = "14"+year
             month = persian_months[int(month)-1]
-            print(year, month, date)
-            year="14"+year
-            list_of_date.append([year,date,month])
+            # list_of_date.append(f"{int(year)} month {int(date)}")
+            list_of_date.append(f"{year} {month}"+ f"{date}")
         # date = datetime2jalali(ser_data.data[0]['date']).strftime('%y-%m-%d')
         return Response({'data':list_of_date, 'success':True}, status=status.HTTP_200_OK)
