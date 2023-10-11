@@ -291,10 +291,16 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         )}
       </Formik>
       <Grid container>
-        <Grid item>
+        <Grid item md={12} lg={12}>
           <Typography variant="h4" className={classes.marginTop}>
             بارگذاری تصویر پروفایل
           </Typography>
+        </Grid>
+        <Grid item md={12} lg={12} mt={2}>
+          <img
+            src={'http://localhost:8000' + userInfo.avatar}
+            className={styles.profilePicture}
+          />
         </Grid>
       </Grid>
       <Grid container mt={5}>
