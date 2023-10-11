@@ -5,7 +5,7 @@ import {
   CreateTaskResponse,
   GetTaskRequest,
   GetTaskResponse,
-  UploadTaskRequest
+  UploadTaskRequest,
 } from './interface/interface.index';
 
 export const createTaskAsync = createAsyncThunk(
@@ -18,8 +18,13 @@ export const createTaskAsync = createAsyncThunk(
 
 export const uploadTaskAsync = createAsyncThunk(
   'task/upload',
-  async (upload: UploadTaskRequest) => {
+  async (upload: any) => {
     const response = await taskApi.uploadTask(upload);
     return response;
   }
 );
+
+export const getStudentsTasksAsync = createAsyncThunk('task/get', async () => {
+  const response = await taskApi.getStudentsTasks();
+  return response;
+});

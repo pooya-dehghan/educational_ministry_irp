@@ -12,6 +12,7 @@ export interface CreateTaskResponse {}
 
 export interface UploadTaskRequest {
   task_id: number;
+  file: File;
 }
 
 export interface UploadTaskResponse {}

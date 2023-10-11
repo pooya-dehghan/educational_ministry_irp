@@ -22,13 +22,22 @@ export const taskApi = {
     }
   },
 
-  uploadTask: async (
-    upload: UploadTaskRequest
-  ): Promise<UploadTaskResponse> => {
+  uploadTask: async (upload: any): Promise<UploadTaskResponse> => {
     try {
       const response = await axiosInstance.post(
-        `${API_BASE_URL}/task/api/v1/upload/${upload.task_id}/`,
+        `${API_BASE_URL}/task/api/v1/upload/${upload.get('task_id')}/`,
         upload
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getStudentsTasks: async () => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/task/api/v1/list/`
       );
       return response.data;
     } catch (error) {
