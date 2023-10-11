@@ -36,9 +36,13 @@ class ListRequest(APIView):
         except Professor.DoesNotExist:
             return Response({'message': 'همچین استادی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         req = ProfessorRequest.objects.filter(receiver=professor)
+        # student = req.sender
+        # username=student.username
+        # first_name=student.first_name
+        # last_name=student.last_name
         ser_data = ProfessorRequestSerializer(req, many=True)
         if req:
-            return Response(data=ser_data.data, status=status.HTTP_200_OK)
+            return Response({"data":ser_data.data}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید", 'Success': False},
                             status=status.HTTP_404_NOT_FOUND)

@@ -15,7 +15,7 @@ from notification.models import Notification
 from datetime import datetime
 from jalali_date import datetime2jalali
 from core.settings import persian_months
-
+from django.utils import timezone
 
 class TaskCreationView(APIView):
     @swagger_auto_schema(
@@ -111,17 +111,20 @@ class RenderTaskCreationView(APIView):
             file_extension = os.path.splitext(uploaded_file.name)[1]
             new_file_name = f"{student.username}_task{file_extension}"  # Customize the naming convention as needed
             new_file_path = os.path.join("tasks", new_file_name)  # 'avatars' is the media subdirectory
-            if RenderTask.objects.filter(student=student, task=task).exists():
-                for rt in RenderTask.objects.filter(student=student, task=task):
-                    default_storage.delete(rt.file.name)
-                    rt.delete()
-
             default_storage.save(new_file_path, uploaded_file)
+            if RenderTask.objects.filter(task=task, student=student).exists():
+                for rt in RenderTask.objects.filter(task=task, student=student):
+                    rt.delete()
+            RenderTask.objects.create(
+                task=task,
+                file=ser_data.validated_data["file"],
+                student=student,
+            )
             Notification.objects.create(sender=student, receiver=student.professor2, code=250, title="انجام تکلیف",
-                                        body=f"دانشجو{student.username} تکلیف {task.title} را در تاریخ {last_rt.delivery_date} آپلود کرده است")
+                                        body=f"دانشجو{student.username} تکلیف {task.title} را در تاریخ {timezone.now()} آپلود کرده است")
 
             return Response(
-                {"message": "تکلیف شما با موفقیت آپلود شد", "location": f"backend/media/{last_rt.file.name}",
+                {"message": "تکلیف شما با موفقیت آپلود شد", "location": f"backend/media/{new_file_name}",
                  'Success': True},
                 status=status.HTTP_201_CREATED)
         else:
