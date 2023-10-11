@@ -12,6 +12,10 @@ from drf_yasg.utils import swagger_auto_schema
 from .swagger_info import swagger_parameters_task, swagger_parameters_upload_task
 from drf_yasg import openapi
 from notification.models import Notification
+from datetime import datetime
+from jalali_date import datetime2jalali
+from core.settings import persian_months
+
 
 class TaskCreationView(APIView):
     @swagger_auto_schema(
@@ -47,11 +51,18 @@ class TaskCreationView(APIView):
 
         ser_data = TaskSerializer(data=request.data)
         if ser_data.is_valid():
+            date = ser_data.validated_data["deadline"]
+            datetime_object = datetime.strptime(date, '%Y-%m-%d')
+            jalali_date = datetime2jalali(datetime_object).strftime('%y-%m-%d')
+            year,month,date = jalali_date.split('-')
+            year = "14"+year
+            month = persian_months[int(month)-1]
+            final_date = f"{date} {month} {year}"
             task = Task.objects.create(
                 title=ser_data.validated_data["title"],
                 description=ser_data.validated_data["description"],
                 professor=professor,
-                deadline=ser_data.validated_data["deadline"]
+                deadline=final_date
             )
             students = Student.objects.filter(professor2=professor)
             for student in students:
@@ -115,3 +126,26 @@ class RenderTaskCreationView(APIView):
                 status=status.HTTP_201_CREATED)
         else:
             return Response({"message": ser_data.errors, 'Success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ListAllTaskView(APIView):
+    def get(self, request):
+        try:
+            student = Student.objects.get(id=request.user.id)
+        except:
+            return Response({"data":"دانشجوی نامعتبر درخواست ارسال نموده است", "success":False}, status=status.HTTP_403_FORBIDDEN)
+        tasks = Task.objects.filter(professor=student.professor2)
+        ser_data = TaskSerializer(tasks, many=True)
+        return Response({"data":ser_data.data, "success":True}, status=status.HTTP_200_OK)
+    
+
+
+class GetTaskView(APIView):
+    def get(self, request, id):
+        task = Task.objects.get(id=id)
+        ser_data = TaskSerializer(task)
+        if RenderTask.objects.filter(task=task).exists():
+            file = RenderTask.objects.get(task=task).file
+            return Response({"data":ser_data.data, "success":True, 'location':file.name, 'status':'شما قبلا فایلی ارسال نموده اید'}, status=status.HTTP_200_OK)
+        else:
+            return Response({"data":ser_data.data, "success":True, 'status':'تاکنون فایلی ارسال نشده است'}, status=status.HTTP_200_OK)

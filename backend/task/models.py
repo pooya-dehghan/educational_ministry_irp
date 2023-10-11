@@ -8,7 +8,7 @@ class Task(models.Model):
     title = models.CharField(max_length=400)
     description = models.TextField()
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
-    deadline = models.DateField()
+    deadline = models.CharField(max_length=30)
 
 
 class RenderTask(models.Model):
