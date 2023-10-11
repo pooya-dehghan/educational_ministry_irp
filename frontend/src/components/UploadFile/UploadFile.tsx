@@ -27,14 +27,6 @@ const UploadFileButton = () => {
       try {
         const formData = new FormData();
         formData.append('avatar', file);
-
-        // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
-        // const response = await axios.post('YOUR_API_ENDPOINT', formData, {
-        //   headers: {
-        //     'Content-Type': 'multipart/form-data',
-        //   },
-        // });
-
         (dispatch as any)(uploadFileAsync(formData))
           .unwrap()
           .then((response: any) => {
