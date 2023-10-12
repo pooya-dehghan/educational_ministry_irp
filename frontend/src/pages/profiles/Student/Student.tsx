@@ -398,7 +398,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         {tasks.length > 0
           ? tasks.map((task: ITask) => {
               return (
-                <Grid item lg={4} mb={4}>
+                <Grid item lg={4} md={6} sm={12} mb={4}>
                   <Task
                     title={task.title}
                     description={task.description}
