@@ -23,7 +23,6 @@ import { deleteSchoolById } from '../../features/school/schoolSlice';
 import { deleteOfficeManagerById } from '../../features/officemanager/officemanagerSlice';
 import { deleteStudentById } from '../../features/student/studentSlice';
 
-
 export default function ListOf({
   type = 'officemanager',
   username = 'نام کاربری',
@@ -177,7 +176,7 @@ export default function ListOf({
             <Avatar
               className={styles.avatar}
               alt="Remy Sharp"
-              src={image ? image : Image}
+              src={image ? 'http://localhost:8000' + image : Image}
               sx={{ margin: '10px' }}
             />
           }
