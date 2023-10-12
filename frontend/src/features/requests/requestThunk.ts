@@ -4,6 +4,7 @@ import {
   AcceptRequestRequest,
   RejectRequestRequest,
   SendRequestRequest,
+  WithDrawRequestRequest,
 } from './interface/interface.index';
 
 export const getAllRequestsAsync = createAsyncThunk('request/all', async () => {
@@ -32,6 +33,15 @@ export const sendRequestAsync = createAsyncThunk(
   'request/send',
   async (data: SendRequestRequest) => {
     const response = await RequestApi.sendRequest(data);
+    return response;
+  }
+);
+
+
+export const withDrawAsync = createAsyncThunk(
+  'request/withdraw',
+  async (data: WithDrawRequestRequest) => {
+    const response = await RequestApi.withDrawRequest(data);
     return response;
   }
 );

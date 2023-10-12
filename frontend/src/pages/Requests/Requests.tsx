@@ -10,6 +10,7 @@ import {
   acceptRequestAsync,
 } from '../../features/requests/requestThunk';
 import { updateResponse } from '../../features/response/responseSlice';
+import { withDrawAsync } from '../../features/requests/requestThunk';
 
 const Requests = () => {
   const [requests, setRequests] = useState([]);
@@ -89,7 +90,7 @@ const Requests = () => {
     setLoadingWithDrawRequest: (value: boolean) => void
   ) => {
     setLoadingWithDrawRequest(true);
-    (dispatch as any)(rejectRequestAsync({ id }))
+    (dispatch as any)(withDrawAsync({ id }))
       .unwrap()
       .then((response: any) => {
         dispatch(

@@ -31,6 +31,12 @@ export interface RejectRequestRequest {
 
 export interface RejectRequestResponse {}
 
+export interface WithDrawRequestRequest {
+  id: number;
+}
+
+export interface WithDrawRequestResponse {}
+
 export interface SendRequestRequest {
   region: number;
 }

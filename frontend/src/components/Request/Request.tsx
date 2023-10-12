@@ -230,12 +230,12 @@ const Request: React.FC<RequestProps> = ({
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={12} lg={6} mt={2}>
-              <Button
+              <Button 
                 variant="contained"
                 endIcon={<SettingsBackupRestoreIcon />}
                 disabled={loadingWithdrawRequest}
                 onClick={() =>
-                  rejectRequest(request.id, setLoadingWithdrawRequest)
+                  withDrawRequest(request.id, setLoadingWithdrawRequest)
                 }
               >
                 {loadingWithdrawRequest ? (
