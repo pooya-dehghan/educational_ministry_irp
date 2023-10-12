@@ -22,7 +22,7 @@ import FormControl from '@mui/material/FormControl';
 import UploadFileButton from '../../../components/UploadFile/UploadFile';
 import { getStudentsTasksAsync } from '../../../features/task/taskThunk';
 import Task from '../../../components/Task/task';
-
+import Image from '../../../../public/images/avatarerp.jpg';
 const useStyles = makeStyles((theme) => ({
   marginButton: {
     marginBottom: '3rem', // Add margin here
@@ -298,7 +298,11 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         </Grid>
         <Grid item md={12} lg={12} mt={2}>
           <img
-            src={'http://localhost:8000' + userInfo.avatar}
+            src={
+              userInfo.avatar
+                ? 'http://localhost:8000' + userInfo.avatar
+                : Image
+            }
             className={styles.profilePicture}
           />
         </Grid>
