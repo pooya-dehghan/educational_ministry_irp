@@ -86,6 +86,7 @@ const List = () => {
                 type="officemanager"
                 username={office_manager.username}
                 id={office_manager.id}
+                name={office_manager.name}
                 image={office_manager?.avatar}
               />
             </Grid>
@@ -101,6 +102,7 @@ const List = () => {
                 type="professor"
                 username={professor.username}
                 id={professor.id}
+                name={professor.name}
                 image={professor?.avatar}
               />
             </Grid>
@@ -116,6 +118,7 @@ const List = () => {
                 type="school"
                 username={school.username}
                 id={school.id}
+                name={school.name}
                 image={school?.avatar}
               />
             </Grid>
@@ -131,6 +134,7 @@ const List = () => {
                 type="teacher"
                 username={teacher.username}
                 id={teacher.id}
+                name={teacher.name}
                 image={teacher?.avatar}
               />
             </Grid>
@@ -146,6 +150,7 @@ const List = () => {
                 type="student"
                 username={student.username}
                 id={student.id}
+                name={student.name}
                 image={student?.avatar}
               />
             </Grid>

@@ -23,6 +23,7 @@ import { deleteSchoolById } from '../../features/school/schoolSlice';
 import { deleteOfficeManagerById } from '../../features/officemanager/officemanagerSlice';
 import { deleteStudentById } from '../../features/student/studentSlice';
 
+
 export default function ListOf({
   type = 'officemanager',
   username = 'نام کاربری',
@@ -30,6 +31,7 @@ export default function ListOf({
   buttonHide = false,
   image = '',
   selected = false,
+  name = ' نام وارد نشده است ',
   onClick = (payload: any) => {},
 }) {
   const [openPermissionModal, setOpenPermissionModal] = useState(false);
@@ -126,6 +128,33 @@ export default function ListOf({
   const handleOpenPermissionModel = () => {
     setOpenPermissionModal(!openPermissionModal);
   };
+  const generateDescription = () => {
+    let holder = 'مسئول اموزش پرورش';
+    switch (type) {
+      case 'officemanager':
+        holder = 'مسئول اموزش پرورش';
+        break;
+      case 'professor':
+        holder = 'استاد';
+        break;
+      case 'student':
+        holder = 'دانشجو';
+        break;
+      case 'school':
+        holder = 'مدرسه';
+        break;
+      case 'teacher':
+        holder = 'معلم';
+        break;
+      case 'universities':
+        holder = 'دانشگاه';
+        break;
+      default:
+        holder = 'مسئول اموزش پرورش';
+        break;
+    }
+    return `${holder} : ${name}`;
+  };
   return (
     <>
       <Card
@@ -158,7 +187,7 @@ export default function ListOf({
         <CardContent>
           <Typography variant="h5" component="div"></Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            مدیر مدرسه امام خمینی تهران
+            {generateDescription()}
           </Typography>
         </CardContent>
         {!buttonHide ? (
