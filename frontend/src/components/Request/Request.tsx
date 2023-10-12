@@ -27,6 +27,8 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { getAllOfRegionSchoolsAsync } from '../../features/school/schoolThunk';
 import { useDispatch, useSelector } from 'react-redux';
+import CircularProgress from '@mui/material/CircularProgress';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -64,22 +66,39 @@ type School = {
 };
 
 interface RequestProps {
-  acceptRequest: (schoolID: number | undefined, requestID: number) => void;
-  rejectRequest: (id: number) => void;
+  acceptRequest: (
+    schoolID: number | undefined,
+    requestID: number,
+    setLoadingAcceptRequest: (value: boolean) => void
+  ) => void;
+  rejectRequest: (
+    id: number,
+    setLoadingRejectRequest: (value: boolean) => void
+  ) => void;
+  withDrawRequest: (
+    id: number,
+    setLoadingWithdrawRequest: (value: boolean) => void
+  ) => void;
   request: Request;
 }
 
 const Request: React.FC<RequestProps> = ({
   acceptRequest,
   rejectRequest,
+  withDrawRequest,
   request,
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [seen, setSeen] = React.useState(false);
   const [schoolID, setSchoolID] = React.useState<number | undefined>();
   const [regionSchools, setRegionSchools] = React.useState([]);
+  const [loadingRejectRequest, setLoadingRejectRequest] =
+    React.useState<boolean>();
+  const [loadingAcceptRequest, setLoadingAcceptRequest] =
+    React.useState<boolean>();
+  const [loadingWithdrawRequest, setLoadingWithdrawRequest] =
+    React.useState<boolean>();
   const dispatch = useDispatch();
-  console.log('request: ', request);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -140,17 +159,55 @@ const Request: React.FC<RequestProps> = ({
             مشخص کنید.
           </Typography>
           <Grid container>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} lg={12}>
               <Button
                 color="success"
                 variant="contained"
                 endIcon={<ThumbUpIcon />}
-                onClick={() => acceptRequest(schoolID, request.id)}
+                disabled={loadingAcceptRequest}
+                onClick={() =>
+                  acceptRequest(schoolID, request.id, setLoadingAcceptRequest)
+                }
               >
-                موافقت
+                {loadingAcceptRequest ? (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <CircularProgress size={24} color="inherit" />{' '}
+                    <Typography
+                      style={{ fontSize: '13px', marginRight: '8px' }}
+                    >
+                      ارسال درخواست
+                    </Typography>
+                  </div>
+                ) : (
+                  'موافقت'
+                )}
               </Button>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12} lg={6} mt={2}>
+              <Button
+                color="error"
+                variant="contained"
+                endIcon={<ThumbDownAltIcon />}
+                disabled={loadingRejectRequest}
+                onClick={() =>
+                  rejectRequest(request.id, setLoadingRejectRequest)
+                }
+              >
+                {loadingRejectRequest ? (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <CircularProgress size={24} color="inherit" />{' '}
+                    <Typography
+                      style={{ fontSize: '13px', marginRight: '8px' }}
+                    >
+                      ارسال درخواست
+                    </Typography>
+                  </div>
+                ) : (
+                  'مخالفت'
+                )}
+              </Button>
+            </Grid>
+            <Grid mt={2} item xs={12} sm={12} md={12} lg={6}>
               <FormControl fullWidth>
                 <InputLabel id="school_id_provider">مدرسه</InputLabel>
                 <Select
@@ -172,15 +229,27 @@ const Request: React.FC<RequestProps> = ({
                 </Select>
               </FormControl>
             </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <Button
-                color="error"
+            <Grid item xs={12} sm={12} lg={6} mt={2}>
+              <Button 
                 variant="contained"
-                endIcon={<ThumbDownAltIcon />}
-                onClick={() => rejectRequest(request.id)}
+                endIcon={<SettingsBackupRestoreIcon />}
+                disabled={loadingWithdrawRequest}
+                onClick={() =>
+                  withDrawRequest(request.id, setLoadingWithdrawRequest)
+                }
               >
-                مخالفت
+                {loadingWithdrawRequest ? (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <CircularProgress size={24} color="inherit" />{' '}
+                    <Typography
+                      style={{ fontSize: '13px', marginRight: '8px' }}
+                    >
+                      ارسال درخواست
+                    </Typography>
+                  </div>
+                ) : (
+                  'تعلیق'
+                )}
               </Button>
             </Grid>
           </Grid>
