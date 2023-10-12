@@ -19,6 +19,10 @@ export interface ChangePasswordRequest {
   new_password_confirm: string;
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
 export interface VerifyRequest {
   token: string | null;
 }

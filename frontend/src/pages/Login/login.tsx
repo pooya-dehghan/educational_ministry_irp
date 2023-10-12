@@ -152,7 +152,7 @@ const Login = () => {
                 </Link>
               </Grid>
               <Grid item xs={12} className={classes.loginLink}>
-                <Link href="resset">رمز عبور خود را فراموش کرده اید؟</Link>
+                <Link href="forgot">رمز عبور خود را فراموش کرده اید؟</Link>
               </Grid>
             </Grid>
           </Box>

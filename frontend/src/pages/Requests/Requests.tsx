@@ -123,8 +123,6 @@ const Requests = () => {
     }, 2000);
   };
 
-  const withDrawRequest = (id: number) => {};
-
   const deleteCodeSearch = () => {
     setCode('');
   };
