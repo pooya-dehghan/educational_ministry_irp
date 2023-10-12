@@ -11,9 +11,11 @@ import {
 } from '../../features/requests/requestThunk';
 import { updateResponse } from '../../features/response/responseSlice';
 import { withDrawAsync } from '../../features/requests/requestThunk';
+import Search from '../../components/Search/Search';
 
 const Requests = () => {
   const [requests, setRequests] = useState([]);
+  const [code, setCode] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -113,6 +115,22 @@ const Requests = () => {
         setLoadingWithDrawRequest(false);
       });
   };
+
+  const searchCodeOnChange = (searchInput: string) => {
+    setCode(searchInput);
+    setTimeout(() => {
+      console.log('searchInput: ', searchInput);
+    }, 2000);
+  };
+
+  const withDrawRequest = (id: number) => {};
+
+  const deleteCodeSearch = () => {
+    setCode('');
+  };
+
+  const searchCode = () => {};
+
   return (
     <Dashboard>
       <Box
@@ -121,10 +139,20 @@ const Requests = () => {
           justifyContent: 'center',
           alignItems: 'center',
           margin: 1,
+          flexDirection: 'column',
         }}
         component={'div'}
       >
-        <Grid container spacing={2}>
+        <Grid container mt={3} mb={3}>
+          <Grid item>
+            <Search
+              onchange={searchCodeOnChange}
+              ondelete={deleteCodeSearch}
+              search={searchCode}
+            />
+          </Grid>
+        </Grid>
+        <Grid container mt={3} mb={3} spacing={2}>
           {requests &&
             requests.map((req, index) => {
               return (

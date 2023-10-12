@@ -327,3 +327,28 @@ class StudentGetRequestStatus(APIView):
                 return Response({'message': "تایید", 'Success': True}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'شما هیج درخواستی ندارید', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
+
+
+class MakeRequestPendingView(APIView):
+    @swagger_auto_schema(
+    operation_description="""This endpoint allows to superuser or admin to make a request pending again.
+
+            The request should include the request's id.
+
+            """,
+    operation_summary="endpoint for make request pending",
+    responses={
+        '200': 'ok',
+        '400': 'bad request'
+        }
+    )
+    def post(self, request, id):
+        try:
+            OfficeManager.objects.get(id=request.user.id)
+        except:
+            return Response({"message":"شما اجازه دسترسی به این مکان را ندارید", "status":status.HTTP_400_BAD_REQUEST, "success":False})
+        request = Request.objects.get(id=id)
+        request.status = 'p'
+        request.save()
+        return Response({"message":"درخواست با موفقیت به حالت تعلیق در آمد", "success":True, "status":status.HTTP_200_OK})
+    
