@@ -6,6 +6,7 @@ import {
   LoginResponse,
   VerifyRequest,
   ChangePasswordRequest,
+  ForgotPasswordRequest
 } from './interface/interface';
 
 export const loginAsync = createAsyncThunk(
@@ -28,6 +29,14 @@ export const changePasswordAsync = createAsyncThunk(
   'auth/changePasswordAsync',
   async (changePassData: ChangePasswordRequest) => {
     const response = await authApi.changePassword(changePassData);
+    return response;
+  }
+);
+
+export const forgotPasswordAsync = createAsyncThunk(
+  'auth/forgotPasswordAsync',
+  async (forgotPassData: ForgotPasswordRequest) => {
+    const response = await authApi.forgotPassword(forgotPassData);
     return response;
   }
 );

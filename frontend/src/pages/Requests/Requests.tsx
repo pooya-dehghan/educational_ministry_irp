@@ -10,6 +10,7 @@ import {
   acceptRequestAsync,
 } from '../../features/requests/requestThunk';
 import { updateResponse } from '../../features/response/responseSlice';
+import { withDrawAsync } from '../../features/requests/requestThunk';
 import Search from '../../components/Search/Search';
 
 const Requests = () => {
@@ -26,7 +27,12 @@ const Requests = () => {
       .catch((error: any) => {});
   }, []);
 
-  const acceptRequest = (schoolID: number | undefined, requestID: number) => {
+  const acceptRequest = (
+    schoolID: number | undefined,
+    requestID: number,
+    setLoadingAcceptRequest: (value: boolean) => void
+  ) => {
+    setLoadingAcceptRequest(true);
     (dispatch as any)(
       acceptRequestAsync({ school_id: schoolID, request_id: requestID })
     )
@@ -39,6 +45,7 @@ const Requests = () => {
             open: true,
           })
         );
+        setLoadingAcceptRequest(false);
       })
       .catch((error: any) => {
         dispatch(
@@ -48,20 +55,26 @@ const Requests = () => {
             open: true,
           })
         );
+        setLoadingAcceptRequest(false);
       });
   };
 
-  const rejectRequest = (id: number) => {
+  const rejectRequest = (
+    id: number,
+    setLoadingRejectRequest: (value: boolean) => void
+  ) => {
+    setLoadingRejectRequest(true);
     (dispatch as any)(rejectRequestAsync({ id }))
       .unwrap()
       .then((response: any) => {
         dispatch(
           updateResponse({
-            severity: 'success',
-            message: 'درخواست دانشجو با موفقیت قبول شد.',
+            severity: 'warning',
+            message: 'درخواست دانشجو رد شد شد.',
             open: true,
           })
         );
+        setLoadingRejectRequest(false);
       })
       .catch((error: any) => {
         dispatch(
@@ -71,6 +84,35 @@ const Requests = () => {
             open: true,
           })
         );
+        setLoadingRejectRequest(false);
+      });
+  };
+  const withDrawRequest = (
+    id: number,
+    setLoadingWithDrawRequest: (value: boolean) => void
+  ) => {
+    setLoadingWithDrawRequest(true);
+    (dispatch as any)(withDrawAsync({ id }))
+      .unwrap()
+      .then((response: any) => {
+        dispatch(
+          updateResponse({
+            severity: 'info',
+            message: 'درخواست دانشجو با موفقیت به حالت اولیه برگردانده شد.',
+            open: true,
+          })
+        );
+        setLoadingWithDrawRequest(false);
+      })
+      .catch((error: any) => {
+        dispatch(
+          updateResponse({
+            severity: 'error',
+            message: 'عملیات ناموفق..',
+            open: true,
+          })
+        );
+        setLoadingWithDrawRequest(false);
       });
   };
 
@@ -80,8 +122,6 @@ const Requests = () => {
       console.log('searchInput: ', searchInput);
     }, 2000);
   };
-
-  const withDrawRequest = (id: number) => {};
 
   const deleteCodeSearch = () => {
     setCode('');
@@ -96,6 +136,7 @@ const Requests = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          margin: 1,
           flexDirection: 'column',
         }}
         component={'div'}
@@ -115,10 +156,23 @@ const Requests = () => {
               return (
                 <Grid item xs={12} md={6} sm={6} lg={6}>
                   <Request
-                    acceptRequest={(schoolID, requestID) =>
-                      acceptRequest(schoolID, requestID)
+                    acceptRequest={(
+                      schoolID,
+                      requestID,
+                      setLoadingAcceptRequest
+                    ) =>
+                      acceptRequest(
+                        schoolID,
+                        requestID,
+                        setLoadingAcceptRequest
+                      )
                     }
-                    rejectRequest={(id) => rejectRequest(id)}
+                    rejectRequest={(id, setLoadingRejectRequest) =>
+                      rejectRequest(id, setLoadingRejectRequest)
+                    }
+                    withDrawRequest={(id, setLoadingWithdrawRequest) =>
+                      withDrawRequest(id, setLoadingWithdrawRequest)
+                    }
                     request={req}
                   />
                 </Grid>

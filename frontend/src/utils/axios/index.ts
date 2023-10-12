@@ -26,6 +26,21 @@ instance.interceptors.request.use(
   }
 );
 
+axios.interceptors.response.use(
+  (response) => {
+    // Handle successful responses here
+    return response;
+  },
+  (error) => {
+    // Handle errors here
+    if (error.response) {
+      // You can access response data from error.response
+      console.log(error.response);
+    }
+    return Promise.reject(error);
+  }
+);
+
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
