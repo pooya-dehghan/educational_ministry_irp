@@ -12,5 +12,6 @@ urlpatterns = [
     path('cancel/', views.CancelRequest.as_view()),
     path('status/', views.StudentGetRequestStatus.as_view(), name='status'),
     path('create/<int:region>/', views.RequestForSchool.as_view()),
+    path('pending/<int:id>/', views.MakeRequestPendingView.as_view(), name='pending')
 ]
 

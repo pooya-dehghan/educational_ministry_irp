@@ -59,9 +59,8 @@ export const studentApi = {
     deleteData: DeletestudenteRequest
   ): Promise<DeletestudentResponse> => {
     try {
-      const response = await axiosInstance.post(
-        `${API_BASE_URL}/student/api/v1/delete/${deleteData.id}/`,
-        deleteData
+      const response = await axiosInstance.delete(
+        `${API_BASE_URL}/student/api/v1/delete/${deleteData.id}/`
       );
       return response.data;
     } catch (error) {

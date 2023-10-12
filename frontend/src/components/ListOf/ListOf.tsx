@@ -17,12 +17,19 @@ import { deleteTeachersAsync } from '../../features/teacher/teacherThunk';
 import { deletestudentsAsync } from '../../features/student/studentThunk';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { deleteTeacherById } from '../../features/teacher/teacherSlice';
+import { deleteProfessorById } from '../../features/professor/professorSlice';
+import { deleteSchoolById } from '../../features/school/schoolSlice';
+import { deleteOfficeManagerById } from '../../features/officemanager/officemanagerSlice';
+import { deleteStudentById } from '../../features/student/studentSlice';
+
 
 export default function ListOf({
   type = 'officemanager',
   username = 'نام کاربری',
   id = 0,
   buttonHide = false,
+  image = '',
   selected = false,
   name = ' نام وارد نشده است ',
   onClick = (payload: any) => {},
@@ -30,6 +37,8 @@ export default function ListOf({
   const [openPermissionModal, setOpenPermissionModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+
   const handleInfoButton = (id: number) => {
     switch (type) {
       case 'officemanager':
@@ -50,38 +59,68 @@ export default function ListOf({
     }
   };
   const handleDeleteButton = () => {
+    setButtonLoading(true);
     switch (type) {
       case 'officemanager':
         (dispatch as any)(deleteOfficeManagersAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteOfficeManagerById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'professor':
         (dispatch as any)(deleteProfessorsAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteProfessorById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'school':
         (dispatch as any)(deleteSchoolsAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteSchoolById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'student':
         (dispatch as any)(deletestudentsAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteStudentById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'teacher':
         (dispatch as any)(deleteTeachersAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteTeacherById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
-
       default:
         break;
     }
@@ -138,7 +177,7 @@ export default function ListOf({
             <Avatar
               className={styles.avatar}
               alt="Remy Sharp"
-              src={Image}
+              src={image ? image : Image}
               sx={{ margin: '10px' }}
             />
           }
@@ -175,6 +214,7 @@ export default function ListOf({
         open={openPermissionModal}
         handleClose={handleOpenPermissionModel}
         onClickDelete={handleDeleteButton}
+        buttonLoading={buttonLoading}
       />
     </>
   );

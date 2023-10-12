@@ -22,7 +22,7 @@ import { teacherValidationSchema } from '../../validations/create-teacher-valida
 const CreateTeacher: React.FC = () => {
   const dispatch = useDispatch();
   const [buttonLoading, setButtonLoading] = useState(false);
-  const handleSubmit = (values: Values, setSubmitting: any) => {
+  const handleSubmit = (values: Values, setSubmitting: any, resetForm: any) => {
     setButtonLoading(true);
     let createTeacherData = {
       schoolName: values.schoolName,
@@ -43,6 +43,7 @@ const CreateTeacher: React.FC = () => {
             open: true,
           })
         );
+        resetForm();
         setButtonLoading(false);
       })
       .catch((error: any) => {
@@ -104,8 +105,11 @@ const CreateTeacher: React.FC = () => {
                   field: '',
                 }}
                 validationSchema={teacherValidationSchema} // Add validation schema
-                onSubmit={(values: Values, { setSubmitting }: any) => {
-                  handleSubmit(values, setSubmitting);
+                onSubmit={(
+                  values: Values,
+                  { setSubmitting, resetForm }: any
+                ) => {
+                  handleSubmit(values, setSubmitting, resetForm);
                 }}
               >
                 {({ handleSubmit, errors, touched }) => (

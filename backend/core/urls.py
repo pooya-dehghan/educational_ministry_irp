@@ -5,6 +5,9 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from .views import test
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -38,3 +41,5 @@ urlpatterns = [
     path('professorrequest/', include('professorrequest.urls')),
     path('test/', test, name="test")
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

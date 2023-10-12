@@ -60,9 +60,8 @@ export const teacherApi = {
     deleteData: DeleteteachereRequest
   ): Promise<DeleteteacherResponse> => {
     try {
-      const response = await axiosInstance.post(
-        `${API_BASE_URL}/teacher/api/v1/delete/${deleteData.id}`,
-        deleteData
+      const response = await axiosInstance.delete(
+        `${API_BASE_URL}/teacher/api/v1/delete/${deleteData.id}`
       );
       return response.data;
     } catch (error) {

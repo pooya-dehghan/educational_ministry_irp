@@ -35,7 +35,7 @@ class TeacherGet(APIView):
             ser_data = TeacherSerializer(instance=teacher)
             return Response(ser_data.data, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'this teacher does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'این معلم وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
 
 
 class TeacherList(APIView):
@@ -130,7 +130,7 @@ class TeacherUpdate(APIView):
         try:
             teacher = Teacher.objects.get(pk=pk)
         except Teacher.DoesNotExist:
-            return Response({'message': 'teacher does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین معلمی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, teacher)
         ser_data = TeacherSerializer(instance=teacher, data=request.data, partial=True)
         if ser_data.is_valid():
@@ -156,6 +156,6 @@ class TeacherDelete(APIView):
         try:
             teacher = Teacher.objects.get(pk=pk)
         except Teacher.DoesNotExist:
-            return Response({'message': 'teacher does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'همچین معلمی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         teacher.delete()
-        return Response({'message': 'deleted successfully'}, status=status.HTTP_200_OK)
+        return Response({'message': 'با موفقیت حذف شد', 'Success': True}, status=status.HTTP_200_OK)
