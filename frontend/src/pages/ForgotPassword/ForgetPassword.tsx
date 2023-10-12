@@ -106,6 +106,7 @@ const ForgetPassword: React.FC = () => {
           color="primary"
           sx={{ marginTop: '20px' }}
           onClick={handleForgotPassword}
+          disabled={buttonLoading}
         >
           {buttonLoading ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -118,7 +119,7 @@ const ForgetPassword: React.FC = () => {
             'بازنشانی رمز عبور'
           )}
         </Button>
-        <Grid item xs={12} className={classes.loginLink}>
+        <Grid item xs={12} className={classes.loginLink} mt={4}>
           <Link href="signup">تا به حال ثبت نام نکرده اید ؟ ثبت نام کنید</Link>
         </Grid>
         <Grid item xs={12} className={classes.loginLink}>
