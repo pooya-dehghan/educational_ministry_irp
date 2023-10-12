@@ -1,10 +1,14 @@
-import React, { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { updateResponse } from '../../features/response/responseSlice';
+import { uploadTaskAsync } from '../../features/task/taskThunk';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
-import { useDispatch } from 'react-redux';
-import { uploadFileAsync } from '../../features/upload/uploadThunk';
-import { updateResponse } from '../../features/response/responseSlice';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -17,17 +21,27 @@ const VisuallyHiddenInput = styled('input')({
   whiteSpace: 'nowrap',
   width: 1,
 });
-const UploadFileButton = () => {
+
+interface ITask {
+  title: string;
+  description: string;
+  buttonText: string;
+  taskID: string;
+}
+
+const Task: React.FC<ITask> = ({ title, description, buttonText, taskID }) => {
   const dispatch = useDispatch();
   const [buttonLoading, setButtonLoading] = useState(false);
+
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (file) {
       try {
         const formData = new FormData();
-        formData.append('avatar', file);
-        (dispatch as any)(uploadFileAsync(formData))
+        formData.append('file', file);
+        formData.append('task_id', taskID.toString());
+        (dispatch as any)(uploadTaskAsync(formData))
           .unwrap()
           .then((response: any) => {
             dispatch(
@@ -63,15 +77,29 @@ const UploadFileButton = () => {
     }
   };
   return (
-    <Button
-      component="label"
-      variant="contained"
-      startIcon={<CloudUploadIcon />}
-    >
-      بارگذاری تصویر پروفایل
-      <VisuallyHiddenInput type="file" onChange={handleFileChange} />
-    </Button>
+    <Card sx={{ maxWidth: 345 }}>
+      <CardActionArea>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {description}
+          </Typography>
+        </CardContent>
+        <CardContent m={4}>
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+          >
+            {buttonText}
+            <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+          </Button>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 };
 
-export default UploadFileButton;
+export default Task;

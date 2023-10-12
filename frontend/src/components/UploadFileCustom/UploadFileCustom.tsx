@@ -17,7 +17,12 @@ const VisuallyHiddenInput = styled('input')({
   whiteSpace: 'nowrap',
   width: 1,
 });
-const UploadFileButton = () => {
+
+interface IUploadFileButton {
+  field: string;
+}
+
+const UploadFileButton: React.FC<IUploadFileButton> = ({ field }) => {
   const dispatch = useDispatch();
   const [buttonLoading, setButtonLoading] = useState(false);
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +31,7 @@ const UploadFileButton = () => {
     if (file) {
       try {
         const formData = new FormData();
-        formData.append('avatar', file);
+        formData.append('filed', file);
         (dispatch as any)(uploadFileAsync(formData))
           .unwrap()
           .then((response: any) => {

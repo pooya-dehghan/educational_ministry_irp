@@ -17,6 +17,10 @@ import ListOf from '../../../components/ListOf/ListOf';
 import ProfessorRequestModal from '../../../components/ProfessorRequestModal/ProfessorRequestModal';
 import { acceptProfessorRequestAsync } from '../../../features/professorRequest/professorRequestThunk';
 import { rejectProfessorRequestAsync } from '../../../features/professorRequest/professorRequestThunk';
+import { createTaskAsync } from '../../../features/task/taskThunk';
+import { DatePicker } from 'zaman';
+import CircularProgress from '@mui/material/CircularProgress';
+import CustomeClasses from './professor.module.css';
 
 const useStyles = makeStyles((theme) => ({
   marginButton: {
@@ -42,11 +46,16 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
   const classes = useStyles();
   const [buttonAcceptLoading, setButtonAcceptLoading] = useState(false);
   const [buttonRejectLoading, setButtonRejectLoading] = useState(false);
+  const [taskLoading, setTaskLoading] = useState(false);
   const [students, setStudents] = useState([]);
   const [selectedCard, setSelectedCard] = useState<ISelectedCard>({
     id: undefined,
   });
   const [openRequestModal, setOpenRequestModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = React.useState<Date>();
+
   useEffect(() => {
     (dispatch as any)(getAllProfessorRequestsAsync())
       .unwrap()
@@ -152,6 +161,45 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
       });
   };
 
+  const CreateTaskProfessor = () => {
+    setTaskLoading(true);
+    if (date) {
+    let month = date.getUTCMonth() + 1; //months from 1-12
+    let day = date.getUTCDate();
+    let year = date.getUTCFullYear();
+    let newdate = year + '-' + month + '-' + day;
+    (dispatch as any)(
+      createTaskAsync({
+        title: title,
+        description: description,
+        deadline: newdate,
+      })
+    )
+      .unwrap()
+      .then((response: any) => {
+        setTaskLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'success',
+            message: 'درخواست اخذ با موفقیت انجام شد.',
+            open: true,
+          })
+        );
+        setTaskLoading(false);
+      })
+      .catch((error: any) => {
+        setTaskLoading(false);
+        dispatch(
+          updateResponse({
+            severity: 'error',
+            message: 'عملیات با موفقیت انجام نشد.',
+            open: true,
+          })
+        );
+      });
+    }
+  };
+
   return (
     <>
       <ProfessorRequestModal
@@ -180,7 +228,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
       >
         <Grid container>
           <Grid item>
-            <Typography variant="h6" className={classes.marginButton}>
+            <Typography variant="h4" className={classes.marginButton}>
               اطلاعات استاد
             </Typography>
           </Grid>
@@ -333,6 +381,61 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
             </Form>
           )}
         </Formik>
+        <Grid container>
+          <Grid item>
+            <Typography variant="h4">بارگذاری تکلیف برای دانشجویان</Typography>
+          </Grid>
+          <Grid container mt={3}>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              {' '}
+              <TextField
+                id="outlined-title"
+                label="عنوان"
+                variant="outlined"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={9}>
+              {' '}
+              <TextField
+                fullWidth
+                id="outlined-description"
+                label="توضیحات"
+                variant="outlined"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </Grid>
+            <Grid item mb={3} mt={5} xs={12} sm={6} md={4} lg={3}>
+              {'تاریخ تحویل '}
+              <DatePicker
+                onChange={(e) => {
+                  setDate(e.value);
+                }}
+                className={CustomeClasses.datePickerClass}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={12}>
+              <Button
+                onClick={() => CreateTaskProfessor()}
+                variant="contained"
+                disabled={taskLoading}
+              >
+                {taskLoading ? (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <CircularProgress size={24} color="inherit" />{' '}
+                    <Typography
+                      style={{ fontSize: '13px', marginRight: '8px' }}
+                    >
+                      در حال ثبت تکلیف
+                    </Typography>
+                  </div>
+                ) : (
+                  'ثبت'
+                )}
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
         <Grid container>
           <Grid item>
             <Typography variant="h4">فهرست دانشجویان کارورز</Typography>
