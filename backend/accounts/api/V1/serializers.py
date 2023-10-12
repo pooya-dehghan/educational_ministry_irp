@@ -14,7 +14,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     professor2 = serializers.IntegerField()
     class Meta:
         model = Student
-        fields = ("username", "password", 'password_confirmation', 'studentUniqueCode', 'professor2')
+        fields = ("username","email","password" ,'password_confirmation', 'studentUniqueCode', 'professor2')
         extra_kwargs = {
             'password': {'write_only': True}
         }

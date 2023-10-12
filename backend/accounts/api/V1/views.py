@@ -83,6 +83,7 @@ class ApiUserRegistrationView(GenericAPIView):
             type=openapi.TYPE_OBJECT,
             properties={
                 'username': openapi.Schema(type=openapi.TYPE_STRING, default="pourya"),
+                'email':openapi.Schema(type=openapi.TYPE_STRING, default="pouryajanparvar@yahoo.com"),
                 'password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'password_confirmation': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'studentUniqueCode': openapi.Schema(type=openapi.TYPE_STRING, default="3981231026"),
@@ -100,7 +101,7 @@ class ApiUserRegistrationView(GenericAPIView):
         if serializer.is_valid():
             professor = Professor.objects.get(id=serializer.validated_data['professor2'])
             student = Student.objects.create(username=serializer.validated_data['username']
-                                             , studentUniqueCode=serializer.validated_data['studentUniqueCode'])
+                                             , studentUniqueCode=serializer.validated_data['studentUniqueCode'], email=serializer.validated_data["email"])
             student.set_password(serializer.validated_data['password'])
             student.save()
             professor_request = ProfessorRequest.objects.create(sender=student, receiver=professor)
@@ -128,6 +129,7 @@ class ApiUserRegistrationView(GenericAPIView):
                 refresh = RefreshToken.for_user(user=user)
                 data = {
                     "username": serializer.validated_data["username"],
+                    "email":serializer.validated_data["email"],
                     'type': 'students',
                     'id': student.id,
                     'refresh': str(refresh),
@@ -226,7 +228,7 @@ class UserLoginAPIView(APIView):
                 'access': str(refresh.access_token),
             })
         else:
-            return Response({'username': 'Error500Server'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'نام کاربری یا کلمه عبور نامعتبر است' , 'success':False}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ForgetPassword(APIView):
@@ -382,26 +384,6 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from rest_framework import generics, status
 
-
-# class PasswordResetView(APIView):
-#     serializer_class = EmailSerializer
-#
-#     def post(self, request):
-#         serializer = self.serializer_class(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         email = serializer.validated_data['email']
-#         user = User.objects.get(email=email)
-#         token = default_token_generator.make_token(user)
-#         uid = urlsafe_base64_encode(force_bytes(user.pk))
-#         reset_link = f"http://example.com/reset-password/{uid}/{token}/"
-#         send_mail(
-#             'Password Reset',
-#             f'Click the link to reset your password: {reset_link}',
-#             'from@example.com',
-#             [email],
-#             fail_silently=False,
-#         )
-#         return Response({'message': 'Password reset link sent.'}, status=status.HTTP_200_OK)
 
 
 class ProfileView(APIView):
