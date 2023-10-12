@@ -157,7 +157,7 @@ export default function ListOf({
   return (
     <>
       <Card
-        onClick={() => onClick({ id: id })}
+        onClick={() => onClick({ id: id, name: username })}
         sx={{ minWidth: 275 }}
         className={`${styles.card} ${
           type === 'officemanager' ? styles.cardOfficeManager : ''

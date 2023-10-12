@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { attendanceApi } from './attendanceAPI';
+import { attendanceApi } from './attendanceApi';
 import {
   CreateAttendanceStudentRequest,
   GetAttendancesOfStudentRequest,
