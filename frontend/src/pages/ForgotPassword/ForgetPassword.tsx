@@ -9,6 +9,7 @@ import { updateResponse } from '../../features/response/responseSlice';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Container, Link, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 const useStyles = makeStyles({
   root: {
@@ -20,6 +21,9 @@ const useStyles = makeStyles({
     backgroundImage: 'url(https://s8.uupload.ir/files/signupbg_bdw.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
+  },
+  loginLink: {
+    textAlign: 'center',
   },
 });
 
@@ -114,6 +118,12 @@ const ForgetPassword: React.FC = () => {
             'بازنشانی رمز عبور'
           )}
         </Button>
+        <Grid item xs={12} className={classes.loginLink}>
+          <Link href="signup">تا به حال ثبت نام نکرده اید ؟ ثبت نام کنید</Link>
+        </Grid>
+        <Grid item xs={12} className={classes.loginLink}>
+          <Link href="login">ورود</Link>
+        </Grid>
       </Box>
     </div>
   );
