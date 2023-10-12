@@ -24,7 +24,7 @@ export default function ListOf({
   id = 0,
   buttonHide = false,
   selected = false,
-  name = 'وارد نشده است',
+  name = ' نام وارد نشده است ',
   onClick = (payload: any) => {},
 }) {
   const [openPermissionModal, setOpenPermissionModal] = useState(false);
@@ -98,11 +98,23 @@ export default function ListOf({
       case 'professor':
         holder = 'استاد';
         break;
+      case 'student':
+        holder = 'دانشجو';
+        break;
+      case 'school':
+        holder = 'مدرسه';
+        break;
+      case 'teacher':
+        holder = 'معلم';
+        break;
+      case 'universities':
+        holder = 'دانشگاه';
+        break;
       default:
         holder = 'مسئول اموزش پرورش';
         break;
     }
-    return `${holder} با نام ${name}`;
+    return `${holder} : ${name}`;
   };
   return (
     <>
