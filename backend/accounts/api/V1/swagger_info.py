@@ -13,6 +13,12 @@ swagger_parameters_register = [
         description='Example PATH parameter',
         type=openapi.TYPE_STRING
     ),
+        openapi.Parameter(
+        name='email',
+        in_=openapi.IN_PATH,
+        description='Example PATH parameter',
+        type=openapi.TYPE_STRING
+    ),
     openapi.Parameter(
         name='password',
         in_=openapi.IN_PATH,

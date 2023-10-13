@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'request.apps.RequestConfig',
     'notification.apps.NotificationConfig',
     'task.apps.TaskConfig',
+    'assessment.apps.AssessmentConfig',
     # third part
     'drf_yasg',
     'rest_framework_simplejwt',

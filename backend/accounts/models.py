@@ -14,7 +14,7 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=100, unique=True)
     national_code = models.CharField(max_length=10, unique=True, null=True, blank=True)
     phone_number = models.CharField(max_length=11, unique=True, null=True, blank=True)
-    email = models.EmailField(unique=True, null=True, blank=True, max_length=200)
+    email = models.EmailField(unique=True, max_length=200)
     first_name = models.CharField(max_length=200, null=True, blank=True)
     last_name = models.CharField(max_length=200, null=True, blank=True)
     birthday_date = models.DateTimeField(null=True, blank=True)

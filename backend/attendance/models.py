@@ -7,7 +7,7 @@ from django.utils import timezone
 
 class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, verbose_name='دانشجو')
-    date = models.DateField(default=timezone.now, verbose_name='تاریخ')
+    date = models.DateTimeField(default=timezone.now, verbose_name='تاریخ')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
