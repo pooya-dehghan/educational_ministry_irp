@@ -6,3 +6,7 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
         fields = '__all__'
+
+
+class SearchSerializer(serializers.Serializer):
+    search = serializers.CharField(max_length=100)
