@@ -10,6 +10,9 @@ from .swagger_info import swagger_parameters
 from jalali_date import datetime2jalali
 from core.settings import persian_months
 from datetime import datetime
+
+
+
 class FillAttendance(APIView):
     permission_classes = [IsSuperuserOrSchoolManager]
 
@@ -37,15 +40,23 @@ class FillAttendance(APIView):
 
         ser_data = DateSerializer(data=request.data)
         if ser_data.is_valid():
-            date = ser_data.validated_data['date']
+            date = ser_data.validated_data["date"]
+            print("="*100)
+            print(date)
+            print(type(date))
+            print("="*100)
+            jalali_date = datetime2jalali(date).strftime('%y-%m-%d')
+            year, month, day = jalali_date.split('-')
+            print(year, month, date)
+            month = persian_months[int(month)-1]
+            date_str = f"14{year} {month} {day}"
 
-            #date = datetime2jalali(date).strftime('%y-%m-%d')
 
             if Attendance.objects.filter(student=student, date=date).exists():
                 return Response({'message': 'شما قبلا این تاریخ را برای این دانشحو پر کرده اید', 'Success': False})
             Attendance.objects.create(student=student, date=date)
             return Response(
-                {'message': f'حضور دانشجو{student.username} در تاریخ {date}با موفقید ثبت شد ', 'Success': True})
+                {'message': f'حضور دانشجو{student.username} در تاریخ {date}با موفقید ثبت شد ', 'Success': True, "date":date_str})
         else:
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
