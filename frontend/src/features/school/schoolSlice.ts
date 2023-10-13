@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   schoolinfo: {
-    schoolname : '',
+    schoolname: '',
   },
   allschools: [],
 };
@@ -17,11 +17,16 @@ const schoolSlice = createSlice({
     getAllSchools: (state, action) => {
       state.allschools = action.payload;
     },
+    deleteSchoolById: (state, action) => {
+      state.allschools = state.allschools.filter(
+        (schools: any) => schools.id != action.payload
+      );
+    },
     updateSchool: (state, action) => {
       state.schoolinfo = action.payload;
     },
     deleteSchool: (state, action) => {
-      state.schoolinfo = { schoolname : ''};
+      state.schoolinfo = { schoolname: '' };
     },
   },
 });
@@ -31,6 +36,7 @@ export const {
   getAllSchools,
   updateSchool,
   deleteSchool,
+  deleteSchoolById,
 } = schoolSlice.actions;
 
 export default schoolSlice.reducer;

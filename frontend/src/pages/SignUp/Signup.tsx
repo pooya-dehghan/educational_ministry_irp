@@ -122,7 +122,7 @@ const Root = () => {
         );
         tokenHandler.setToken(response.access);
         tokenHandler.setRefreshToken(response.refresh);
-        userInfoLocalStorage.setUserInfo(response)
+        userInfoLocalStorage.setUserInfo(response);
         setButtonLoading(false);
         navigate('/dashboard');
       })

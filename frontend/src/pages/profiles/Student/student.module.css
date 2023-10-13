@@ -1,3 +1,17 @@
 .infoType {
   margin-bottom: 1rem;
 }
+
+.container {
+  background-image: url(https://s8.uupload.ir/files/signupbg_bdw.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100%; /* Set width to 100% */
+  min-height: 100vh; /* Use min-height to ensure container fills at least viewport height */
+}
+
+.profilePicture {
+  width: 300px;
+  height: 300px;
+}

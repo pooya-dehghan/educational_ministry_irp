@@ -1,3 +1,5 @@
+from rest_framework.exceptions import ValidationError
+
 from ...models import Student, User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
@@ -7,36 +9,15 @@ from accounts.models import Professor
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
 
-class UserRegisterSerializer(serializers.Serializer):
-    # password_confirmation = serializers.CharField(max_length=255, write_only=True)
-
-    # class Meta:
-    #     model = Student
-    #     fields = ["username", "password", "password_confirmation", "studentUniqueCode", 'professor2']  # , "field", "professor2"]
-    username = serializers.CharField(error_messages={
-            'required': 'فیلد الزامی است.',
-            'blank': 'نمی‌تواند خالی باشد.',
-            'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
-        })
-    password = serializers.CharField(error_messages={
-            'required': 'فیلد الزامی است.',
-            'blank': 'نمی‌تواند خالی باشد.',
-            'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
-        },write_only=True)
-    password_confirmation = serializers.CharField( error_messages= {
-            'required': 'فیلد الزامی است.',
-            'blank': 'نمی‌تواند خالی باشد.',
-            'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
-        },write_only=True)
-    studentUniqueCode =  serializers.CharField( error_messages={
-            'required': 'فیلد الزامی است.',
-            'blank': 'نمی‌تواند خالی باشد.',
-            'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
-        })
-    professor2 = serializers.IntegerField(error_messages={
-        'required': 'فیلد الزامی است.',
-        'blank': 'نمی‌تواند خالی باشد.',
-    })
+class UserRegisterSerializer(serializers.ModelSerializer):
+    password_confirmation = serializers.CharField(max_length=100, write_only=True)
+    professor2 = serializers.IntegerField()
+    class Meta:
+        model = Student
+        fields = ("username","email","password" ,'password_confirmation', 'studentUniqueCode', 'professor2')
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
     def validate(self, attrs):
         password_confirmation = attrs.get("password_confirmation")
@@ -92,11 +73,11 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
 
-
 class UserProfileAvatarSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('avatar',)  # Include other fields as needed
+
 
 class ChangePasswordSerializerOriginal(serializers.Serializer):
     username = serializers.CharField(max_length=100)
@@ -104,7 +85,7 @@ class ChangePasswordSerializerOriginal(serializers.Serializer):
     new_password = serializers.CharField(max_length=100)
     new_password_confirm = serializers.CharField(max_length=100)
 
-    def validate(self,attrs):
+    def validate(self, attrs):
         new_password = attrs.get("new_password")
         new_password_confirm = attrs.get("new_password_confirm")
         if new_password != new_password_confirm:
@@ -114,4 +95,3 @@ class ChangePasswordSerializerOriginal(serializers.Serializer):
         except exceptions.ValidationError as e:
             raise serializers.ValidationError({"password": list(e.messages)})
         return attrs
-

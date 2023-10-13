@@ -17,18 +17,27 @@ import { deleteTeachersAsync } from '../../features/teacher/teacherThunk';
 import { deletestudentsAsync } from '../../features/student/studentThunk';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { deleteTeacherById } from '../../features/teacher/teacherSlice';
+import { deleteProfessorById } from '../../features/professor/professorSlice';
+import { deleteSchoolById } from '../../features/school/schoolSlice';
+import { deleteOfficeManagerById } from '../../features/officemanager/officemanagerSlice';
+import { deleteStudentById } from '../../features/student/studentSlice';
 
 export default function ListOf({
   type = 'officemanager',
   username = 'نام کاربری',
   id = 0,
   buttonHide = false,
+  image = '',
   selected = false,
+  name = ' نام وارد نشده است ',
   onClick = (payload: any) => {},
 }) {
   const [openPermissionModal, setOpenPermissionModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+
   const handleInfoButton = (id: number) => {
     switch (type) {
       case 'officemanager':
@@ -49,38 +58,68 @@ export default function ListOf({
     }
   };
   const handleDeleteButton = () => {
+    setButtonLoading(true);
     switch (type) {
       case 'officemanager':
         (dispatch as any)(deleteOfficeManagersAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteOfficeManagerById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'professor':
         (dispatch as any)(deleteProfessorsAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteProfessorById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'school':
         (dispatch as any)(deleteSchoolsAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteSchoolById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'student':
         (dispatch as any)(deletestudentsAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteStudentById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
       case 'teacher':
         (dispatch as any)(deleteTeachersAsync({ id }))
           .unwrap()
-          .then((response: any) => {})
-          .catch((error: any) => {});
+          .then((response: any) => {
+            dispatch(deleteTeacherById(id));
+            setButtonLoading(false);
+            setOpenPermissionModal(false);
+          })
+          .catch((error: any) => {
+            setOpenPermissionModal(false);
+          });
         break;
-
       default:
         break;
     }
@@ -88,10 +127,37 @@ export default function ListOf({
   const handleOpenPermissionModel = () => {
     setOpenPermissionModal(!openPermissionModal);
   };
+  const generateDescription = () => {
+    let holder = 'مسئول اموزش پرورش';
+    switch (type) {
+      case 'officemanager':
+        holder = 'مسئول اموزش پرورش';
+        break;
+      case 'professor':
+        holder = 'استاد';
+        break;
+      case 'student':
+        holder = 'دانشجو';
+        break;
+      case 'school':
+        holder = 'مدرسه';
+        break;
+      case 'teacher':
+        holder = 'معلم';
+        break;
+      case 'universities':
+        holder = 'دانشگاه';
+        break;
+      default:
+        holder = 'مسئول اموزش پرورش';
+        break;
+    }
+    return `${holder} : ${name}`;
+  };
   return (
     <>
       <Card
-        onClick={() => onClick({ id: id })}
+        onClick={() => onClick({ id: id, name: username })}
         sx={{ minWidth: 275 }}
         className={`${styles.card} ${
           type === 'officemanager' ? styles.cardOfficeManager : ''
@@ -110,7 +176,7 @@ export default function ListOf({
             <Avatar
               className={styles.avatar}
               alt="Remy Sharp"
-              src={Image}
+              src={image ? 'http://localhost:8000' + image : Image}
               sx={{ margin: '10px' }}
             />
           }
@@ -120,7 +186,7 @@ export default function ListOf({
         <CardContent>
           <Typography variant="h5" component="div"></Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            مدیر مدرسه امام خمینی تهران
+            {generateDescription()}
           </Typography>
         </CardContent>
         {!buttonHide ? (
@@ -147,6 +213,7 @@ export default function ListOf({
         open={openPermissionModal}
         handleClose={handleOpenPermissionModel}
         onClickDelete={handleDeleteButton}
+        buttonLoading={buttonLoading}
       />
     </>
   );

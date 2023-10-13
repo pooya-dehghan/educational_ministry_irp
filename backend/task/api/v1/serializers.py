@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ...models import Task, RenderTask
+from ...models import Task
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -8,7 +8,4 @@ class TaskSerializer(serializers.ModelSerializer):
         exclude = ("professor",)
 
 
-class RenderTaskUploadingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RenderTask
-        fields = ("file",)
+

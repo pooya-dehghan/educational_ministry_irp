@@ -70,6 +70,19 @@ export const RequestApi = {
     }
   },
 
+  withDrawRequest: async (
+    rejectRequest: IRequest.WithDrawRequestRequest
+  ): Promise<IRequest.WithDrawRequestResponse> => {
+    try {
+      const response = await axiosInstance.post(
+        `${API_BASE_URL}/request/api/v1/pending/${rejectRequest.id}/`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   sendRequest: async (
     sendData: IRequest.SendRequestRequest
   ): Promise<IRequest.SendRequestResponse> => {

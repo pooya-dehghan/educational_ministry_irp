@@ -26,22 +26,14 @@ const UploadFileButton = () => {
     if (file) {
       try {
         const formData = new FormData();
-        formData.append('file', file);
-
-        // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
-        // const response = await axios.post('YOUR_API_ENDPOINT', formData, {
-        //   headers: {
-        //     'Content-Type': 'multipart/form-data',
-        //   },
-        // });
-
+        formData.append('avatar', file);
         (dispatch as any)(uploadFileAsync(formData))
           .unwrap()
           .then((response: any) => {
             dispatch(
               updateResponse({
                 severity: 'success',
-                message: 'مدرسه با موفقیت اضافه شد.',
+                message: 'فایل با موفقیت اپلود شد.',
                 open: true,
               })
             );

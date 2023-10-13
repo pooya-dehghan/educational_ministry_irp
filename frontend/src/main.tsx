@@ -35,6 +35,9 @@ import store from './store/store';
 import AuthenticationHOC from './HOC/authenticationHOC/authentifcationHOC';
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const UserInfo = lazy(() => import('./pages/UserInfo/UserInfo'));
+const ForgotPassword = lazy(
+  () => import('./pages/ForgotPassword/ForgetPassword')
+);
 import Requests from '../src/pages/Requests/Requests';
 
 const router = createBrowserRouter([
@@ -54,6 +57,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/forgot',
+    element: <ForgotPassword />,
   },
   {
     path: '/resset',

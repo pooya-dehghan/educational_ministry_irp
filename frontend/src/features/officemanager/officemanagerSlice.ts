@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   officeManagerinfo: {
     username: '',
+    firstname: '',
+    lastname: '',
     avatar: '',
     status: '',
   },
@@ -17,14 +19,24 @@ const officeManagerSlice = createSlice({
       state.officeManagerinfo = action.payload;
     },
     getAllOfficeManagers: (state, action) => {
-      console.log('stateallofficemanagers: ', action.payload);
       state.allOfficeManagers = action.payload;
+    },
+    deleteOfficeManagerById: (state, action) => {
+      state.allOfficeManagers = state.allOfficeManagers.filter(
+        (officeManager: any) => officeManager.id != action.payload
+      );
     },
     updateOfficeManager: (state, action) => {
       state.officeManagerinfo = action.payload;
     },
     deleteOfficeManager: (state, action) => {
-      state.officeManagerinfo = { username: '', avatar: '', status: '' };
+      state.officeManagerinfo = {
+        username: '',
+        avatar: '',
+        status: '',
+        firstname: '',
+        lastname: '',
+      };
     },
   },
 });
@@ -34,6 +46,7 @@ export const {
   getAllOfficeManagers,
   updateOfficeManager,
   deleteOfficeManager,
+  deleteOfficeManagerById,
 } = officeManagerSlice.actions;
 
 export default officeManagerSlice.reducer;

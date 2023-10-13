@@ -20,20 +20,22 @@ import InputLabel from '@mui/material/InputLabel';
 import {} from '../../../features/requests/requestThunk';
 import FormControl from '@mui/material/FormControl';
 import UploadFileButton from '../../../components/UploadFile/UploadFile';
-
+import { getStudentsTasksAsync } from '../../../features/task/taskThunk';
+import Task from '../../../components/Task/task';
+import Image from '../../../../public/images/avatarerp.jpg';
 const useStyles = makeStyles((theme) => ({
   marginButton: {
-    marginBottom: "3rem", // Add margin here
-    fontStyle: "bold",
+    marginBottom: '3rem', // Add margin here
+    fontStyle: 'bold',
   },
   marginTop: {
-    marginTop: "2rem",
+    marginTop: '2rem',
   },
   selectRegion: {
-    width: "30%",
+    width: '30%',
   },
   buttonSendRequest: {
-    width: "30%",
+    width: '30%',
   },
 }));
 
@@ -42,11 +44,28 @@ interface StudentProfileProps {
   id: number;
 }
 
+interface ITask {
+  title: string;
+  description: string;
+  id: string;
+  deadline: string;
+}
+
 const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [region, setRegion] = useState<number | undefined>();
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    (dispatch as any)(getStudentsTasksAsync())
+      .unwrap()
+      .then((response: any) => {
+        setTasks(response.data);
+      })
+      .catch((error: any) => {});
+  }, []);
 
   const handleSendRequest = () => {
     setButtonLoading(true);
@@ -56,8 +75,8 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         .then((response: any) => {
           dispatch(
             updateResponse({
-              severity: "success",
-              message: "درخواست کارورزی شما با موفقیت ارسال شد.",
+              severity: 'success',
+              message: 'درخواست کارورزی شما با موفقیت ارسال شد.',
               open: true,
             })
           );
@@ -66,8 +85,8 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         .catch((error: any) => {
           dispatch(
             updateResponse({
-              severity: "error",
-              message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
+              severity: 'error',
+              message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
               open: true,
             })
           );
@@ -83,7 +102,6 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
       email: values.email,
       first_name: values.first_name,
       last_name: values.last_name,
-      birthday_date: values.birthday_date,
       gender: values.gender,
       personal_code: values.personal_code,
     };
@@ -95,8 +113,8 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         dispatch(updatestudent(response));
         dispatch(
           updateResponse({
-            severity: "success",
-            message: "پروفایل شما با موفقیت بروزرسانی شد..",
+            severity: 'success',
+            message: 'پروفایل شما با موفقیت بروزرسانی شد..',
             open: true,
           })
         );
@@ -104,31 +122,30 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
       .catch((error: any) => {
         dispatch(
           updateResponse({
-            severity: "error",
-            message: "عملیات ناموفق. لطفا دوباره تلاش کنید.",
+            severity: 'error',
+            message: 'عملیات ناموفق. لطفا دوباره تلاش کنید.',
             open: true,
           })
         );
       });
   };
+
   return (
     <Box
       sx={{
-        backgroundColor: "white",
+        backgroundColor: 'white',
         paddingBottom: 8,
         paddingTop: 8,
         paddingLeft: 12,
         paddingRight: 12,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         boxShadow: 3,
         borderRadius: 2,
-        height: "100vh",
-        "@media (max-width: 768px)": {
-          height: "auto",
-        },
+        height: 'auto',
       }}
+      className={styles.container}
     >
       <Grid container>
         <Grid item>
@@ -145,7 +162,6 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
           email: userInfo.email,
           first_name: userInfo.first_name,
           last_name: userInfo.last_name,
-          birthday_date: userInfo.birthday_date,
           gender: userInfo.gender,
           personal_code: userInfo.personal_code,
         }}
@@ -168,7 +184,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -185,7 +201,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -202,12 +218,12 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={12} sm={3}>
                 <Field name="email">
                   {({ field, meta }: FieldProps) => (
                     <TextField
@@ -219,24 +235,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
-                    />
-                  )}
-                </Field>
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <Field name="birthday_date">
-                  {({ field, meta }: FieldProps) => (
-                    <TextField
-                      {...field}
-                      label="تاریخ تولد"
-                      placeholder="تاریخ تولد"
-                      id="birthday_date"
-                      autoFocus
-                      variant="outlined"
-                      fullWidth
-                      error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -253,7 +252,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -270,7 +269,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
                       variant="outlined"
                       fullWidth
                       error={meta.touched && meta.error ? true : false}
-                      helperText={meta.touched && meta.error ? meta.error : ""}
+                      helperText={meta.touched && meta.error ? meta.error : ''}
                     />
                   )}
                 </Field>
@@ -292,10 +291,20 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         )}
       </Formik>
       <Grid container>
-        <Grid item>
+        <Grid item md={12} lg={12}>
           <Typography variant="h4" className={classes.marginTop}>
             بارگذاری تصویر پروفایل
           </Typography>
+        </Grid>
+        <Grid item md={12} lg={12} mt={2}>
+          <img
+            src={
+              userInfo.avatar
+                ? 'http://localhost:8000' + userInfo.avatar
+                : Image
+            }
+            className={styles.profilePicture}
+          />
         </Grid>
       </Grid>
       <Grid container mt={5}>
@@ -314,6 +323,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
             variant="body1"
             gutterBottom
             className={classes.marginTop}
+            textAlign="justify"
           >
             کاربر گرامی با انتخاب ناحیه مورد نظر خود درخواست شروع کارورزی خود را
             برای مسئول آموزش و پرورش ناحیه ارسال کنید پس از ارسال این درخواست
@@ -365,17 +375,40 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
             sx={{ mt: 3, mb: 2 }}
           >
             {buttonLoading ? (
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <CircularProgress size={24} color="inherit" />{" "}
-                <Typography style={{ fontSize: "13px", marginRight: "8px" }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <CircularProgress size={24} color="inherit" />{' '}
+                <Typography style={{ fontSize: '13px', marginRight: '8px' }}>
                   در حال ارسال
                 </Typography>
               </div>
             ) : (
-              "ثبت"
+              'ثبت'
             )}
           </Button>
         </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item>
+          <Typography variant="h4" className={classes.marginTop}>
+            تکالیف محول شده به دانشجو
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container mt={4} mb={4}>
+        {tasks.length > 0
+          ? tasks.map((task: ITask) => {
+              return (
+                <Grid item lg={4} md={6} sm={12} mb={4}>
+                  <Task
+                    title={task.title}
+                    description={task.description}
+                    buttonText={'اپلود فایل'}
+                    taskID={task.id}
+                  />
+                </Grid>
+              );
+            })
+          : null}
       </Grid>
     </Box>
   );

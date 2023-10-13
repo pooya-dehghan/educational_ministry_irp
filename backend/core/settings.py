@@ -1,11 +1,11 @@
 from pathlib import Path
 import os
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@s263e1ebd3sfvt-s)da(3zn*)vp7@83=3x=hc9u7kebqa1n9&'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'request.apps.RequestConfig',
     'notification.apps.NotificationConfig',
     'task.apps.TaskConfig',
-    'exception.apps.ExceptionConfig',
+    'assessment.apps.AssessmentConfig',
     # third part
     'drf_yasg',
     'rest_framework_simplejwt',
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'jalali_date',
     'professorrequest.apps.ProfessorrequestConfig'
 
-    #'django_rest_passwordreset',
+    # 'django_rest_passwordreset',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -82,7 +81,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -102,11 +100,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fa-ir'
 
 TIME_ZONE = 'UTC'
 
@@ -114,24 +111,20 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
 
-
 # Media files (such as images that uploaded by user)
 MEDIA_URL = '/media/'  # URL for serving media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Absolute file system path to the media directory
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'accounts.User' 
-
+AUTH_USER_MODEL = 'accounts.User'
 
 # Rest framework
 REST_FRAMEWORK = {
@@ -140,7 +133,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_AUTO_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
+    'EXCEPTION_HANDLER': 'core.utils.api_exception_handler',
 }
+
 
 # CORS handeling
 CORS_ORIGIN_ALLOW_ALL = True
@@ -160,17 +155,14 @@ EMAIL_HOST_PASSWORD = 'vltlqqpyzhnnidzu'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'InterShip'
 
-
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000',
     'http://example.com',
 ]
 
-
 SWAGGER_SETTINGS = {
-       'DEFAULT_INFO': 'core.urls.swagger_info',
-   }
-
+    'DEFAULT_INFO': 'core.urls.swagger_info',
+}
 
 # caching with redis config
 CACHES = {
@@ -182,3 +174,11 @@ CACHES = {
         }
     }
 }
+
+
+persian_months = [
+    "فروردین", "اردیبهشت", "خرداد",
+    "تیر", "مرداد", "شهریور",
+    "مهر", "آبان", "آذر",
+    "دی", "بهمن", "اسفند"
+]

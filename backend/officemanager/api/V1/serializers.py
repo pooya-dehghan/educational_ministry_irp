@@ -5,40 +5,15 @@ from django.core import exceptions
 from rest_framework.validators import UniqueValidator
 
 
-class OfficeManagerSerializerForCreate(serializers.Serializer):
-    username = serializers.CharField(
-        validators=[
-            UniqueValidator(
-                queryset=User.objects.all(),
-                message='این فیلد تکراری است.'
-            )
-        ],
-        error_messages={
-            'required': 'فیلد الزامی است.',
-            'blank': 'نمی‌تواند خالی باشد.',
-            'max_length': 'حداکثر طول مجاز 255 کاراکتر است.'
+class OfficeManagerSerializerForCreate(serializers.ModelSerializer):
+    password_confirmation = serializers.CharField(max_length=100, write_only=True)
+
+    class Meta:
+        model = OfficeManager
+        fields = ('username', 'password', 'password_confirmation', 'region')
+        extra_kwargs = {
+            'password': {'write_only': True}
         }
-    )
-    password = serializers.CharField(error_messages={
-        'required': 'فیلد الزامی است.',
-        'blank': 'نمی‌تواند خالی باشد.',
-        'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
-    },write_only=True)
-    password_confirmation = serializers.CharField(error_messages={
-        'required': 'فیلد الزامی است.',
-        'blank': 'نمی‌تواند خالی باشد.',
-        'max_length': 'حداکثر طول مجاز 255 کاراکتر است.',
-    },write_only=True)
-    region = serializers.IntegerField(validators=[
-            UniqueValidator(
-                queryset=OfficeManager.objects.all(),
-                message='این فیلد تکراری است.'
-            )
-        ], error_messages={
-        'required': 'فیلد الزامی است.',
-        'blank': 'نمی‌تواند خالی باشد.',
-        'invalid': 'یک عدد صحیح معتبر مورد نیاز است.'
-    })
 
     def validate(self, attrs):
         password_confirmation = attrs.get("password_confirmation")
@@ -61,10 +36,12 @@ class OfficeManagerSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
+
 class SchoolListSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = ('city', 'capacity', 'username', 'manager', 'id', 'name')
+
 
 class SchoolSerializer(serializers.ModelSerializer):  # Nested serializer for User model
 

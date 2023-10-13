@@ -33,7 +33,6 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
 }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [birthDate, setBirthDate] = useState<Date>();
   const handleSubmit = (values: any, setSubmitting: any) => {
     let updateOfficeManagerData = {
       username: values.username,
@@ -42,7 +41,6 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
       email: values.email,
       first_name: values.first_name,
       last_name: values.last_name,
-      birthday_date: birthDate,
       gender: values.gender,
       region: values.region,
       personal_code: values.personal_code,
@@ -85,11 +83,9 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
         alignItems: "center",
         boxShadow: 3,
         borderRadius: 2,
-        height: "100vh",
-        "@media (max-width: 768px)": {
-          height: "auto",
-        },
+        height: "auto",
       }}
+      className={styles.container}
     >
       <Grid container>
         <Grid item>
@@ -106,7 +102,6 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
           email: userInfo.email,
           first_name: userInfo.first_name,
           last_name: userInfo.last_name,
-          birthday_date: userInfo.birthday_date,
           gender: userInfo.gender,
           region: userInfo.region,
           personal_code: userInfo.personal_code,
@@ -169,7 +164,7 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                   )}
                 </Field>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={12} sm={3}>
                 <Field name="email">
                   {({ field, meta }: FieldProps) => (
                     <TextField
@@ -185,10 +180,6 @@ const OfficeManagerProfile: React.FC<OfficeManagerProfileProps> = ({
                     />
                   )}
                 </Field>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <Typography className={styles.infoType}>تاریخ تولد</Typography>
-                <DatePicker onChange={(e) => setBirthDate(e.value)} />
               </Grid>
               <Grid item xs={12} sm={3}>
                 <Field name="first_name">
