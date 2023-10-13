@@ -26,6 +26,9 @@ class OfficeManagerSerializerForCreate(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": list(e.messages)})
 
         return super().validate(attrs)
+    
+    def create(self, validated_data):
+        return OfficeManager.objects.create(**validated_data)
 
 
 class OfficeManagerSerializer(serializers.ModelSerializer):
