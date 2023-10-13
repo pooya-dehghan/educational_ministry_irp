@@ -122,7 +122,8 @@ class SchoolCreate(APIView):
                     city=ser_data.validated_data["city"],
                     manager=ser_data.validated_data["manager"],
                     region=office_manager.region,
-                    office_manager=office_manager
+                    office_manager=office_manager,
+                    email=ser_data.validated_data["email"]
                 )
                 school.set_password(ser_data.validated_data["password"])
                 school.save()
@@ -150,36 +151,7 @@ class SchoolCreate(APIView):
                 return Response(ser_data.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
-        # if OfficeManager.objects.filter(id=request.user.id).exists():
-        #     ser_data = SchoolSerializerByOfficeManager(data=request.data)
-        #     if ser_data.is_valid():
-        #         school = School.objects.create(username=ser_data.validated_data['username'],
-        #                                        region=ser_data.validated_data['region'],
-        #                                        name=ser_data.validated_data['name'],
-        #                                        city=ser_data.validated_data['city'],
-        #                                        manager=ser_data.validated_data['manager'],
-        #                                        )
-        #         school.set_password(ser_data.validated_data['password'])
-        #         office_manager = OfficeManager.objects.get(reqion=ser_data.validated_data['region'])
-        #         school.office_manager = office_manager
-        #         school.save()
-        #         return Response(ser_data.data, status=status.HTTP_201_CREATED)
-        #     return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
-        # else:
-        #     ser_data = SchoolSerializer(data=request.data)
-        #     if ser_data.is_valid():
-        #         school = School.objects.create(username=ser_data.validated_data['username'],
-        #                                        region=ser_data.validated_data['region'],
-        #                                        name=ser_data.validated_data['name'],
-        #                                        city=ser_data.validated_data['city'],
-        #                                        manager=ser_data.validated_data['manager'],
-        #                                        )
-        #         school.set_password(ser_data.validated_data['password'])
-        #         office_manager = OfficeManager.objects.get(reqion=ser_data.validated_data['region'])
-        #         school.office_manager = office_manager
-        #         school.save()
-        #         return Response(ser_data.data, status=status.HTTP_201_CREATED)
-        #     return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class SchoolUpdate(APIView):
