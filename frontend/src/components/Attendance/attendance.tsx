@@ -43,14 +43,14 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
   username,
 }) => {
   const [buttonLoading, setButtonLoading] = React.useState(false);
-  const [attendances, setAttendances] = React.useState([]);
+  const [attendances, setAttendances] = React.useState<string[]>([]);
   const [date, setDate] = React.useState<Date>();
   const dispatch = useDispatch();
   React.useEffect(() => {
     (dispatch as any)(getAttendanceStudentAsync({ id: studentID }))
       .unwrap()
       .then((response: any) => {
-        setAttendances(response);
+        setAttendances(response.data);
       })
       .catch((error: any) => {});
   }, []);
@@ -78,6 +78,8 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
               open: true,
             })
           );
+          let data = response?.date || 'ایراد';
+          setAttendances((prevState) => [...prevState, data]);
         })
         .catch((error: any) => {
           setButtonLoading(false);
@@ -117,25 +119,32 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
             >
               {`لیست حضور غیاب دانشجو : ${username}`}
             </Typography>
-            {attendances.length > 0
-              ? attendances.map((attendance, index) => {
-                  return (
-                    <Grid container justifyContent={'space-between'}>
-                      <Grid item>
-                        <Typography
-                          id="transition-modal-description"
-                          sx={{ mt: 1 }}
-                        >
-                          {}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Checkbox {...label} defaultChecked color="success" />
-                      </Grid>
+            {attendances.length > 0 ? (
+              attendances.map((attendance, index) => {
+                return (
+                  <Grid container justifyContent={'space-between'}>
+                    <Grid item lg={3} md={4} sm={12}>
+                      <Typography
+                        id="transition-modal-description"
+                        sx={{ mt: 1 }}
+                      >
+                        {attendance}
+                      </Typography>
                     </Grid>
-                  );
-                })
-              : null}
+                    <Grid item>
+                      <Checkbox
+                        {...label}
+                        disabled
+                        defaultChecked
+                        color="success"
+                      />
+                    </Grid>
+                  </Grid>
+                );
+              })
+            ) : (
+              <div>لیست حضور غیاب خالی است</div>
+            )}
             <Grid container mt={5} justifyContent={'space-between'}>
               <Grid item>
                 <DatePicker

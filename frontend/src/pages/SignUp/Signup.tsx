@@ -76,16 +76,13 @@ type Professor = {
 const Root = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.signup.isAuthenticated
-  );
-  const user = useSelector((state: RootState) => state.signup.user);
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [buttonLoading, setButtonLoading] = useState(false);
   const [password, setPassword] = useState('');
   const [password_confirmation, setPasswordConfirmation] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [professors, setProfessors] = useState([]);
   const [professor_id, setProfessor_id] = useState('0');
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
@@ -105,6 +102,7 @@ const Root = () => {
       password_confirmation,
       studentUniqueCode: studentNumber,
       professor2: professor_id,
+      email: email,
     };
 
     (dispatch as any)(signUpAsync(signUpData))
@@ -196,6 +194,14 @@ const Root = () => {
               </Grid>
               <Grid item xs={12} className={classes.textAreaContainer}>
                 <TextField
+                  onChange={(e) => setEmail(e.target.value)}
+                  id="outlined-basic"
+                  label="ایمیل"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12} className={classes.textAreaContainer}>
+                <TextField
                   onChange={(e) => setStudentNumber(e.target.value)}
                   id="outlined-basic"
                   label="شماره دانشجویی"
@@ -204,12 +210,6 @@ const Root = () => {
               </Grid>
               <Grid item xs={12} lg={12} className={classes.textAreaContainer}>
                 <FormControl fullWidth className={styles.selectContainer}>
-                  {/* <InputLabel
-                    className={styles.labelContainer}
-                    id="professor_id_provider"
-                  >
-                    استاد
-                  </InputLabel> */}
                   <Typography>استاد را انتخاب کنید</Typography>
                   <Select
                     labelId="professor_id_provider"
