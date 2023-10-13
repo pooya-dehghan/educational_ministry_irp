@@ -83,7 +83,7 @@ class GetAttendance(APIView):
         ser_data = DateSerializer(instance=attendance, many=True)
         list_of_date = []
         for data in ser_data.data[:]:
-            datetime_object = datetime.strptime(data["date"], '%Y-%m-%d')
+            datetime_object = datetime.strptime(data["date"][0:10], '%Y-%m-%d')
             jalali_date = datetime2jalali(datetime_object).strftime('%y-%m-%d')
             year,month,date = jalali_date.split('-')
             year = "14"+year
