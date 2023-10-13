@@ -144,6 +144,7 @@ class SchoolCreate(APIView):
                     city=ser_data.validated_data["city"],
                     manager=ser_data.validated_data["manager"],
                     region=ser_data.validated_data["region"],
+                    email=ser_data.validated_data["email"],
                     office_manager=OfficeManager.objects.get(region=ser_data.validated_data["region"])
                 )
                 school.set_password(ser_data.validated_data["password"])
