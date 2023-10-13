@@ -14,6 +14,12 @@ swagger_parameters = [
         type=openapi.TYPE_STRING
     ),
     openapi.Parameter(
+        name='email',
+        in_=openapi.IN_PATH,
+        description='Example PATH parameter',
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
         name='password',
         in_=openapi.IN_PATH,
         description='Example path parameter',
@@ -36,6 +42,12 @@ swagger_parameters = [
 swagger_parameters_update = [
     openapi.Parameter(
         name='username',
+        in_=openapi.IN_PATH,
+        description='Example path parameter',
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        name='email',
         in_=openapi.IN_PATH,
         description='Example path parameter',
         type=openapi.TYPE_STRING

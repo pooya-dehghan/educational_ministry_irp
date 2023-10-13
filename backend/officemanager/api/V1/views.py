@@ -88,6 +88,7 @@ class OfficeManagerCreate(APIView):
                 'password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'password_confirmation': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'region': openapi.Schema(type=openapi.TYPE_NUMBER, default="10"),
+                'email': openapi.Schema(type=openapi.TYPE_NUMBER, default="10"),
             },
             required=['username', 'password', 'password_confirmation', 'region'],
         ),
@@ -100,7 +101,7 @@ class OfficeManagerCreate(APIView):
         ser_data = OfficeManagerSerializerForCreate(data=request.data)
         if ser_data.is_valid():
             office_manager = OfficeManager.objects.create(username=ser_data.validated_data['username'],
-                                                          region=ser_data.validated_data['region'])
+                                                          region=ser_data.validated_data['region'], email=ser_data.validated_data["email"])
             office_manager.set_password(ser_data.validated_data['password'])
             office_manager.save()
 

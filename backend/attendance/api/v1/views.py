@@ -50,8 +50,6 @@ class FillAttendance(APIView):
             print(year, month, date)
             month = persian_months[int(month)-1]
             date_str = f"14{year} {month} {day}"
-
-
             if Attendance.objects.filter(student=student, date=date).exists():
                 return Response({'message': 'شما قبلا این تاریخ را برای این دانشحو پر کرده اید', 'Success': False})
             Attendance.objects.create(student=student, date=date)
@@ -83,7 +81,7 @@ class GetAttendance(APIView):
         ser_data = DateSerializer(instance=attendance, many=True)
         list_of_date = []
         for data in ser_data.data[:]:
-            datetime_object = datetime.strptime(data["date"], '%Y-%m-%d')
+            datetime_object = datetime.strptime(data["date"][0:10], '%Y-%m-%d')
             jalali_date = datetime2jalali(datetime_object).strftime('%y-%m-%d')
             year,month,date = jalali_date.split('-')
             year = "14"+year

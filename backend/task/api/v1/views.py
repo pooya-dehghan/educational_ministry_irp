@@ -4,7 +4,7 @@ from accounts.models import Professor, Student
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from ...models import Task
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, TaskUploadingSerializer
 from notification.models import Notification
 import os
 from django.core.files.storage import default_storage
@@ -140,30 +140,49 @@ class TaskCreationView(APIView):
 #             return Response({"message": ser_data.errors, 'Success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class ListAllTaskView(APIView):
-#     def get(self, request):
-#         try:
-#             student = Student.objects.get(id=request.user.id)
-#         except:
-#             return Response({"data":"دانشجوی نامعتبر درخواست ارسال نموده است", "success":False}, status=status.HTTP_403_FORBIDDEN)
-#         tasks = Task.objects.filter(professor=student.professor2)
-#         for task in tasks:
-#             if RenderTask.objects.filter(task=task, student=student).exists():
-#                 rt = RenderTask.objects.get(task=task, student=student)
-#                 task.location = rt.file.name
-#         ser_data = TaskSerializer(tasks, many=True)
-#         return Response({"data":ser_data.data, "success":True}, status=status.HTTP_200_OK)
+class UploadingTask(APIView):
+    def post(self, request, id):
+        try:
+            student = Student.objects.get(id=request.user.id)
+        except:
+            return Response({"message":"دانشجوی نامعتبر شما اجاره دسترسی به این مکان را ندارید", "success":False}, status=status.HTTP_403_FORBIDDEN)
+        
+        try:
+            task = Task.objects.get(id=id, student=student)
+        except:
+            return Response({"message":"تکلیف نامشخص", "success":False}, status=status.HTTP_403_FORBIDDEN)
+        print(student)
+        print(task)
+        ser_data = TaskUploadingSerializer(data=request.data)
+        if ser_data.is_valid():
+            task.file = ser_data.validated_data["file"]
+            dt=timezone.now()
+            task.delivary_date=dt
+            task.save()
+            return Response({"message":"تکلیف شما با موفقیت ارسال شد", "success":True, "location":task.file.name})
+
+
+
+
+
+class ListAllTaskView(APIView):
+    def get(self, request):
+        try:
+            student = Student.objects.get(id=request.user.id)
+        except:
+            return Response({"data":"دانشجوی نامعتبر درخواست ارسال نموده است", "success":False}, status=status.HTTP_403_FORBIDDEN)
+        tasks = Task.objects.filter(student=student)
+        ser_data = TaskSerializer(tasks, many=True)
+        return Response({"data":ser_data.data, "success":True}, status=status.HTTP_200_OK)
     
 
 
 
 class GetTaskView(APIView):
     def get(self, request, id):
-        pass
-        # task = Task.objects.get(id=id)
-        # ser_data = TaskSerializer(task)
-        # if RenderTask.objects.filter(task=task).exists():
-        #     file = RenderTask.objects.get(task=task).file
-        #     return Response({"data":ser_data.data, "success":True, 'location':file.name, 'status':'شما قبلا فایلی ارسال نموده اید'}, status=status.HTTP_200_OK)
-        # else:
-        #     return Response({"data":ser_data.data, "success":True, 'status':'تاکنون فایلی ارسال نشده است'}, status=status.HTTP_200_OK)
+        try:
+            task = Task.objects.get(id=id)
+            ser_data = TaskSerializer(task)
+            return Response({"data":ser_data.data, "success":True, 'status':'تاکنون فایلی ارسال نشده است'}, status=status.HTTP_200_OK)
+        except:
+            return Response({"message":"تکلیف درخواستی وجود ندارد", "success":False})
