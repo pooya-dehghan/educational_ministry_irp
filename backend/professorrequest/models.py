@@ -17,6 +17,7 @@ class ProfessorRequest(models.Model):
     body = models.CharField(max_length=200)
     code = models.CharField(max_length=50, null=True, blank=True, unique=True)
     status = models.CharField(max_length=100, choices=status_choices, default='s')
+    username = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self) -> str:
         return f'{self.sender} sent request to {self.receiver} and id = {self.id}'
