@@ -7,6 +7,7 @@ from rest_framework import status
 from professorrequest.models import ProfessorRequest
 from .serializers import ProfessorRequestSerializer
 from notification.models import Notification
+from request.api.v1.serializers import SearchSerializer
 
 
 class ListRequest(APIView):
@@ -35,14 +36,14 @@ class ListRequest(APIView):
             professor = Professor.objects.get(id=request.user.id)
         except Professor.DoesNotExist:
             return Response({'message': 'همچین استادی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
-        req = ProfessorRequest.objects.filter(receiver=professor)
+        req = ProfessorRequest.objects.filter(receiver=professor).order_by('-status')
         # student = req.sender
         # username=student.username
         # first_name=student.first_name
         # last_name=student.last_name
         ser_data = ProfessorRequestSerializer(req, many=True)
         if req:
-            return Response({"data":ser_data.data}, status=status.HTTP_200_OK)
+            return Response({"data": ser_data.data}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "شما در حال حاضر درخواستی در سیستم ندارید", 'Success': False},
                             status=status.HTTP_404_NOT_FOUND)
@@ -164,3 +165,31 @@ class RejectRequest(APIView):
         else:
             return Response(
                 {'message': 'این دانشجو قبلا استاد داشته است و اشتباها به شما درخواست داده است', 'Success': False})
+
+
+class SearchRequest(APIView):
+
+    @swagger_auto_schema(
+        operation_description="""This endpoint allows to search user base on code.
+
+             The user include code of request
+             """,
+        operation_summary="endpoint for search base code",
+        responses={
+            '200': 'ok',
+            '400': 'bad request',
+            '404': 'not found'
+        }
+    )
+    def post(self, request):
+        ser_data = SearchSerializer(data=request.data)
+        if ser_data.is_valid():
+            search = ser_data.validated_data['search']
+            try:
+                req = ProfessorRequest.objects.get(code=search)
+            except ProfessorRequest.DoesNotExist:
+                return Response({'message': 'همچین درخواستی وجود ندارد', 'Success': False},
+                                status=status.HTTP_404_NOT_FOUND)
+            ser_data_request = ProfessorRequestSerializer(req)
+            return Response({'data': ser_data_request.data, 'Success': True}, status=status.HTTP_200_OK)
+        return Response({'message': ser_data.errors, 'Success': False}, status=status.HTTP_400_BAD_REQUEST)
