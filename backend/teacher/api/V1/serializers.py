@@ -9,7 +9,7 @@ class TeacherSerializerForCreate(serializers.ModelSerializer):
 
     class Meta:
         model = Teacher
-        fields = ('username', 'password', 'password_confirmation', 'field')
+        fields = ('username', 'email','password', 'password_confirmation', 'field')
         extra_kwargs = {
             'password': {'write_only': True}
         }

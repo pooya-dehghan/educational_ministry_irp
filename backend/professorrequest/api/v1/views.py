@@ -37,6 +37,8 @@ class ListRequest(APIView):
         except Professor.DoesNotExist:
             return Response({'message': 'همچین استادی وجود ندارد', 'Success': False}, status=status.HTTP_404_NOT_FOUND)
         req = ProfessorRequest.objects.filter(receiver=professor).order_by('-status')
+        for i in range(len(req)):
+            req[i].username = req[i].sender.username
         # student = req.sender
         # username=student.username
         # first_name=student.first_name

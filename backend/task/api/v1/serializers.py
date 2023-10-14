@@ -8,4 +8,7 @@ class TaskSerializer(serializers.ModelSerializer):
         exclude = ("professor",)
 
 
-
+class TaskUploadingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Task
+        fields=("file",)

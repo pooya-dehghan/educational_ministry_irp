@@ -99,11 +99,11 @@ class StudentCreate(APIView):
         ser_data = StudentSerializerForCreate(data=request.data)
         if ser_data.is_valid():
             student = Student.objects.create(username=ser_data.validated_data['username'],
-                                             studentUniqueCode=ser_data.validated_data['studentUniqueCode'])
+                                             studentUniqueCode=ser_data.validated_data['studentUniqueCode'], email=ser_data.validated_data["email"])
             student.set_password(ser_data.validated_data['password'])
             student.save()
 
-            return Response(ser_data.data, status=status.HTTP_201_CREATED)
+            return Response({'data':ser_data.data}, status=status.HTTP_201_CREATED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

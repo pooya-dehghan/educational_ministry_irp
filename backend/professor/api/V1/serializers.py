@@ -9,7 +9,7 @@ class ProfessorSerializerForCreate(serializers.ModelSerializer):
     password_confirmation = serializers.CharField(max_length=100, write_only=True)
     class Meta:
         model = Professor
-        fields = ('username', 'password', 'password_confirmation', 'professor_id')
+        fields = ('username', 'email','password', 'password_confirmation', 'professor_id')
         extra_kwargs = {
             'password': {'write_only': True}
         }

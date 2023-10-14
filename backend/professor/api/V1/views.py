@@ -80,6 +80,7 @@ class ProfessorCreate(APIView):
             type=openapi.TYPE_OBJECT,
             properties={
                 'username': openapi.Schema(type=openapi.TYPE_STRING, default="pourya"),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, default="pourya@yahoo.com"),
                 'password': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'password_confirmation': openapi.Schema(type=openapi.TYPE_STRING, default="1234"),
                 'professor_id': openapi.Schema(type=openapi.TYPE_STRING, default="10"),
@@ -95,7 +96,7 @@ class ProfessorCreate(APIView):
         ser_data = ProfessorSerializerForCreate(data=request.data)
         if ser_data.is_valid():
             professor = Professor.objects.create(username=ser_data.validated_data['username'],
-                                                 professor_id=ser_data.validated_data['professor_id'])
+                                                 professor_id=ser_data.validated_data['professor_id'], email=ser_data.validated_data["email"])
             professor.set_password(ser_data.validated_data['password'])
             professor.save()
 

@@ -10,7 +10,7 @@ class OfficeManagerSerializerForCreate(serializers.ModelSerializer):
 
     class Meta:
         model = OfficeManager
-        fields = ('username', 'password', 'password_confirmation', 'region')
+        fields = ('username','email', 'password', 'password_confirmation', 'region')
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -26,6 +26,9 @@ class OfficeManagerSerializerForCreate(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": list(e.messages)})
 
         return super().validate(attrs)
+    
+    def create(self, validated_data):
+        return OfficeManager.objects.create(**validated_data)
 
 
 class OfficeManagerSerializer(serializers.ModelSerializer):

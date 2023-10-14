@@ -9,7 +9,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = School
-        fields = ('username', 'password', 'password_confirmation', 'name', 'city', 'region', 'manager')
+        fields = ('username', 'email','password', 'password_confirmation', 'name', 'city', 'region', 'manager')
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -31,7 +31,7 @@ class SchoolSerializerForOfficeManager(serializers.ModelSerializer):
 
     class Meta:
         model = School
-        fields = ('username', 'password', 'password_confirmation', 'name', 'city', 'manager')
+        fields = ('username', 'email','password', 'password_confirmation', 'name', 'city', 'manager')
         extra_kwargs = {
             'password': {'write_only': True}
         }
