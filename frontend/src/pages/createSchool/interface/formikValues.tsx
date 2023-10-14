@@ -7,4 +7,5 @@ export interface Values {
   manager: string;
   region: string;
   city: string;
+  email: string
 }

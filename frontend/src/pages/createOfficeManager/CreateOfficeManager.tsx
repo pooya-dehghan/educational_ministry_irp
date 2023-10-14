@@ -33,6 +33,7 @@ const CreateOfficeManager: React.FC = () => {
       password: values.password,
       password_confirmation: values.password_confirmation,
       username: values.username,
+      email : values.email
     };
     (dispatch as any)(createOfficeManagerAsync(createOfficeManagerData))
       .unwrap()
@@ -49,6 +50,7 @@ const CreateOfficeManager: React.FC = () => {
         setButtonLoading(false);
       })
       .catch((error: any) => {
+        console.log('error123321: ', error);
         dispatch(
           updateResponse({
             severity: 'error',

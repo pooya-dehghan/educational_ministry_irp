@@ -60,7 +60,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
     (dispatch as any)(getAllProfessorRequestsAsync())
       .unwrap()
       .then((response: any) => {
-        setStudents(response);
+        setStudents(response.data);
       })
       .catch((error: any) => {});
   }, []);
@@ -164,39 +164,40 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
   const CreateTaskProfessor = () => {
     setTaskLoading(true);
     if (date) {
-    let month = date.getUTCMonth() + 1; //months from 1-12
-    let day = date.getUTCDate();
-    let year = date.getUTCFullYear();
-    let newdate = year + '-' + month + '-' + day;
-    (dispatch as any)(
-      createTaskAsync({
-        title: title,
-        description: description,
-        deadline: newdate,
-      })
-    )
-      .unwrap()
-      .then((response: any) => {
-        setTaskLoading(false);
-        dispatch(
-          updateResponse({
-            severity: 'success',
-            message: 'درخواست اخذ با موفقیت انجام شد.',
-            open: true,
-          })
-        );
-        setTaskLoading(false);
-      })
-      .catch((error: any) => {
-        setTaskLoading(false);
-        dispatch(
-          updateResponse({
-            severity: 'error',
-            message: 'عملیات با موفقیت انجام نشد.',
-            open: true,
-          })
-        );
-      });
+      let month = date.getUTCMonth() + 1; //months from 1-12
+      let day = date.getUTCDate();
+      let year = date.getUTCFullYear();
+      let newdate = year + '-' + month + '-' + day;
+      (dispatch as any)(
+        createTaskAsync({
+          title: title,
+          description: description,
+          deadline: newdate,
+        })
+      )
+        .unwrap()
+        .then((response: any) => {
+          setTaskLoading(false);
+          dispatch(
+            updateResponse({
+              severity: 'success',
+              message:
+                'تکلیف با موفقیت ساخته شد و برای دانشجویان شما ارسال شد.',
+              open: true,
+            })
+          );
+          setTaskLoading(false);
+        })
+        .catch((error: any) => {
+          setTaskLoading(false);
+          dispatch(
+            updateResponse({
+              severity: 'error',
+              message: 'عملیات با موفقیت انجام نشد.',
+              open: true,
+            })
+          );
+        });
     }
   };
 
@@ -383,7 +384,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
         </Formik>
         <Grid container>
           <Grid item>
-            <Typography variant="h4">بارگذاری تکلیف برای دانشجویان</Typography>
+            <Typography variant="h4" mt={4}>بارگذاری تکلیف برای دانشجویان</Typography>
           </Grid>
           <Grid container mt={3}>
             <Grid item xs={12} sm={6} md={4} lg={3}>
@@ -414,7 +415,7 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
                 className={CustomeClasses.datePickerClass}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={12}>
+            <Grid item xs={12} sm={6} md={4} lg={12} mb={4}>
               <Button
                 onClick={() => CreateTaskProfessor()}
                 variant="contained"

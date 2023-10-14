@@ -9,6 +9,7 @@ import { uploadTaskAsync } from '../../features/task/taskThunk';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -27,12 +28,19 @@ interface ITask {
   description: string;
   buttonText: string;
   taskID: string;
+  fileLocation: string;
 }
 
-const Task: React.FC<ITask> = ({ title, description, buttonText, taskID }) => {
+const Task: React.FC<ITask> = ({
+  title,
+  description,
+  buttonText,
+  taskID,
+  fileLocation,
+}) => {
   const dispatch = useDispatch();
   const [buttonLoading, setButtonLoading] = useState(false);
-
+  const navigate = useNavigate();
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -76,6 +84,9 @@ const Task: React.FC<ITask> = ({ title, description, buttonText, taskID }) => {
       }
     }
   };
+  const handleFileDownload = () => {
+    window.location.href = 'http://localhost:8000' + fileLocation;
+  };
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
@@ -97,6 +108,20 @@ const Task: React.FC<ITask> = ({ title, description, buttonText, taskID }) => {
             <VisuallyHiddenInput type="file" onChange={handleFileChange} />
           </Button>
         </CardContent>
+        {fileLocation ? (
+          <CardContent m={4}>
+            <Button
+              component="label"
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+              onClick={() => {
+                handleFileDownload();
+              }}
+            >
+              دانلود فایل اپلود شده
+            </Button>
+          </CardContent>
+        ) : null}
       </CardActionArea>
     </Card>
   );

@@ -1,7 +1,7 @@
 export interface Values {
   // firstName: string;
   // lastName: string;
-  // email: string;
+  email: string;
   region: string;
   // nationalCode: string;
   username: string;
