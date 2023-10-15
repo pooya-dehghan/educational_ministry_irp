@@ -176,7 +176,7 @@ export default function ListOf({
             <Avatar
               className={styles.avatar}
               alt="Remy Sharp"
-              src={image ? 'http://localhost:8000' + image : Image}
+              src={image ? import.meta.env.VITE_API_URL + image : Image}
               sx={{ margin: '10px' }}
             />
           }

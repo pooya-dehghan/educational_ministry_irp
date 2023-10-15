@@ -9,7 +9,7 @@ import {
 } from '../token/index'; // Replace with your token management utility
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8000', // Replace with your API base URL
+  baseURL: import.meta.env.VITE_API_URL, // Replace with your API base URL
 });
 
 // Request interceptor
@@ -50,7 +50,7 @@ instance.interceptors.response.use(
       const refresh = getRefreshToken();
       try {
         const response = await axios.post(
-          'http://localhost:8000/accounts/api/v1/jwt/refresh/',
+          import.meta.env.VITE_API_URL + '/accounts/api/v1/jwt/refresh/',
           {
             refresh,
           }

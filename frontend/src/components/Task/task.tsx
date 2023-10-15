@@ -85,7 +85,7 @@ const Task: React.FC<ITask> = ({
     }
   };
   const handleFileDownload = () => {
-    window.location.href = 'http://localhost:8000' + fileLocation;
+    window.location.href = import.meta.env.VITE_API_URL + fileLocation;
   };
   return (
     <Card sx={{ maxWidth: 345 }}>

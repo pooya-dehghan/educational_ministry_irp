@@ -6,7 +6,7 @@ import {
   ChangePasswordRequest,
   ForgotPasswordRequest
 } from './interface/interface';
-const API_BASE_URL = 'http://localhost:8000'; // Your API base URL
+const API_BASE_URL = import.meta.env.VITE_API_URL; // Your API base URL
 
 export const authApi = {
   login: async (loginData: LoginRequest): Promise<LoginResponse> => {

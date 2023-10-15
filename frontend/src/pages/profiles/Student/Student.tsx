@@ -301,7 +301,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
           <img
             src={
               userInfo.avatar
-                ? 'http://localhost:8000' + userInfo.avatar
+                ? import.meta.env.VITE_API_URL + userInfo.avatar
                 : Image
             }
             className={styles.profilePicture}

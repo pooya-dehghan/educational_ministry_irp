@@ -1,5 +1,5 @@
 import axiosInstance from '../../utils/axios/index';
-const API_BASE_URL = 'http://localhost:8000'; // Your API base URL
+const API_BASE_URL = import.meta.env.VITE_API_URL; // Your API base URL
 import * as IRequest from './interface/interface.index';
 
 export const NotificationApi = {
