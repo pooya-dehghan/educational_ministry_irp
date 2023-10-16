@@ -130,7 +130,7 @@ class ApiUserRegistrationView(GenericAPIView):
                 data = {
                     "username": serializer.validated_data["username"],
                     "email":serializer.validated_data["email"],
-                    'type': 'students',
+                    'type': 'student',
                     'id': student.id,
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
