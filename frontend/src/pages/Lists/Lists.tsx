@@ -77,9 +77,12 @@ const List = () => {
   }, []);
 
   const putRightListOnScreen = () => {
+    if (!userType) {
+      return;
+    }
     return userType.trim() === 'officemanagers' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allOfficeManagers.map((office_manager: any, index) => {
+        {allOfficeManagers.map((office_manager: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf
@@ -95,7 +98,7 @@ const List = () => {
       </Grid>
     ) : userType.trim() === 'professors' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allProfessors.map((professor: any, index) => {
+        {allProfessors.map((professor: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf
@@ -111,7 +114,7 @@ const List = () => {
       </Grid>
     ) : userType.trim() === 'schools' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allSchools.map((school: any, index) => {
+        {allSchools.map((school: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf
@@ -127,7 +130,7 @@ const List = () => {
       </Grid>
     ) : userType.trim() === 'teachers' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allTeachers.map((teacher: any, index) => {
+        {allTeachers.map((teacher: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf
@@ -143,7 +146,7 @@ const List = () => {
       </Grid>
     ) : userType.trim() === 'students' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allStudents.map((student: any, index) => {
+        {allStudents.map((student: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf

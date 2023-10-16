@@ -31,6 +31,10 @@ interface ITask {
   fileLocation: string;
 }
 
+const classes = {
+  margin : '4rem'
+}
+
 const Task: React.FC<ITask> = ({
   title,
   description,
@@ -98,7 +102,7 @@ const Task: React.FC<ITask> = ({
             {description}
           </Typography>
         </CardContent>
-        <CardContent m={4}>
+        <CardContent className={classes.margin}>
           <Button
             component="label"
             variant="contained"
@@ -109,7 +113,7 @@ const Task: React.FC<ITask> = ({
           </Button>
         </CardContent>
         {fileLocation ? (
-          <CardContent m={4}>
+          <CardContent className={classes.margin}>
             <Button
               component="label"
               variant="contained"

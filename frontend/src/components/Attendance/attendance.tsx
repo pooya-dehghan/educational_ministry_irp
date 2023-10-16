@@ -33,7 +33,7 @@ interface AttendanceModalProps {
   open: boolean;
   handleClose: () => void;
   studentID: number;
-  username: string;
+  username: string | undefined;
 }
 
 export const AttendanceModal: React.FC<AttendanceModalProps> = ({

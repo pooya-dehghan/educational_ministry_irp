@@ -11,6 +11,11 @@ interface CustomAlertProps {
   seenClickHandler: (setButtonLoading: any) => void;
 }
 
+const classes = {
+  marginBottom: '2rem',
+  marginTop: '1rem',
+};
+
 const CustomAlert: React.FC<CustomAlertProps> = ({
   alertTitle,
   alertBody,
@@ -40,8 +45,8 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
       }
       severity="info"
     >
-      <AlertTitle mb={2}>{alertTitle}</AlertTitle>
-      <Typography mt={1} variant="body2" color={'grey'}>
+      <AlertTitle className={classes.marginBottom}>{alertTitle}</AlertTitle>
+      <Typography className={classes.marginTop} variant="body2" color={'grey'}>
         {alertBody}
       </Typography>
     </Alert>
