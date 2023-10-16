@@ -72,10 +72,10 @@ class SchoolList(APIView):
         }
     )
     def get(self, request):
-        school_list = cache.get('school_list')
-        if school_list is None:
-            school_list = School.objects.all()
-            cache.set('school_list', school_list)
+        # school_list = cache.get('school_list')
+        # if school_list is None:
+        school_list = School.objects.all()
+        # cache.set('school_list', school_list)
         ser_data = SchoolSerializerAll(instance=school_list, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
 
