@@ -54,7 +54,7 @@ const List = () => {
       })
       .catch((error: any) => {});
 
-    (dispatch as any)(getAllProfessorsAsync({}))
+    (dispatch as any)(getAllProfessorsAsync())
       .unwrap()
       .then((response: any) => {
         dispatch(getAllProfessors(response));
@@ -89,7 +89,9 @@ const List = () => {
                 type="officemanager"
                 username={office_manager.username}
                 id={office_manager.id}
-                name={office_manager.name}
+                name={
+                  office_manager.first_name + ' ' + office_manager.last_name
+                }
                 image={office_manager?.avatar}
               />
             </Grid>
@@ -105,7 +107,7 @@ const List = () => {
                 type="professor"
                 username={professor.username}
                 id={professor.id}
-                name={professor.name}
+                name={professor.first_name + ' ' + professor.last_name}
                 image={professor?.avatar}
               />
             </Grid>
@@ -121,7 +123,7 @@ const List = () => {
                 type="school"
                 username={school.username}
                 id={school.id}
-                name={school.name}
+                name={school.first_name + ' ' + school.last_name}
                 image={school?.avatar}
               />
             </Grid>
@@ -137,7 +139,7 @@ const List = () => {
                 type="teacher"
                 username={teacher.username}
                 id={teacher.id}
-                name={teacher.name}
+                name={teacher.first_name + ' ' + teacher.last_name}
                 image={teacher?.avatar}
               />
             </Grid>

@@ -118,11 +118,6 @@ const Request: React.FC<RequestProps> = ({
             دانشجو
           </Avatar>
         }
-        action={
-          <IconButton aria-label="settings" onClick={() => setSeen(!seen)}>
-            <VisibilityIcon style={{ color: seen ? 'blue' : 'inherit' }} />
-          </IconButton>
-        }
         title="درخواست ثبت کارورزی"
         subheader="24 مهر 1398"
       />
@@ -215,7 +210,7 @@ const Request: React.FC<RequestProps> = ({
                   id="demo-simple-select"
                   value={schoolID}
                   label="مدرسه"
-                  onChange={(value) => setSchoolID(value.target.value)}
+                  onChange={(value) => setSchoolID(Number(value.target.value))}
                 >
                   {regionSchools.length >= 1 ? (
                     regionSchools.map((school: School, index) => {
@@ -230,7 +225,7 @@ const Request: React.FC<RequestProps> = ({
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={12} lg={6} mt={2}>
-              <Button 
+              <Button
                 variant="contained"
                 endIcon={<SettingsBackupRestoreIcon />}
                 disabled={loadingWithdrawRequest}

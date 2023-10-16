@@ -141,15 +141,6 @@ const Requests = () => {
         }}
         component={'div'}
       >
-        <Grid container mt={3} mb={3}>
-          <Grid item>
-            <Search
-              onchange={searchCodeOnChange}
-              ondelete={deleteCodeSearch}
-              search={searchCode}
-            />
-          </Grid>
-        </Grid>
         <Grid container mt={3} mb={3} spacing={2}>
           {requests &&
             requests.map((req, index) => {

@@ -19,7 +19,7 @@ export interface GetAllRequestsRequest {}
 export interface GetAllRequestsResponse {}
 
 export interface AcceptRequestRequest {
-  school_id: number;
+  school_id: number | undefined;
   request_id: number;
 }
 

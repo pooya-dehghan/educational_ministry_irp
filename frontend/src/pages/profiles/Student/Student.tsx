@@ -49,13 +49,13 @@ interface ITask {
   description: string;
   id: string;
   deadline: string;
-  file : string;
+  file: string;
 }
 
 const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [region, setRegion] = useState<number | undefined>();
+  const [region, setRegion] = useState<number>(0);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
 
@@ -340,7 +340,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
               id="demo-simple-select"
               value={region}
               label="منطقه"
-              onChange={(value) => setRegion(value.target.value)}
+              onChange={(value) => setRegion(Number(value.target.value))}
             >
               <MenuItem value={1}>منطقه 1</MenuItem>
               <MenuItem value={2}>منطقه 2</MenuItem>

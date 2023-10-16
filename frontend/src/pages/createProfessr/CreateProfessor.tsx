@@ -29,6 +29,9 @@ const CreateProfessor: React.FC = () => {
       password: values.password,
       password_confirmation: values.password_confirmation,
       username: values.username,
+      email: values.email,
+      first_name: values.firstName,
+      last_name: values.lastName,
     };
     (dispatch as any)(createProfessorAsync(createProfessorData))
       .unwrap()

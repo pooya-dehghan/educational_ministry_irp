@@ -164,10 +164,16 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
   const CreateTaskProfessor = () => {
     setTaskLoading(true);
     if (date) {
-      let month = date.getUTCMonth() + 1; //months from 1-12
-      let day = date.getUTCDate();
-      let year = date.getUTCFullYear();
+      let month: number | string = date.getUTCMonth() + 1; //months from 1-12
+      let day: number | string = date.getUTCDate();
+      let year: number | string = date.getUTCFullYear();
       let newdate = year + '-' + month + '-' + day;
+      if (month < 10) {
+        month = '0' + month;
+      }
+      if (day < 10) {
+        day = '0' + day;
+      }
       (dispatch as any)(
         createTaskAsync({
           title: title,
@@ -384,7 +390,9 @@ const ProfessorProfile: React.FC<ProfessorProfileProps> = ({
         </Formik>
         <Grid container>
           <Grid item>
-            <Typography variant="h4" mt={4}>بارگذاری تکلیف برای دانشجویان</Typography>
+            <Typography variant="h4" mt={4}>
+              بارگذاری تکلیف برای دانشجویان
+            </Typography>
           </Grid>
           <Grid container mt={3}>
             <Grid item xs={12} sm={6} md={4} lg={3}>
