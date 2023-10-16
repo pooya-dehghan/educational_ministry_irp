@@ -150,6 +150,11 @@ class AcceptRequest(APIView):
         except School.DoesNotExist:
             return Response({'message': 'همچین مدرسه ای وجود ندارد', 'Success': False},
                             status=status.HTTP_404_NOT_FOUND)
+        print("*"*140)
+        print(req)
+        print(student)
+        print(school)
+        print("*"*140)
         if school.office_manager == office_manager:
             if req.status != 'na':
                 if student.school2 is None:
@@ -169,7 +174,7 @@ class AcceptRequest(APIView):
                             'Success': True},
                             status=status.HTTP_200_OK)
                     else:
-                        return Response({'message': 'این مدرسه ظرفیت کافی ندارد', 'Success': False})
+                        return Response({'message': 'این مدرسه ظرفیت کافی ندارد', 'Success': False}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({'message': 'این دانش آموز قبلا مدرسه داشته است اشتباهی به شما درخواست داده است',
                                      'Success': False},
