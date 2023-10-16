@@ -255,27 +255,27 @@ class ForgetPassword(APIView):
     )
     def post(self, request):
         # Validate the user's email
-        ser_data = EmailSerializer(data=request.POST)
+        ser_data = EmailSerializer(data=request.data)
+        print(ser_data)
         if ser_data.is_valid():
             email = ser_data.validated_data['email']
+            try:
+                user=User.objects.get(email=email)
+            except:
+                return Response({"message":"ایمیل وارد شده شما در سیستم وجود ندارد"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Check if the user exists
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return Response({'message': 'user with this email does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
         # Generate a unique token for email verification
+        print(user)
+        print("*"*100)
         token, created = Token.objects.get_or_create(user=user)
-
-        subject = 'Reset Password'
+        subject = 'تغییر گذر واژه'
         reset_url = request.build_absolute_uri(f"/accounts/api/v1/reset/?token={token.key}")
-        message = f'Click the link below to reset your password:\n\n{reset_url}'
+        message = f'برای تغییر گذر واژه روی لینک زیر کلیک کنید:\n\n{reset_url}'
         send_mail(subject, message, 'InterShip', [email])
-
-        return Response({'message': 'send email successfully'}, status=status.HTTP_200_OK)
+        return Response({'message': 'ایمیل با موفقیت ارسال شده است'}, status=status.HTTP_200_OK)
 
 
 # You can use this view to verify the token and change the password

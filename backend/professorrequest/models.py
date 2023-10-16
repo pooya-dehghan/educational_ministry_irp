@@ -23,5 +23,5 @@ class ProfessorRequest(models.Model):
         return f'{self.sender} sent request to {self.receiver} and id = {self.id}'
 
     def save(self, *args, **kwargs):
-        self.body = f'آقای {self.sender.username} با شماره دانشجویی {self.sender.studentUniqueCode} از دانشگاه تربیت دبیر شهید رجایی ادعا کرده است دانشجوی شما هست  '
+        self.body = f'کاربر {self.sender.username} با شماره دانشجویی {self.sender.studentUniqueCode} از دانشگاه تربیت دبیر شهید رجایی ادعا کرده است دانشجوی شما هست  '
         super().save(*args, **kwargs)
