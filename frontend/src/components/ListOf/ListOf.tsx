@@ -152,7 +152,7 @@ export default function ListOf({
         holder = 'مسئول اموزش پرورش';
         break;
     }
-    return `${holder} : ${name}`;
+    return `${holder}`;
   };
   return (
     <>
