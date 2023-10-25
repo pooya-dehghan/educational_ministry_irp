@@ -29,14 +29,14 @@ class Notification(models.Model):
             self.body = f'دانشجوی {self.sender.username} به شما درخواست داده است لطفا بررسی کنید'
         elif self.code == 401:
             self.title = 'رد شدن درخواست'
-            self.body = f'آقای {self.sender.username} درخواست شما را رد کرده است '
+            self.body = f'کاربر {self.sender.username} درخواست شما را رد کرده است '
         elif self.code == 501:
             self.title = 'تایید شدن درخواست'
-            self.body = f'آقای {self.sender.username} درخواست شما را تایید کرده است '
+            self.body = f'کاربر {self.sender.username} درخواست شما را تایید کرده است '
         elif self.code == 601:
             self.title = 'درخواست به استاد توسط دانشجو'
-            self.body = f'آقای {self.sender.username} ادعا کرده است دانشجوی شما هست'
+            self.body = f'کاربر {self.sender.username} ادعا کرده است دانشجوی شما هست'
         elif self.code == 701:
             self.title = 'تایید شدن درخواست'
-            self.body = f'آقای {self.sender.username} درخواست شما را تایید کرد'
+            self.body = f'کاربر {self.sender.username} درخواست شما را تایید کرد'
         super().save(*args, **kwargs)

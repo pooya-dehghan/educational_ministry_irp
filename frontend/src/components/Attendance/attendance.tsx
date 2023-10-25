@@ -33,7 +33,7 @@ interface AttendanceModalProps {
   open: boolean;
   handleClose: () => void;
   studentID: number;
-  username: string;
+  username: string | undefined;
 }
 
 export const AttendanceModal: React.FC<AttendanceModalProps> = ({
@@ -57,10 +57,15 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
 
   const createAttendanceSession = () => {
     if (studentID && date) {
-      let month = date.getUTCMonth() + 1; //months from 1-12
-      let day = date.getUTCDate();
-      let year = date.getUTCFullYear();
-
+      let month: number | string = date.getUTCMonth() + 1; //months from 1-12
+      let day: number | string = date.getUTCDate();
+      let year: number | string = date.getUTCFullYear();
+      if (month < 10) {
+        month = '0' + month;
+      }
+      if (day < 10) {
+        day = '0' + day;
+      }
       let newdate = year + '-' + month + '-' + day;
       (dispatch as any)(
         createAttendanceStudentAsync({

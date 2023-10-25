@@ -54,7 +54,7 @@ const List = () => {
       })
       .catch((error: any) => {});
 
-    (dispatch as any)(getAllProfessorsAsync({}))
+    (dispatch as any)(getAllProfessorsAsync())
       .unwrap()
       .then((response: any) => {
         dispatch(getAllProfessors(response));
@@ -77,16 +77,21 @@ const List = () => {
   }, []);
 
   const putRightListOnScreen = () => {
+    if (!userType) {
+      return;
+    }
     return userType.trim() === 'officemanagers' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allOfficeManagers.map((office_manager: any, index) => {
+        {allOfficeManagers.map((office_manager: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf
                 type="officemanager"
                 username={office_manager.username}
                 id={office_manager.id}
-                name={office_manager.name}
+                name={
+                  office_manager.first_name + ' ' + office_manager.last_name
+                }
                 image={office_manager?.avatar}
               />
             </Grid>
@@ -95,14 +100,14 @@ const List = () => {
       </Grid>
     ) : userType.trim() === 'professors' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allProfessors.map((professor: any, index) => {
+        {allProfessors.map((professor: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf
                 type="professor"
                 username={professor.username}
                 id={professor.id}
-                name={professor.name}
+                name={professor.first_name + ' ' + professor.last_name}
                 image={professor?.avatar}
               />
             </Grid>
@@ -111,14 +116,14 @@ const List = () => {
       </Grid>
     ) : userType.trim() === 'schools' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allSchools.map((school: any, index) => {
+        {allSchools.map((school: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf
                 type="school"
                 username={school.username}
                 id={school.id}
-                name={school.name}
+                name={school.first_name + ' ' + school.last_name}
                 image={school?.avatar}
               />
             </Grid>
@@ -127,14 +132,14 @@ const List = () => {
       </Grid>
     ) : userType.trim() === 'teachers' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allTeachers.map((teacher: any, index) => {
+        {allTeachers.map((teacher: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf
                 type="teacher"
                 username={teacher.username}
                 id={teacher.id}
-                name={teacher.name}
+                name={teacher.first_name + ' ' + teacher.last_name}
                 image={teacher?.avatar}
               />
             </Grid>
@@ -143,7 +148,7 @@ const List = () => {
       </Grid>
     ) : userType.trim() === 'students' ? (
       <Grid container spacing={2} className={styles.grid}>
-        {allStudents.map((student: any, index) => {
+        {allStudents.map((student: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <ListOf

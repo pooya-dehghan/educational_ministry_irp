@@ -21,7 +21,7 @@ class Request(models.Model):
     code = models.CharField(max_length=50, null=True, blank=True, unique=True)
 
     def save(self, *args, **kwargs):
-        self.body = f'آقای {self.sender.username} با شماره دانشجویی {self.sender.studentUniqueCode} از دانشگاه تربیت دبیر شهید رجایی به اداره منطقه {self.receiver.region} درخواست داده است '
+        self.body = f'کاربر {self.sender.username} با شماره دانشجویی {self.sender.studentUniqueCode} از دانشگاه تربیت دبیر شهید رجایی به اداره منطقه {self.receiver.region} درخواست داده است '
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:

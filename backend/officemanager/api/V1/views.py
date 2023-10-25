@@ -46,8 +46,6 @@ class OfficeManagerGet(APIView):
 class OfficeManagerList(APIView):
     @swagger_auto_schema(
         operation_description="""This endpoint allows users to list of all office_manager information.
-
-
             The response will contain a success message including these fields:
                 - username
                 - region

@@ -56,6 +56,7 @@ const Dashboard: React.FC<PageWrapper> = ({ children }) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log(import.meta.env.VITE_API_URL);
     if (user) {
       (dispatch as any)(dashboardAsync())
         .unwrap()

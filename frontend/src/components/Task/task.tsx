@@ -9,6 +9,7 @@ import { uploadTaskAsync } from '../../features/task/taskThunk';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -27,12 +28,23 @@ interface ITask {
   description: string;
   buttonText: string;
   taskID: string;
+  fileLocation: string;
 }
 
-const Task: React.FC<ITask> = ({ title, description, buttonText, taskID }) => {
+const classes = {
+  margin : '4rem'
+}
+
+const Task: React.FC<ITask> = ({
+  title,
+  description,
+  buttonText,
+  taskID,
+  fileLocation,
+}) => {
   const dispatch = useDispatch();
   const [buttonLoading, setButtonLoading] = useState(false);
-
+  const navigate = useNavigate();
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -76,6 +88,9 @@ const Task: React.FC<ITask> = ({ title, description, buttonText, taskID }) => {
       }
     }
   };
+  const handleFileDownload = () => {
+    window.location.href = import.meta.env.VITE_API_URL + fileLocation;
+  };
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
@@ -87,7 +102,7 @@ const Task: React.FC<ITask> = ({ title, description, buttonText, taskID }) => {
             {description}
           </Typography>
         </CardContent>
-        <CardContent m={4}>
+        <CardContent className={classes.margin}>
           <Button
             component="label"
             variant="contained"
@@ -97,6 +112,20 @@ const Task: React.FC<ITask> = ({ title, description, buttonText, taskID }) => {
             <VisuallyHiddenInput type="file" onChange={handleFileChange} />
           </Button>
         </CardContent>
+        {fileLocation ? (
+          <CardContent className={classes.margin}>
+            <Button
+              component="label"
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+              onClick={() => {
+                handleFileDownload();
+              }}
+            >
+              دانلود فایل اپلود شده
+            </Button>
+          </CardContent>
+        ) : null}
       </CardActionArea>
     </Card>
   );

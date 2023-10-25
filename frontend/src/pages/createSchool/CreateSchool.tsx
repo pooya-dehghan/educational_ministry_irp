@@ -42,6 +42,7 @@ const CreateSchool: React.FC = () => {
       password_confirmation: values.password_confirmation,
       region: values.region,
       city: values.city,
+      email: values.email,
     };
     (dispatch as any)(createSchoolAsync(createSchoolData))
       .unwrap()
@@ -58,6 +59,7 @@ const CreateSchool: React.FC = () => {
         setButtonLoading(false);
       })
       .catch((error: any) => {
+        console.log('error: ', error);
         dispatch(
           updateResponse({
             severity: 'error',
@@ -110,6 +112,7 @@ const CreateSchool: React.FC = () => {
                   address: '',
                   region: '',
                   city: '',
+                  email: '',
                 }}
                 validationSchema={schoolValidationSchema}
                 onSubmit={(
@@ -249,6 +252,25 @@ const CreateSchool: React.FC = () => {
                               label="تایید گذرواژه"
                               placeholder="تایید گذرواژه"
                               id="password_confirmation"
+                              autoFocus
+                              variant="outlined"
+                              fullWidth
+                              error={meta.touched && meta.error ? true : false}
+                              helperText={
+                                meta.touched && meta.error ? meta.error : ''
+                              }
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <Field name="email">
+                          {({ field, meta }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              label="ایمیل"
+                              placeholder="ایمیل"
+                              id="email"
                               autoFocus
                               variant="outlined"
                               fullWidth

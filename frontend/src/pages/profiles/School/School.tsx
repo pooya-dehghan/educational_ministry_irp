@@ -34,6 +34,7 @@ interface SchoolProfileProps {
 
 interface ISelectedCard {
   id: number | undefined;
+  name: string | undefined;
 }
 
 const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
@@ -43,6 +44,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
   const [students, setStudents] = useState([]);
   const [selectedCard, setSelectedCard] = useState<ISelectedCard>({
     id: undefined,
+    name: undefined,
   });
   const [openAttendanceModal, setOpenAttendanceModal] = useState(false);
   useEffect(() => {
@@ -104,7 +106,7 @@ const SchoolProfile: React.FC<SchoolProfileProps> = ({ userInfo, id }) => {
         <AttendanceModal
           handleClose={() => {
             setOpenAttendanceModal(false);
-            setSelectedCard({ id: 0 });
+            setSelectedCard({ id: 0, name: '' });
           }}
           open={openAttendanceModal}
           studentID={selectedCard.id}

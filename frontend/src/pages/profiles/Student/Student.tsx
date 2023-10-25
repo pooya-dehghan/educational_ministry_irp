@@ -49,12 +49,13 @@ interface ITask {
   description: string;
   id: string;
   deadline: string;
+  file: string;
 }
 
 const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [region, setRegion] = useState<number | undefined>();
+  const [region, setRegion] = useState<number>(0);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
 
@@ -300,7 +301,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
           <img
             src={
               userInfo.avatar
-                ? 'http://localhost:8000' + userInfo.avatar
+                ? import.meta.env.VITE_API_URL + userInfo.avatar
                 : Image
             }
             className={styles.profilePicture}
@@ -339,7 +340,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
               id="demo-simple-select"
               value={region}
               label="منطقه"
-              onChange={(value) => setRegion(value.target.value)}
+              onChange={(value) => setRegion(Number(value.target.value))}
             >
               <MenuItem value={1}>منطقه 1</MenuItem>
               <MenuItem value={2}>منطقه 2</MenuItem>
@@ -395,20 +396,23 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ userInfo, id }) => {
         </Grid>
       </Grid>
       <Grid container mt={4} mb={4}>
-        {tasks.length > 0
-          ? tasks.map((task: ITask) => {
-              return (
-                <Grid item lg={4} md={6} sm={12} mb={4}>
-                  <Task
-                    title={task.title}
-                    description={task.description}
-                    buttonText={'اپلود فایل'}
-                    taskID={task.id}
-                  />
-                </Grid>
-              );
-            })
-          : null}
+        {tasks.length > 0 ? (
+          tasks.map((task: ITask) => {
+            return (
+              <Grid item lg={4} md={6} sm={12} mb={4}>
+                <Task
+                  title={task.title}
+                  description={task.description}
+                  buttonText={'اپلود فایل'}
+                  taskID={task.id}
+                  fileLocation={task?.file}
+                />
+              </Grid>
+            );
+          })
+        ) : (
+          <div>هیچ تکلیفی وجود ندارد</div>
+        )}
       </Grid>
     </Box>
   );

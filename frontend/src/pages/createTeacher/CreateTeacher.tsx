@@ -31,6 +31,7 @@ const CreateTeacher: React.FC = () => {
       password_confirmation: values.password_confirmation,
       username: values.username,
       field: values.field,
+      email : values.email
     };
     (dispatch as any)(createTeacherAsync(createTeacherData))
       .unwrap()

@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from accounts.models import School, OfficeManager
+from accounts.models import School, OfficeManager, Student
 from rest_framework.response import Response
 from .serializers import SchoolSerializer, SchoolSerializerForOfficeManager, SchoolCapacitySerializer, \
     SchoolSerializerAll, SchoolSerializerAllOffice
@@ -11,6 +11,7 @@ from .swagger_info import swagger_parameters, swagger_parameters_update, swagger
 from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg import openapi
 from student.api.V1.serializers import StudentSerializer
+from django.core.cache import cache
 
 
 class SchoolGet(APIView):
@@ -48,6 +49,7 @@ class SchoolGet(APIView):
 
 
 class SchoolList(APIView):
+    permission_classes=[IsSuperuserOrOfficeManager]
     @swagger_auto_schema(
         operation_description="""This endpoint allows users to list of all school information.
 
@@ -70,8 +72,11 @@ class SchoolList(APIView):
         }
     )
     def get(self, request):
-        school = School.objects.all()
-        ser_data = SchoolSerializerAll(instance=school, many=True)
+        # school_list = cache.get('school_list')
+        # if school_list is None:
+        school_list = School.objects.all()
+        # cache.set('school_list', school_list)
+        ser_data = SchoolSerializerAll(instance=school_list, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
 
 
@@ -240,7 +245,9 @@ class StudentList(APIView):
             school = School.objects.get(id=request.user.id)
         except School.DoesNotExist:
             return Response({'message': 'you are not school manager'},status=status.HTTP_404_NOT_FOUND)
-        students = school.school_to_student
+        students = Student.objects.filter(school2=school)
+        print("*"*100)
+        print(students)
         ser_data = StudentSerializer(instance=students, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
 

@@ -228,7 +228,7 @@ const Root = () => {
                         );
                       })
                     ) : (
-                      <MenuItem>در حال گرفتن لیست</MenuItem>
+                      <MenuItem>لیست استاد خالی است</MenuItem>
                     )}
                   </Select>
                 </FormControl>
